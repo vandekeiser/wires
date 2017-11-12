@@ -1,6 +1,7 @@
 package fr.cla.wires;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
@@ -44,8 +45,7 @@ public abstract class AbstractValueObject<T extends AbstractValueObject<T>> {
         );
     }
 
-    //Should be a Set, but that would require more boilerplate in concrete classes than Arrays::asList.
-    //Doesn't matter since equality will still be defined correctly if a field is included twice.
-    protected abstract Collection<Object> attributesToIncludeInEqualityCheck();
+    //It doesn't matter if a field is included twice, since that would not change the result of equals().
+    protected abstract List<Object> attributesToIncludeInEqualityCheck();
 
 }

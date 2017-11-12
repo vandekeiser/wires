@@ -1,7 +1,7 @@
 package fr.cla.wires;
 
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.List;
 
 public class Tick extends AbstractValueObject<Tick> {
     public static final Tick ZERO = new Tick(0L);
@@ -15,7 +15,7 @@ public class Tick extends AbstractValueObject<Tick> {
     }
 
     @Override
-    protected Collection<Object> attributesToIncludeInEqualityCheck() {
+    protected List<Object> attributesToIncludeInEqualityCheck() {
         return Arrays.asList(tick);
     }
 

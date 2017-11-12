@@ -1,7 +1,7 @@
 package fr.cla.wires;
 
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -25,7 +25,7 @@ public class Signal<V> extends AbstractValueObject<Signal<V>> {
     }
 
     @Override
-    protected Collection<Object> attributesToIncludeInEqualityCheck() {
+    protected List<Object> attributesToIncludeInEqualityCheck() {
         return Arrays.asList(value);
     }
 

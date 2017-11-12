@@ -1,7 +1,7 @@
 package fr.cla.wires;
 
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.List;
 
 public class Delay extends AbstractValueObject<Delay> {
     private final int duration;
@@ -13,7 +13,7 @@ public class Delay extends AbstractValueObject<Delay> {
     }
 
     @Override
-    protected Collection<Object> attributesToIncludeInEqualityCheck() {
+    protected List<Object> attributesToIncludeInEqualityCheck() {
         return Arrays.asList(duration);
     }
 
