@@ -1,0 +1,98 @@
+package fr.cla.wires;
+
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
+import static java.util.Objects.requireNonNull;
+
+public abstract class Box {
+
+    protected static final Delay DEFAULT_DELAY = Delay.of(1);
+    private final Delay delay;
+    private final Agenda agenda;
+
+    protected Box(Delay delay, Agenda agenda) {
+        this.delay = requireNonNull(delay);
+        this.agenda = requireNonNull(agenda);
+    }
+
+    protected <V> void onSignalChanged(Wire<V> wire, Action<V> action) {
+        wire.addAction(
+            agenda.afterDelay(delay, action)
+        );
+    }
+
+    //----------Convenience shortcuts for Boxes that have 1 or 2 inputs--------------VVVVVVVVVVVVVVVV
+    // (call onSignalChanged() directly if you have 3 or more inputs)
+
+    /**
+     * @param <I> The type of input to read on @{code observedWire}
+     * @param <O> The type of output to write on @{code targetWire}
+     */
+    protected <I, O> OnSignalChangedBuilder<I, O> onSignalChanged(Wire<I> observedWire) {
+        return new OnSignalChangedBuilder<>(observedWire);
+    }
+
+    protected class OnSignalChangedBuilder<I, O> {
+        private Wire<I> observedWire;
+        private Wire<O> targetWire;
+
+        OnSignalChangedBuilder(Wire<I> observedWire) {
+            this.observedWire = requireNonNull(observedWire);
+        }
+
+        public OnSignalChangedBuilder<I, O> set(Wire<O> targetWire) {
+            this.targetWire = requireNonNull(targetWire);
+            return this;
+        }
+
+        /**
+         * Applies {@code transformation} to the changed Signal
+         */
+        public void toResultOf(Function<I, O> transformation) {
+            onSignalChanged(observedWire,
+                newIn -> targetWire.setSignal(
+                    newIn.map(transformation)
+                )
+            );
+        }
+
+        /**
+         * Applies {@code transformation} to (changed Signal, unchanged Signal).
+         * Of course calling this method or the other BiFunction one
+         *  only has an impact if {@code transformation} is not symmetrical.
+         * @param transformation The function to apply to (changed Wire, unchanged Wire)
+         * @param unchangedSecondWire The unchanged Wire, used as the 2nd parameter of {@code transformation}
+         */
+        public <J> void toResultOf(
+            BiFunction<I, J, O> transformation,
+            Wire<J> unchangedSecondWire
+        ) {
+            onSignalChanged(observedWire,
+                newIn1 -> targetWire.setSignal(
+                    Signal.map(newIn1, unchangedSecondWire.getSignal(), transformation)
+                )
+            );
+        }
+
+        /**
+         * Applies {@code transformation} to (unchanged Signal, changed Signal).
+         * Of course calling this method or the other BiFunction one
+         *  only has an impact if {@code transformation} is not symmetrical.
+         * @param unchangedFirstWire The unchanged Wire, used as the 1st parameter of {@code transformation}
+         * @param transformation The function to apply to (unchanged Wire, changed Wire)
+         */
+        public <J> void toResultOf(
+            Wire<J> unchangedFirstWire,
+            BiFunction<J, I, O> transformation
+        ) {
+            onSignalChanged(observedWire,
+                newIn2 -> targetWire.setSignal(
+                    Signal.map(unchangedFirstWire.getSignal(), newIn2, transformation)
+                )
+            );
+        }
+    }
+    //----------Convenience shortcuts for Boxes that have 1 or 2 inputs--------------^^^^^^^^^^^^^^^^
+
+}
