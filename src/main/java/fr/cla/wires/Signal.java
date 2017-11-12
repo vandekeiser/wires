@@ -46,10 +46,11 @@ public class Signal<V> extends AbstractValueObject<Signal<V>> {
     private static <V> Class<Signal<V>> signalOfV() {
         Class<?> unbounded = Signal.class;
 
-        //Doesn't matter, as this is only used in AbstractValueObject::equals,
-        // for the isInstance check.
-        //This unchecked cast means that Signals of all types are compared together,
+        //Doesn't matter, as this is only used in AbstractValueObject::equals, for the isInstance check.
+        //This unchecked cast means that Signals of all types are compared together without ClassCastException,
         // but this doesn't matter because Signals with equal values should be equal.
+        //This is proved by SignalTest::should_not_get_classcast_when_calling_equals_on_signals_of_different_types
+        // and SignalTest::equals_should_be_true_for_signals_of_different_types_but_same_value
         @SuppressWarnings("unchecked")
         Class<Signal<V>> signalOfV = (Class<Signal<V>>) unbounded;
 
