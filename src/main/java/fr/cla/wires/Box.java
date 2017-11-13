@@ -1,5 +1,6 @@
 package fr.cla.wires;
 
+import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -17,8 +18,9 @@ public abstract class Box {
     }
 
     protected <V> void onSignalChanged(Wire<V> wire, Action<V> action) {
+        Action<V> _action = requireNonNull(action);
         wire.addAction(
-            agenda.afterDelay(delay, action)
+            agenda.afterDelay(delay, _action)
         );
     }
 
@@ -50,9 +52,11 @@ public abstract class Box {
          * Applies {@code transformation} to the changed Signal
          */
         public void toResultOf(Function<I, O> transformation) {
+            Function<I, O> _transformation = requireNonNull(transformation);
+
             onSignalChanged(observedWire,
                 newIn -> targetWire.setSignal(
-                    newIn.map(transformation)
+                    newIn.map(_transformation)
                 )
             );
         }
@@ -68,9 +72,12 @@ public abstract class Box {
             BiFunction<I, J, O> transformation,
             Wire<J> unchangedSecondWire
         ) {
+            BiFunction<I, J, O> _transformation= requireNonNull(transformation);
+            Wire<J> _unchangedSecondWire = requireNonNull(unchangedSecondWire);
+
             onSignalChanged(observedWire,
                 newIn1 -> targetWire.setSignal(
-                    Signal.map(newIn1, unchangedSecondWire.getSignal(), transformation)
+                    Signal.map(newIn1, _unchangedSecondWire.getSignal(), _transformation)
                 )
             );
         }
@@ -86,9 +93,12 @@ public abstract class Box {
             Wire<J> unchangedFirstWire,
             BiFunction<J, I, O> transformation
         ) {
+            Wire<J> _unchangedFirstWire = requireNonNull(unchangedFirstWire);
+            BiFunction<J, I, O> _transformation= requireNonNull(transformation);
+
             onSignalChanged(observedWire,
                 newIn2 -> targetWire.setSignal(
-                    Signal.map(unchangedFirstWire.getSignal(), newIn2, transformation)
+                    Signal.map(_unchangedFirstWire.getSignal(), newIn2, _transformation)
                 )
             );
         }

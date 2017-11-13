@@ -3,13 +3,16 @@ package fr.cla.wires;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.util.Objects.requireNonNull;
+
 public class Agenda {
 
     private Tick now = Tick.ZERO;
     private final Map<Tick, TickQueue> agenda = new HashMap<>();
 
     <V> Action<V> afterDelay(Delay delay, Action<V> action) {
-        return v -> waitFor(delay).thenCall(action, v);
+        Action<V> _action = requireNonNull(action);
+        return v -> waitFor(delay).thenCall(_action, v);
     }
 
     private TickQueue waitFor(Delay delay) {

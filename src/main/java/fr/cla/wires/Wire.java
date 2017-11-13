@@ -3,12 +3,15 @@ package fr.cla.wires;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Objects.requireNonNull;
+
 public class Wire<T> {
 
     private Signal<T> signal = Signal.none();
     private final List<Action<T>> actions = new ArrayList<>();
 
     public Signal<T> getSignal() {
+        if(signal == null) throw new AssertionError();
         return signal;
     }
 
@@ -20,7 +23,7 @@ public class Wire<T> {
     }
 
     void addAction(Action<T> action) {
-        actions.add(action);
+        actions.add(requireNonNull(action));
     }
 
     public static <T> Wire<T> make() {

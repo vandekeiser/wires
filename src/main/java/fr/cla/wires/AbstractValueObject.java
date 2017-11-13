@@ -22,7 +22,6 @@ public abstract class AbstractValueObject<T extends AbstractValueObject<T>> {
         //An optimization, but also avoids StackOverflows on cyclic object graphs.
         if(obj == this) return true;
 
-        if(obj == null) return false;
         if(! type.isInstance(obj)) return false;
         T that = type.cast(obj);
         

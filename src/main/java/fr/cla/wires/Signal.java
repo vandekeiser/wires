@@ -33,8 +33,8 @@ public class Signal<V> extends AbstractValueObject<Signal<V>> {
         return Optional.ofNullable(value);
     }
 
-    public <W> Signal<W> map(Function<V, W> gate) {
-        return getValue().map(gate).map(Signal::of).orElse(Signal.none());
+    public <W> Signal<W> map(Function<V, W> mapper) {
+        return getValue().map(mapper).map(Signal::of).orElse(Signal.none());
     }
 
     public static <V1, V2, W> Signal<W> map(Signal<V1> s1, Signal<V2> s2, BiFunction<V1, V2, W> mapper) {
