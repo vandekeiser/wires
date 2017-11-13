@@ -12,7 +12,8 @@ public class Agenda {
 
     <V> Action<V> afterDelay(Delay delay, Action<V> action) {
         Action<V> _action = requireNonNull(action);
-        return v -> waitFor(delay).thenCall(_action, v);
+        Delay _delay = requireNonNull(delay);
+        return v -> waitFor(_delay).thenCall(_action, v);
     }
 
     private TickQueue waitFor(Delay delay) {
