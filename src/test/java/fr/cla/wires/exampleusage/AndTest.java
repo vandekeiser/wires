@@ -2,6 +2,7 @@ package fr.cla.wires.exampleusage;
 
 
 import fr.cla.wires.Agenda;
+import fr.cla.wires.Clock;
 import fr.cla.wires.Signal;
 import fr.cla.wires.Wire;
 import org.junit.Before;
@@ -13,7 +14,7 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 public class AndTest {
 
     private Wire<Boolean> in1, in2, out;
-    private Agenda agenda;
+    private Clock clock;
     private And not;
 
     @Before
@@ -21,7 +22,8 @@ public class AndTest {
         in1 = Wire.make();
         in2 = Wire.make();
         out = Wire.make();
-        agenda = new Agenda();
+        Agenda agenda = new Agenda();
+        clock = agenda;
         not = And.in1(in1).in2(in2).out(out).agenda(agenda);
     }
 
@@ -30,7 +32,7 @@ public class AndTest {
         //When
         in1.setSignal(Signal.of(false));
         in2.setSignal(Signal.of(false));
-        agenda.tick();
+        clock.tick();
 
         //Then
         assertThat(out.getSignal()).isEqualTo(Signal.of(false));
@@ -41,7 +43,7 @@ public class AndTest {
         //When
         in1.setSignal(Signal.of(false));
         in2.setSignal(Signal.of(true));
-        agenda.tick();
+        clock.tick();
 
         //Then
         assertThat(out.getSignal()).isEqualTo(Signal.of(false));
@@ -52,7 +54,7 @@ public class AndTest {
         //When
         in1.setSignal(Signal.of(true));
         in2.setSignal(Signal.of(false));
-        agenda.tick();
+        clock.tick();
 
         //Then
         assertThat(out.getSignal()).isEqualTo(Signal.of(false));
@@ -63,7 +65,7 @@ public class AndTest {
         //When
         in1.setSignal(Signal.of(true));
         in2.setSignal(Signal.of(true));
-        agenda.tick();
+        clock.tick();
 
         //Then
         assertThat(out.getSignal()).isEqualTo(Signal.of(true));
@@ -88,7 +90,7 @@ public class AndTest {
         assertThat(out.getSignal()).isEqualTo(Signal.none());
 
         //t1
-        agenda.tick();
+        clock.tick();
 
         //o3
         assertThat(out.getSignal()).isEqualTo(Signal.none());
@@ -100,7 +102,7 @@ public class AndTest {
         assertThat(out.getSignal()).isEqualTo(Signal.none());
 
         //t2
-        agenda.tick();
+        clock.tick();
 
         //o5
         assertThat(out.getSignal()).isEqualTo(Signal.of(false));
@@ -112,7 +114,7 @@ public class AndTest {
         assertThat(out.getSignal()).isEqualTo(Signal.of(false));
 
         //t3
-        agenda.tick();
+        clock.tick();
 
         //o7
         assertThat(out.getSignal()).isEqualTo(Signal.of(false));
@@ -124,13 +126,13 @@ public class AndTest {
         assertThat(out.getSignal()).isEqualTo(Signal.of(false));
 
         //t4
-        agenda.tick();
+        clock.tick();
 
         //o9
         assertThat(out.getSignal()).isEqualTo(Signal.of(true));
 
         //t5
-        agenda.tick();
+        clock.tick();
 
         //o10
         assertThat(out.getSignal()).isEqualTo(Signal.of(true));
@@ -142,7 +144,7 @@ public class AndTest {
         in2.setSignal(Signal.of(false));
 
         //t6
-        agenda.tick();
+        clock.tick();
 
         //o11
         assertThat(out.getSignal()).isEqualTo(Signal.of(false));

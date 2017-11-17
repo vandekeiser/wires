@@ -1,6 +1,5 @@
 package fr.cla.wires;
 
-import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -17,10 +16,11 @@ public abstract class Box {
         this.agenda = requireNonNull(agenda);
     }
 
-    protected <V> void onSignalChanged(Wire<V> wire, Action<V> action) {
-        Action<V> _action = requireNonNull(action);
-        wire.addAction(
-            agenda.afterDelay(delay, _action)
+    protected <V> void onSignalChanged(Wire<V> wire, OnSignaledChanged<V> callback) {
+        OnSignaledChanged<V> _callback = requireNonNull(callback);
+
+        wire.onSignaledChanged(
+            agenda.afterDelay(delay, _callback)
         );
     }
 

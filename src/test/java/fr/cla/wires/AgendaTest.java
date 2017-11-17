@@ -10,7 +10,7 @@ public class AgendaTest {
     @Test
     public void tick_number_should_initially_be_0() {
         //Given
-        Agenda agenda = new Agenda();
+        Clock agenda = new Agenda();
 
         //Then
         assertThat(agenda.now()).isEqualTo(Tick.ZERO);
@@ -19,7 +19,7 @@ public class AgendaTest {
     @Test
     public void tick_number_should_be_incremeted_when_tick_is_called() {
         //Given
-        Agenda agenda = new Agenda();
+        Clock agenda = new Agenda();
 
         //When
         agenda.tick();
