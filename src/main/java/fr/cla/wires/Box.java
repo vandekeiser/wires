@@ -16,10 +16,10 @@ public abstract class Box {
         this.agenda = requireNonNull(agenda);
     }
 
-    protected <V> void onSignalChanged(Wire<V> wire, OnSignalChanged<V> callback) {
+    protected <V> void onSignalChanged(Wire<V> observedWire, OnSignalChanged<V> callback) {
         OnSignalChanged<V> _callback = requireNonNull(callback);
 
-        wire.onSignalChanged(
+        observedWire.onSignalChanged(
             agenda.afterDelay(delay, _callback)
         );
     }
