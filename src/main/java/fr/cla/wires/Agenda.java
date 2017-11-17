@@ -25,8 +25,8 @@ public class Agenda implements Clock {
         return now;
     }
 
-    <V> OnSignaledChanged<V> afterDelay(Delay delay, OnSignaledChanged<V> callback) {
-        OnSignaledChanged<V> _callback = requireNonNull(callback);
+    <V> OnSignalChanged<V> afterDelay(Delay delay, OnSignalChanged<V> callback) {
+        OnSignalChanged<V> _callback = requireNonNull(callback);
         Delay _delay = requireNonNull(delay);
 
         return v -> waitFor(_delay).thenCall(_callback, v);

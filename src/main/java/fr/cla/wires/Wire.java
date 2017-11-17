@@ -8,7 +8,7 @@ import static java.util.Objects.requireNonNull;
 public class Wire<T> {
 
     private Signal<T> signal = Signal.none();
-    private final List<OnSignaledChanged<T>> listeners = new ArrayList<>();
+    private final List<OnSignalChanged<T>> listeners = new ArrayList<>();
 
     public Signal<T> getSignal() {
         if(signal == null) throw new AssertionError();
@@ -22,7 +22,7 @@ public class Wire<T> {
         listeners.forEach(a -> a.accept(signal));
     }
 
-    void onSignaledChanged(OnSignaledChanged<T> callback) {
+    void onSignalChanged(OnSignalChanged<T> callback) {
         listeners.add(requireNonNull(callback));
     }
 

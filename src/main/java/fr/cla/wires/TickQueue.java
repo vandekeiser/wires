@@ -10,8 +10,8 @@ class TickQueue {
     //Run actions in FIFO order
     private final Queue<Runnable> todos = new ArrayDeque<>();
 
-    <V> void thenCall(OnSignaledChanged<V> callback, Signal<V> signal) {
-        OnSignaledChanged<V> _callback = requireNonNull(callback);
+    <V> void thenCall(OnSignalChanged<V> callback, Signal<V> signal) {
+        OnSignalChanged<V> _callback = requireNonNull(callback);
         Signal<V> _signal = requireNonNull(signal);
 
         todos.add(() -> _callback.accept(_signal));
