@@ -81,7 +81,7 @@ public abstract class CollectHomogeneousInputs<O, T> extends Box {
             }
 
             @Override public Set<Characteristics> characteristics() {
-                //TODO some collections might not be UNORDERED
+                //TODO some collectors might not be UNORDERED
                 return EnumSet.of(UNORDERED);
             }
         };
