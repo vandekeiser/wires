@@ -19,7 +19,7 @@ public class Wire<T> {
         if(signal.equals(this.signal)) return;
 
         this.signal = signal;
-        listeners.forEach(a -> a.accept(signal));
+        listeners.forEach(callback -> callback.accept(signal));
     }
 
     void onSignalChanged(OnSignalChanged<T> callback) {

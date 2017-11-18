@@ -5,10 +5,7 @@ import fr.cla.wires.Delay;
 import fr.cla.wires.Time;
 import fr.cla.wires.Wire;
 
-import static java.util.Objects.requireNonNull;
-
 public class Not extends Box {
-    private final Wire<Boolean> in, out;
 
     private Not(Wire<Boolean> in, Wire<Boolean> out, Time time) {
         this(in, out, time, DEFAULT_DELAY);
@@ -16,9 +13,6 @@ public class Not extends Box {
 
     private Not(Wire<Boolean> in, Wire<Boolean> out, Time time, Delay delay) {
         super(delay, time);
-        this.in = requireNonNull(in);
-        this.out = requireNonNull(out);
-
         this.<Boolean, Boolean>onSignalChanged(in).set(out).toResultOf(this::not);
     }
 
