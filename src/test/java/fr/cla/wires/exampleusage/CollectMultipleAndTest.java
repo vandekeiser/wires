@@ -23,7 +23,11 @@ public class CollectMultipleAndTest {
 
     @Before
     public void setup() {
-        ins = Stream.generate(() -> Wire.<Boolean>make()).limit(MULTIPLICITY).collect(toSet());
+        setup(MULTIPLICITY);
+    }
+
+    private void setup(long multiplicity) {
+        ins = Stream.generate(() -> Wire.<Boolean>make()).limit(multiplicity).collect(toSet());
         out = Wire.make();
         time = Time.create();
         CollectMultipleAnd.ins(ins).out(out).time(time);
@@ -36,6 +40,37 @@ public class CollectMultipleAndTest {
 
         //Then
         assertThat(out.getSignal()).isEqualTo(Signal.none());
+    }
+
+    @Test
+    public void without_ins_out_should_be_no_signal() {
+        //Given
+        setup(0);
+
+        //When
+        time.tick();
+
+        //Then
+        assertThat(out.getSignal()).isEqualTo(Signal.none());
+    }
+
+    @Test
+    public void with_1_in_out_should_be_same_signal() {
+        with_1_in_out_should_be_same_signal(Signal.of(true));
+        with_1_in_out_should_be_same_signal(Signal.of(false));
+        with_1_in_out_should_be_same_signal(Signal.none());
+    }
+
+    public void with_1_in_out_should_be_same_signal(Signal<Boolean> signal) {
+        //Given
+        setup(1);
+
+        //When
+        ins.iterator().next().setSignal(signal);
+        time.tick();
+
+        //Then
+        assertThat(out.getSignal()).isEqualTo(signal);
     }
 
     @Test
