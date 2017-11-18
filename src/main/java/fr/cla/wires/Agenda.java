@@ -6,12 +6,12 @@ import java.util.Map;
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off
-class Agenda implements Clock {
+class Agenda {
 
     private Tick now = Tick.ZERO;
     private final Map<Tick, TickQueue> appointments = new HashMap<>();
 
-    @Override public void tick() {
+    public void tick() {
         now = now.plus(Delay.of(1));
 
         TickQueue todo = appointments.get(now);
@@ -21,7 +21,7 @@ class Agenda implements Clock {
         appointments.remove(now);
     }
 
-    @Override public Tick now() {
+    public Tick now() {
         return now;
     }
 
