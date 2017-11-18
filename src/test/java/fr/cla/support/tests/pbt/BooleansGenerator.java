@@ -28,9 +28,9 @@ public class BooleansGenerator extends Generator<List<Boolean>> {
 
         //We promise to only ever produce Set<Boolean>
         @SuppressWarnings("unchecked")
-        Class<List<Boolean>> signalOfV = (Class<List<Boolean>>) unbounded;
+        Class<List<Boolean>> listOfBooleans = (Class<List<Boolean>>) unbounded;
 
-        return signalOfV;
+        return listOfBooleans;
     }
 
 }
