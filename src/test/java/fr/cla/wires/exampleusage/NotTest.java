@@ -1,7 +1,9 @@
 package fr.cla.wires.exampleusage;
 
 
-import fr.cla.wires.*;
+import fr.cla.wires.Signal;
+import fr.cla.wires.Time;
+import fr.cla.wires.Wire;
 import org.junit.Before;
 import org.junit.Test;
 

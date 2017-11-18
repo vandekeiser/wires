@@ -1,6 +1,9 @@
 package fr.cla.wires.exampleusage;
 
-import fr.cla.wires.*;
+import fr.cla.wires.Box;
+import fr.cla.wires.Delay;
+import fr.cla.wires.Time;
+import fr.cla.wires.Wire;
 
 import static java.util.Objects.requireNonNull;
 

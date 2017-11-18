@@ -11,7 +11,7 @@ class Agenda {
     private Tick now = Tick.ZERO;
     private final Map<Tick, TickQueue> appointments = new HashMap<>();
 
-    public void tick() {
+    void tick() {
         now = now.plus(Delay.of(1));
 
         TickQueue todo = appointments.get(now);
@@ -21,7 +21,7 @@ class Agenda {
         appointments.remove(now);
     }
 
-    public Tick now() {
+    Tick now() {
         return now;
     }
 
