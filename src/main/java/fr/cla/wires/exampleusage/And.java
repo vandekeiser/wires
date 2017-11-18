@@ -13,6 +13,7 @@ public class And extends Box {
 
     private And(Wire<Boolean> in1, Wire<Boolean> in2, Wire<Boolean> out, Time time, Delay delay) {
         super(delay, time);
+        //Warning not to let this escape if we end up making this thread-safe
         this.<Boolean, Boolean>onSignalChanged(in1).set(out).toResultOf(this::and, in2);
         this.<Boolean, Boolean>onSignalChanged(in2).set(out).toResultOf(in1, this::and);
     }

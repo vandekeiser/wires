@@ -13,6 +13,7 @@ public class Not extends Box {
 
     private Not(Wire<Boolean> in, Wire<Boolean> out, Time time, Delay delay) {
         super(delay, time);
+        //Warning not to let this escape if we end up making this thread-safe
         this.<Boolean, Boolean>onSignalChanged(in).set(out).toResultOf(this::not);
     }
 
