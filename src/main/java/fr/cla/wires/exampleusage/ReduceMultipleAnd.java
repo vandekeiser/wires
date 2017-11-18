@@ -12,13 +12,13 @@ import java.util.function.Function;
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off
-public class MultipleAnd extends ReduceHomogeneousInputs<Boolean, Boolean> {
+public class ReduceMultipleAnd extends ReduceHomogeneousInputs<Boolean, Boolean> {
 
-    private MultipleAnd(Set<Wire<Boolean>> ins, Wire<Boolean> out, Time time) {
+    private ReduceMultipleAnd(Set<Wire<Boolean>> ins, Wire<Boolean> out, Time time) {
         this(ins, out, time, DEFAULT_DELAY);
     }
 
-    private MultipleAnd(Set<Wire<Boolean>> ins, Wire<Boolean> out, Time time, Delay delay) {
+    private ReduceMultipleAnd(Set<Wire<Boolean>> ins, Wire<Boolean> out, Time time, Delay delay) {
         super(ins, out, time, delay);
     }
 
@@ -36,7 +36,7 @@ public class MultipleAnd extends ReduceHomogeneousInputs<Boolean, Boolean> {
         return b1 && b2;
     }
 
-    @Override protected MultipleAnd startup() {
+    @Override protected ReduceMultipleAnd startup() {
         super.startup();
         return this;
     }
@@ -58,9 +58,9 @@ public class MultipleAnd extends ReduceHomogeneousInputs<Boolean, Boolean> {
             return this;
         }
 
-        public MultipleAnd time(Time time) {
+        public ReduceMultipleAnd time(Time time) {
             Time _time = requireNonNull(time);
-            return new MultipleAnd(ins, out, _time).startup();
+            return new ReduceMultipleAnd(ins, out, _time).startup();
         }
     }
 

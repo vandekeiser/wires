@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
+import java.util.stream.Collector;
 
 import static java.util.Objects.requireNonNull;
 
@@ -167,6 +168,29 @@ public abstract class Box {
                 allInputs,
                 requireNonNull(mapper)
             );
+        }
+
+        public void withCollection(Collector<Optional<O>, ?, Optional<T>> collector) {
+            Collector<Optional<O>, ?, Optional<T>> _collector = requireNonNull(collector);
+
+            onSignalChanged(observedWire,
+                newIn -> targetWire.setSignal(
+                    collect(allInputs, _collector)
+                )
+            );
+        }
+
+        private Signal<T> collect(
+            Collection<Wire<O>> allInputs,
+            Collector<Optional<O>, ?, Optional<T>> collector
+        ) {
+            return allInputs.stream()
+                .map(Wire::getSignal)
+                .map(Signal::getValue)
+                .collect(collector)
+                .map(Signal::of)
+                .orElse(Signal.none())
+            ;
         }
     }
 

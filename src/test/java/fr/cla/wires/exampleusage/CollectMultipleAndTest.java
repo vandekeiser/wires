@@ -14,7 +14,7 @@ import static java.util.stream.Collectors.toSet;
 import static org.assertj.core.api.Assertions.assertThat;
 
 //@formatter:off
-public class MultipleAndTest {
+public class CollectMultipleAndTest {
 
     private static final int MULTIPLICITY = 1;
     private Set<Wire<Boolean>> ins;
@@ -26,7 +26,7 @@ public class MultipleAndTest {
         ins = Stream.generate(() -> Wire.<Boolean>make()).limit(MULTIPLICITY).collect(toSet());
         out = Wire.make();
         time = Time.create();
-        MultipleAnd.ins(ins).out(out).time(time);
+        CollectMultipleAnd.ins(ins).out(out).time(time);
     }
 
     @Test
