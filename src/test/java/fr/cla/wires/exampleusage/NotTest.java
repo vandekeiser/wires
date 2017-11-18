@@ -11,14 +11,13 @@ public class NotTest {
 
     private Wire<Boolean> in, out;
     private Time time;
-    private Not not;
 
     @Before
     public void setup() {
         in = Wire.make();
         out = Wire.make();
         time = Time.create();
-        not = Not.in(in).out(out).agenda(time);
+        Not.in(in).out(out).time(time);
     }
 
     @Test

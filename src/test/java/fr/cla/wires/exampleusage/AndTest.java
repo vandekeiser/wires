@@ -14,7 +14,6 @@ public class AndTest {
 
     private Wire<Boolean> in1, in2, out;
     private Time time;
-    private And not;
 
     @Before
     public void setup() {
@@ -22,7 +21,7 @@ public class AndTest {
         in2 = Wire.make();
         out = Wire.make();
         time = Time.create();
-        not = And.in1(in1).in2(in2).out(out).time(time);
+        And.in1(in1).in2(in2).out(out).time(time);
     }
 
     @Test

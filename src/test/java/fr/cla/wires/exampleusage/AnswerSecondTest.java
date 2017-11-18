@@ -14,7 +14,6 @@ public class AnswerSecondTest {
 
     private Wire<Boolean> in1, in2, out;
     private Time time;
-    private AnswerSecond answerSecond;
 
     @Before
     public void setup() {
@@ -22,7 +21,7 @@ public class AnswerSecondTest {
         in2 = Wire.make();
         out = Wire.make();
         time = Time.create();
-        answerSecond = AnswerSecond.in1(in1).in2(in2).out(out).time(time);
+        AnswerSecond.in1(in1).in2(in2).out(out).time(time);
     }
 
     @Test

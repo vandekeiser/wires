@@ -42,7 +42,7 @@ public class Not extends Box {
             return this;
         }
 
-        public Not agenda(Time time) {
+        public Not time(Time time) {
             return new Not(in, out, time);
         }
     }
