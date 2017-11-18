@@ -31,9 +31,8 @@ public abstract class CollectHomogeneousInputs<O, T> extends Box {
     /**
      * Don't do the startup in the constructor to not let "this" escape through the method ref,
      * so that the Box is "properly constructed".
-     * Implementation note:
-     *     The contract of overriders is to call super.startup(), return this:
-     *     this method is only not marked final as a convenience to allow covariant return.
+     * @implNote The contract of overriders is to call super.startup(), return this:
+     * This method is only not marked final as a convenience to allow covariant return.
      * @return this Box, started.
      */
     protected CollectHomogeneousInputs<O, T> startup() {
