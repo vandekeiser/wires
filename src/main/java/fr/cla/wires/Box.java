@@ -33,6 +33,9 @@ public abstract class Box {
         );
     }
 
+
+
+
     //----------Convenience shortcuts for Boxes that have 1 or 2 inputs, or N homogeneous inputs--------------VVVVVVVVVVVVVVVV
     //----------(this follows the "Staged Builder" pattern)-------------
     protected <O, T> OnSignalChangedBuilder_ObservedWireCaptured<O, T> onSignalChanged(Wire<O> observedWire) {
@@ -41,7 +44,7 @@ public abstract class Box {
 
 
 
-    
+
     /**
     * Captures the input wire to observe
     */
