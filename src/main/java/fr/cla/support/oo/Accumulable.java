@@ -14,7 +14,7 @@ public class Accumulable<A, T> extends Mutable<A> {
     private final BiFunction<A, T, A> accumulator;
     private final BinaryOperator<A> combiner;
 
-    public Accumulable(
+    protected Accumulable(
         Optional<A> initialValue,
         Function<T, A> accumulationValue,
         BiFunction<A, T, A> accumulator,
