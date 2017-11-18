@@ -1,10 +1,10 @@
 package fr.cla.wires.exampleusage;
 
 import fr.cla.wires.Delay;
+import fr.cla.wires.ReduceHomogeneousInputs;
 import fr.cla.wires.Time;
 import fr.cla.wires.Wire;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
@@ -25,11 +25,9 @@ public class MultipleAnd extends ReduceHomogeneousInputs<Boolean, Boolean> {
     @Override protected Function<Boolean, Boolean> mapping() {
         return Function.identity();
     }
-
     @Override protected Boolean neutralElement() {
         return true;
     }
-
     @Override protected BinaryOperator<Boolean> reduction() {
         return this::and;
     }

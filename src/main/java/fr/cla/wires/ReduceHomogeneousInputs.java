@@ -1,9 +1,4 @@
-package fr.cla.wires.exampleusage;
-
-import fr.cla.wires.Box;
-import fr.cla.wires.Delay;
-import fr.cla.wires.Time;
-import fr.cla.wires.Wire;
+package fr.cla.wires;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,7 +6,6 @@ import java.util.function.BinaryOperator;
 import java.util.function.Function;
 
 import static java.util.Objects.requireNonNull;
-import static java.util.function.Function.identity;
 
 //@formatter:off
 public abstract class ReduceHomogeneousInputs<O, T> extends Box {
