@@ -82,11 +82,15 @@ public abstract class Box {
         }
 
         public OnSignalChangedBuilder_Applying<O, T> toResultOfApplying() {
-            return new OnSignalChangedBuilder_Applying<>(this.observedWire, this.targetWire);
+            return new OnSignalChangedBuilder_Applying<>(
+                this.observedWire, this.targetWire
+            );
         }
 
         public OnSignalChangedBuilderAll_InputsAndOutputCaptured<O, T> withInputs(Collection<Wire<O>> inputs) {
-            return new OnSignalChangedBuilderAll_InputsAndOutputCaptured<>(this.observedWire, this.targetWire, requireNonNull(inputs));
+            return new OnSignalChangedBuilderAll_InputsAndOutputCaptured<>(
+                this.observedWire, this.targetWire, requireNonNull(inputs)
+            );
         }
     }
 
