@@ -37,8 +37,8 @@ public class MultipleAnd extends Box {
     private void startup(Wire<Boolean> in) {
         this.<Boolean, Boolean>onSignalChanged(in)
             .set(out)
-            .withMapping(identity())
             .toResultOfReducing(this.ins)
+            .withMapping(identity())
             .withReduction(this::and, true)
         ;
     }
