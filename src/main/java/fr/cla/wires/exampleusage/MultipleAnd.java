@@ -1,51 +1,46 @@
 package fr.cla.wires.exampleusage;
 
-import fr.cla.wires.Box;
 import fr.cla.wires.Delay;
 import fr.cla.wires.Time;
 import fr.cla.wires.Wire;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.BinaryOperator;
 import java.util.function.Function;
 
 import static java.util.Objects.requireNonNull;
-import static java.util.function.Function.identity;
 
 //@formatter:off
-public class MultipleAnd extends Box {
-
-    private final Set<Wire<Boolean>> ins;
-    private final Wire<Boolean> out;
+public class MultipleAnd extends ReduceHomogeneousInputs<Boolean, Boolean> {
 
     private MultipleAnd(Set<Wire<Boolean>> ins, Wire<Boolean> out, Time time) {
         this(ins, out, time, DEFAULT_DELAY);
     }
 
     private MultipleAnd(Set<Wire<Boolean>> ins, Wire<Boolean> out, Time time, Delay delay) {
-        super(delay, time);
-        this.ins = requireNonNull(ins);
-        this.out = requireNonNull(out);
+        super(ins, out, time, delay);
     }
 
-    //Don't do the startup in the constructor to not let "this" escape through the method ref,
-    // so that the Box is "properly constructed".
-    private MultipleAnd startup() {
-        ins.forEach(this::startup);
-        return this;
+    @Override protected Function<Boolean, Boolean> mapping() {
+        return Function.identity();
     }
 
-    private void startup(Wire<Boolean> in) {
-        this.<Boolean, Boolean>onSignalChanged(in)
-            .set(out)
-            .withInputs(this.ins)
-            .withMapping(identity())
-            .withReduction(this::and, true)
-        ;
+    @Override protected Boolean neutralElement() {
+        return true;
+    }
+
+    @Override protected BinaryOperator<Boolean> reduction() {
+        return this::and;
     }
 
     private boolean and(boolean b1, boolean b2) {
         return b1 && b2;
+    }
+
+    @Override protected MultipleAnd startup() {
+        super.startup();
+        return this;
     }
 
     public static Builder ins(Set<Wire<Boolean>> ins) {
@@ -69,14 +64,6 @@ public class MultipleAnd extends Box {
             Time _time = requireNonNull(time);
             return new MultipleAnd(ins, out, _time).startup();
         }
-    }
-
-    private static Set<Wire<Boolean>> checkNoNulls(Set<Wire<Boolean>> ins) {
-        ins = new HashSet<>(requireNonNull(ins));
-        if(ins.stream().anyMatch(w -> w == null)) {
-            throw new NullPointerException("Detected null wires in " + ins);
-        }
-        return ins;
     }
 
 }
