@@ -6,6 +6,7 @@ import java.util.function.BinaryOperator;
 
 import static java.util.Objects.requireNonNull;
 
+//@formatter:off
 public class Mutable<T> {
 
     private Optional<T> maybe;
@@ -43,3 +44,4 @@ public class Mutable<T> {
     }
 
 }
+//@formatter:on

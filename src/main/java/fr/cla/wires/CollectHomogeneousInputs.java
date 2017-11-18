@@ -7,10 +7,7 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.function.*;
 import java.util.stream.Collector;
 
 import static java.util.Objects.requireNonNull;
@@ -48,40 +45,43 @@ public abstract class CollectHomogeneousInputs<O, T> extends Box {
         ;
     }
 
-    protected abstract Collector<Optional<O>, ?, Optional<T>> collection();
+    protected final Collector<Optional<O>, ?, Optional<T>> collection() {
+        return collection(accumulatorConstructor(), accumulator(), combiner());
+    }
 
+    protected abstract Function<O, T> accumulatorConstructor();
+    protected abstract BiFunction<T, O, T> accumulator();
+    protected abstract BinaryOperator<T> combiner();
 
-//    protected final Collector<Optional<O>, ?, Optional<T>> collection() {
-//        return collection(binaryOperator());
-//    }
-//
-//    protected abstract BinaryOperator<O> binaryOperator();
-//
-//    private Collector<Optional<Boolean>, ?, Optional<Boolean>> collection(
-//        BinaryOperator<Boolean> binaryOperator
-//    ) {
-//        return new Collector<Optional<Boolean>, Accumulable<O>, Optional<Boolean>>() {
-//            @Override public Supplier<Accumulable<O>> supplier() {
-//                return () -> Accumulable.initiallyUnset(binaryOperator);
-//            }
-//
-//            @Override public BiConsumer<Accumulable<O>, Optional<O>> accumulator() {
-//                return Accumulable::accumulate;
-//            }
-//
-//            @Override public BinaryOperator<Accumulable<O>> combiner() {
-//                return Accumulable::combine;
-//            }
-//
-//            @Override public Function<Accumulable<O>, Optional<O>> finisher() {
-//                return Mutable::current;
-//            }
-//
-//            @Override public Set<Characteristics> characteristics() {
-//                return EnumSet.of(UNORDERED);
-//            }
-//        };
-//    }
+    private Collector<Optional<O>, ?, Optional<T>> collection(
+        Function<O, T> accumulatorConstructor,
+        BiFunction<T, O, T> accumulator,
+        BinaryOperator<T> combiner
+    ) {
+        return new Collector<Optional<O>, Accumulable<T, O>, Optional<T>>() {
+            @Override public Supplier<Accumulable<T, O>> supplier() {
+                return () -> Accumulable.initiallyUnset(
+                    accumulatorConstructor, accumulator, combiner
+                );
+            }
+
+            @Override public BiConsumer<Accumulable<T, O>, Optional<O>> accumulator() {
+                return Accumulable::accumulate;
+            }
+
+            @Override public BinaryOperator<Accumulable<T, O>> combiner() {
+                return Accumulable::combine;
+            }
+
+            @Override public Function<Accumulable<T, O>, Optional<T>> finisher() {
+                return Mutable::current;
+            }
+
+            @Override public Set<Characteristics> characteristics() {
+                return EnumSet.of(UNORDERED);
+            }
+        };
+    }
 
     protected static <O> Set<Wire<O>> checkNoNulls(Set<Wire<O>> ins) {
         ins = new HashSet<>(requireNonNull(ins));
