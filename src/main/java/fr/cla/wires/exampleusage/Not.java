@@ -13,7 +13,9 @@ public class Not extends Box {
 
     private Not(Wire<Boolean> in, Wire<Boolean> out, Time time, Delay delay) {
         super(delay, time);
-        //Warning not to let this escape if we end up making this thread-safe
+        //Warning not to let "this" escape through the method ref,
+        // for a stateful Box that needs thread-safety
+        // (otherwise the Box will not be "properly constructed").
         this.<Boolean, Boolean>onSignalChanged(in).set(out).toResultOf(this::not);
     }
 
