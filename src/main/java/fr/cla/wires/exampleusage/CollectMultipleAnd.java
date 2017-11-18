@@ -1,6 +1,11 @@
 package fr.cla.wires.exampleusage;
 
-import fr.cla.wires.*;
+import fr.cla.Accumulable;
+import fr.cla.Mutable;
+import fr.cla.wires.CollectHomogeneousInputs;
+import fr.cla.wires.Delay;
+import fr.cla.wires.Time;
+import fr.cla.wires.Wire;
 
 import java.util.EnumSet;
 import java.util.Optional;
@@ -12,6 +17,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collector;
 
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collector.Characteristics.UNORDERED;
 
 //@formatter:off
 public class CollectMultipleAnd extends CollectHomogeneousInputs<Boolean, Boolean> {
@@ -24,7 +30,6 @@ public class CollectMultipleAnd extends CollectHomogeneousInputs<Boolean, Boolea
         super(ins, out, time, delay);
     }
 
-
     private boolean and(boolean b1, boolean b2) {
         return b1 && b2;
     }
@@ -34,26 +39,32 @@ public class CollectMultipleAnd extends CollectHomogeneousInputs<Boolean, Boolea
         return this;
     }
 
-    @Override protected Collector<Optional<Boolean>, ?, Optional<Boolean>> collection() {
-        return new Collector<Optional<Boolean>, MutableBoolean, Optional<Boolean>>() {
-            @Override public Supplier<MutableBoolean> supplier() {
-                return MutableBoolean::initiallyUnset;
+    protected Collector<Optional<Boolean>, ?, Optional<Boolean>> collection() {
+        return collection(this::and);
+    }
+
+    protected Collector<Optional<Boolean>, ?, Optional<Boolean>> collection(
+        BinaryOperator<Boolean> accumulator
+    ) {
+        return new Collector<Optional<Boolean>, Accumulable<Boolean>, Optional<Boolean>>() {
+            @Override public Supplier<Accumulable<Boolean>> supplier() {
+                return () -> Accumulable.initiallyUnset(accumulator);
             }
 
-            @Override public BiConsumer<MutableBoolean, Optional<Boolean>> accumulator() {
-                return MutableBoolean::and;
+            @Override public BiConsumer<Accumulable<Boolean>, Optional<Boolean>> accumulator() {
+                return Accumulable::accumulate;
             }
 
-            @Override public BinaryOperator<MutableBoolean> combiner() {
-                return MutableBoolean::and;
+            @Override public BinaryOperator<Accumulable<Boolean>> combiner() {
+                return Accumulable::combine;
             }
 
-            @Override public Function<MutableBoolean, Optional<Boolean>> finisher() {
-                return MutableBoolean::current;
+            @Override public Function<Accumulable<Boolean>, Optional<Boolean>> finisher() {
+                return Mutable::current;
             }
 
             @Override public Set<Characteristics> characteristics() {
-                return EnumSet.of(Characteristics.UNORDERED);
+                return EnumSet.of(UNORDERED);
             }
         };
     }
