@@ -23,15 +23,15 @@ public abstract class Box {
         if(agenda == null) throw new AssertionError("Time::agenda promised not to return null!");
     }
 
-    protected <V> void onSignalChanged(Wire<V> observedWire, OnSignalChanged<V> callback) {
-        OnSignalChanged<V> _callback = requireNonNull(callback);
+    protected <O> void onSignalChanged(Wire<O> observedWire, OnSignalChanged<O> callback) {
+        OnSignalChanged<O> _callback = requireNonNull(callback);
 
         observedWire.onSignalChanged(
             agenda.afterDelay(delay, _callback)
         );
     }
 
-    protected <I, O> OnSignalChangedBuilder_observedWireCaptured<I, O> onSignalChanged(Wire<I> observedWire) {
+    protected <O, T> OnSignalChangedBuilder_observedWireCaptured<O, T> onSignalChanged(Wire<O> observedWire) {
         return new OnSignalChangedBuilder_observedWireCaptured<>(observedWire);
     }
 
