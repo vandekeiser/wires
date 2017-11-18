@@ -41,6 +41,9 @@ public class Not extends Box {
         return new Builder(requireNonNull(in));
     }
 
+
+
+
     public static class Builder {
         private Wire<Boolean> in, out;
 
@@ -58,5 +61,6 @@ public class Not extends Box {
             return new Not(in, out, _time).startup();
         }
     }
+
 }
 //@formatter:on

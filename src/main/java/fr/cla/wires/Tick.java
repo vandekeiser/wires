@@ -1,6 +1,6 @@
 package fr.cla.wires;
 
-import fr.cla.AbstractValueObject;
+import fr.cla.support.oo.ddd.AbstractValueObject;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,5 +29,6 @@ public class Tick extends AbstractValueObject<Tick> {
     public static Tick number(long number) {
         return new Tick(number);
     }
+
 }
 //@formatter:on

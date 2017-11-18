@@ -1,6 +1,6 @@
 package fr.cla.wires;
 
-import fr.cla.AbstractValueObject;
+import fr.cla.support.oo.ddd.AbstractValueObject;
 
 import java.util.Arrays;
 import java.util.List;

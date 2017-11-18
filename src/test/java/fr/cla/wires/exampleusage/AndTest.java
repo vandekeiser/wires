@@ -77,74 +77,42 @@ public class AndTest {
      */
     @Test
     public void more_complex_scenario() {
-        //o1
-        assertThat(out.getSignal()).isEqualTo(Signal.none());
+        //Tick 0
+        assertThat(out.getSignal()).isEqualTo(Signal.none());    //o1
+        in1.setSignal(Signal.of(false));                         //i1
+        assertThat(out.getSignal()).isEqualTo(Signal.none());    //o2
 
-        //i1
-        in1.setSignal(Signal.of(false));
+        time.tick();                                             //t1
+        //Tick 1
+        assertThat(out.getSignal()).isEqualTo(Signal.none());    //o3
+        in2.setSignal(Signal.of(false));                         //i2
+        assertThat(out.getSignal()).isEqualTo(Signal.none());    //o4
 
-        //o2
-        assertThat(out.getSignal()).isEqualTo(Signal.none());
+        time.tick();                                             //t2
+        //Tick 2
+        assertThat(out.getSignal()).isEqualTo(Signal.of(false)); //o5
+        in1.setSignal(Signal.of(true));                          //i3
+        assertThat(out.getSignal()).isEqualTo(Signal.of(false)); //o6
 
-        //t1
-        time.tick();
+        time.tick();                                             //t3
+        //Tick 3
+        assertThat(out.getSignal()).isEqualTo(Signal.of(false)); //o7
+        in2.setSignal(Signal.of(true));                          //i4
+        assertThat(out.getSignal()).isEqualTo(Signal.of(false)); //o8
 
-        //o3
-        assertThat(out.getSignal()).isEqualTo(Signal.none());
+        time.tick();                                             //t4
+        //Tick 4
+        assertThat(out.getSignal()).isEqualTo(Signal.of(true));  //o9
 
-        //i2
-        in2.setSignal(Signal.of(false));
+        time.tick();                                             //t5
+        //Tick 5
+        assertThat(out.getSignal()).isEqualTo(Signal.of(true));  //o10
+        in1.setSignal(Signal.of(false));                         //i6
+        in2.setSignal(Signal.of(false));                         //i7
 
-        //o4
-        assertThat(out.getSignal()).isEqualTo(Signal.none());
-
-        //t2
-        time.tick();
-
-        //o5
-        assertThat(out.getSignal()).isEqualTo(Signal.of(false));
-
-        //i3
-        in1.setSignal(Signal.of(true));
-
-        //o6
-        assertThat(out.getSignal()).isEqualTo(Signal.of(false));
-
-        //t3
-        time.tick();
-
-        //o7
-        assertThat(out.getSignal()).isEqualTo(Signal.of(false));
-
-        //i4
-        in2.setSignal(Signal.of(true));
-
-        //o8
-        assertThat(out.getSignal()).isEqualTo(Signal.of(false));
-
-        //t4
-        time.tick();
-
-        //o9
-        assertThat(out.getSignal()).isEqualTo(Signal.of(true));
-
-        //t5
-        time.tick();
-
-        //o10
-        assertThat(out.getSignal()).isEqualTo(Signal.of(true));
-
-        //i6
-        in1.setSignal(Signal.of(false));
-
-        //i7
-        in2.setSignal(Signal.of(false));
-
-        //t6
-        time.tick();
-
-        //o11
-        assertThat(out.getSignal()).isEqualTo(Signal.of(false));
+        time.tick();                                             //t6
+        //Tick 6
+        assertThat(out.getSignal()).isEqualTo(Signal.of(false)); //o11
     }
 
 }

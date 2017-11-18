@@ -7,6 +7,7 @@ import java.util.function.Function;
 
 import static java.util.Objects.requireNonNull;
 
+//TODO: refact as extending CollectHomogeneousInputs (withMapping->withCollection)
 //@formatter:off
 public abstract class ReduceHomogeneousInputs<O, T> extends Box {
 

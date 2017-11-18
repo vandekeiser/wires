@@ -1,4 +1,4 @@
-package fr.cla.wires.exampleusage.pbt;
+package fr.cla.support.tests.pbt;
 
 import com.pholser.junit.quickcheck.generator.GenerationStatus;
 import com.pholser.junit.quickcheck.generator.Generator;
@@ -9,8 +9,10 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
+//@formatter:off
 public class BooleansGenerator extends Generator<List<Boolean>> {
-    static final int MULTIPLICITY = 100;
+
+    public static final int MULTIPLICITY = 100;
 
     public BooleansGenerator() {
         super(listOfBooleans());
@@ -32,3 +34,4 @@ public class BooleansGenerator extends Generator<List<Boolean>> {
     }
 
 }
+//@formatter:on

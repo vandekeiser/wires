@@ -75,5 +75,6 @@ public class NotTest {
         //Then
         assertThat(out.getSignal()).isEqualTo(Signal.none());
     }
+
 }
 //@formatter:on

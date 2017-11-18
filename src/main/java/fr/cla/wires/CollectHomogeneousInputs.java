@@ -1,7 +1,7 @@
 package fr.cla.wires;
 
-import fr.cla.Accumulable;
-import fr.cla.Mutable;
+import fr.cla.support.oo.Accumulable;
+import fr.cla.support.oo.Mutable;
 
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -54,14 +54,14 @@ public abstract class CollectHomogeneousInputs<O, T> extends Box {
     protected abstract BinaryOperator<T> combiner();
 
     private Collector<Optional<O>, ?, Optional<T>> collection(
-        Function<O, T> accumulatorConstructor,
+        Function<O, T> accumulationValue,
         BiFunction<T, O, T> accumulator,
         BinaryOperator<T> combiner
     ) {
         return new Collector<Optional<O>, Accumulable<T, O>, Optional<T>>() {
             @Override public Supplier<Accumulable<T, O>> supplier() {
                 return () -> Accumulable.initiallyUnset(
-                    accumulatorConstructor, accumulator, combiner
+                    accumulationValue, accumulator, combiner
                 );
             }
 
@@ -78,6 +78,7 @@ public abstract class CollectHomogeneousInputs<O, T> extends Box {
             }
 
             @Override public Set<Characteristics> characteristics() {
+                //TODO some collections might not be UNORDERED
                 return EnumSet.of(UNORDERED);
             }
         };

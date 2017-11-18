@@ -1,6 +1,6 @@
 package fr.cla.wires;
 
-import fr.cla.Monads;
+import fr.cla.support.functional.Monads;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -57,6 +57,9 @@ public abstract class Box {
         }
     }
 
+
+
+
     /**
      * Captures the input wire to observe, and the output wire to set
      */
@@ -78,6 +81,9 @@ public abstract class Box {
         }
 
     }
+
+
+
 
     /**
      * Enables applying a mapper to 1 or 2 inputs
@@ -145,6 +151,9 @@ public abstract class Box {
         }
     }
 
+
+
+
     /**
      * Captures N homogeneous inputs
      */
@@ -193,6 +202,9 @@ public abstract class Box {
             ;
         }
     }
+
+
+
 
     /**
      * Enables applying a reduction to N homogeneous inputs

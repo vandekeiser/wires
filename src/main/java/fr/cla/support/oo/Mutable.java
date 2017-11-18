@@ -1,8 +1,6 @@
-package fr.cla;
+package fr.cla.support.oo;
 
 import java.util.Optional;
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
 
 import static java.util.Objects.requireNonNull;
 
@@ -19,6 +17,10 @@ public class Mutable<T> {
         return new Mutable<>(Optional.empty());
     }
 
+    public static <T> Mutable<T> initially(T initialVal) {
+        return new Mutable<>(Optional.of(initialVal));
+    }
+
     public Optional<T> current() {
         if(maybe == null) throw new AssertionError();
         return maybe;
@@ -29,7 +31,7 @@ public class Mutable<T> {
     }
 
     /**
-     * @throws java.util.NoSuchElementException if !isPresent()
+     * @throws java.util.NoSuchElementException if !isPresent
      */
     protected final T get() {
         return maybe.get();

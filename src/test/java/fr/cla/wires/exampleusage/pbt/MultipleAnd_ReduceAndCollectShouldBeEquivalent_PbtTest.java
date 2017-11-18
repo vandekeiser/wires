@@ -3,6 +3,7 @@ package fr.cla.wires.exampleusage.pbt;
 
 import com.pholser.junit.quickcheck.Property;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
+import fr.cla.support.tests.pbt.RandomBooleans;
 import fr.cla.wires.Signal;
 import fr.cla.wires.Time;
 import fr.cla.wires.Wire;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import static fr.cla.wires.exampleusage.pbt.BooleansGenerator.MULTIPLICITY;
+import static fr.cla.support.tests.pbt.BooleansGenerator.MULTIPLICITY;
 import static java.lang.String.format;
 import static java.util.stream.Collectors.toSet;
 import static org.assertj.core.api.Assertions.assertThat;

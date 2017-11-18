@@ -1,4 +1,4 @@
-package fr.cla;
+package fr.cla.support.oo.ddd;
 
 import java.util.List;
 import java.util.Objects;
