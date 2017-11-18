@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 //@formatter:off
 public class ReduceMultipleAndTest {
 
-    private static final int MULTIPLICITY = 1;
+    private static final int MULTIPLICITY = 100;
     private Set<Wire<Boolean>> ins;
     private Wire<Boolean> out;
     private Time time;
