@@ -1,6 +1,11 @@
 package fr.cla.support.oo;
 
+import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import static java.util.Objects.requireNonNull;
 
@@ -13,12 +18,17 @@ public class Mutable<T> {
         this.maybe = requireNonNull(maybe);
     }
 
-    public static <T> Mutable<T> initiallyUnset() {
+    public static <T> Mutable<T> empty() {
         return new Mutable<>(Optional.empty());
     }
-
-    public static <T> Mutable<T> initially(T initialVal) {
-        return new Mutable<>(Optional.of(initialVal));
+    public static <T> Mutable<T> of(Optional<T> initialVal) {
+        return new Mutable<>(initialVal);
+    }
+    public static <T> Mutable<T> of(T initialVal) {
+        return of(Optional.of(initialVal));
+    }
+    public static <T> Mutable<T> ofNullable(T initialVal) {
+        return of(Optional.ofNullable(initialVal));
     }
 
     public final Optional<T> current() {
@@ -43,6 +53,64 @@ public class Mutable<T> {
 
     public final void set(Optional<T> o) {
         maybe = requireNonNull(o);
+    }
+
+    public final <U> Mutable<U> map(Function<T, U> mapper) {
+        return Mutable.of(current().map(mapper));
+    }
+
+    public final <U> Mutable<U> flatMap(Function<T, Optional<U>> mapper) {
+        return current()
+            .flatMap(mapper)
+            .map(Mutable::of)
+            .orElseGet(Mutable::empty)
+        ;
+    }
+
+    public final Mutable<T> orElse(T replacement) {
+        return Mutable.of(current().orElse(replacement));
+    }
+
+    public final Mutable<T> orElseGet(Supplier<? extends T> supplier) {
+        return Mutable.of(current().orElseGet(supplier));
+    }
+
+    public <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
+        return current().orElseThrow(exceptionSupplier);
+    }
+
+    public final void ifPresent(Consumer<? super T> consumer) {
+        current().ifPresent(consumer);
+    }
+
+    public final Mutable<T> filter(Predicate<? super T> predicate) {
+        return Mutable.of(current().filter(predicate));
+    }
+
+    @Override public final boolean equals(Object obj) {
+        //An optimization, but also avoids StackOverflows on cyclic object graphs.
+        if(obj == this) return true;
+
+        if(! (obj instanceof Mutable)) return false;
+        Mutable<?> that = (Mutable<?>) obj;
+
+        return Objects.equals(
+            this.current(),
+            that.current()
+        );
+    }
+
+    @Override public final int hashCode() {
+        return Objects.hash(current());
+    }
+
+    @Override public String toString() {
+        return String.format(
+            "%s@%s%s",
+            getClass().getSimpleName(),
+            Integer.toHexString(System.identityHashCode(this)),
+            current()
+        );
     }
 
 }
