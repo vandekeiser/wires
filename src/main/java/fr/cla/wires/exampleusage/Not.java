@@ -24,7 +24,7 @@ public class Not extends Box {
     //Don't do the startup in the constructor to not let "this" escape through the method ref,
     // so that the Box is "properly constructed".
     private Not startup() {
-        this.<Boolean, Boolean>onSignalChanged(in).set(out).toResultOf(this::not);
+        this.<Boolean, Boolean>onSignalChanged(in).set(out).toResultOfApplying(this::not);
         return this;
     }
 

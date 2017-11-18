@@ -25,8 +25,8 @@ public class AnswerSecond extends Box {
     //Don't do the startup in the constructor to not let "this" escape through the method ref,
     // so that the Box is "properly constructed".
     private AnswerSecond startup() {
-        this.<Boolean, Boolean>onSignalChanged(in1).set(out).toResultOf(this::answerSecond, in2);
-        this.<Boolean, Boolean>onSignalChanged(in2).set(out).toResultOf(in1, this::answerSecond);
+        this.<Boolean, Boolean>onSignalChanged(in1).set(out).toResultOfApplying(this::answerSecond, in2);
+        this.<Boolean, Boolean>onSignalChanged(in2).set(out).toResultOfApplying(in1, this::answerSecond);
         return this;
     }
 
