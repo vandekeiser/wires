@@ -1,4 +1,4 @@
-package fr.cla;
+package fr.cla.support.oo.ddd;
 
 import fr.cla.wires.Signal;
 import fr.cla.wires.Tick;
