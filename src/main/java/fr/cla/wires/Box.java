@@ -2,9 +2,7 @@ package fr.cla.wires;
 
 import fr.cla.support.functional.Monads;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
@@ -33,6 +31,13 @@ public abstract class Box {
         );
     }
 
+    protected static final <O> Set<Wire<O>> checkNoNulls(Set<Wire<O>> ins) {
+        ins = new HashSet<>(requireNonNull(ins));
+        if(ins.stream().anyMatch(Objects::isNull)) {
+            throw new NullPointerException("Detected null wires in " + ins);
+        }
+        return ins;
+    }
 
 
 
@@ -87,7 +92,7 @@ public abstract class Box {
             );
         }
 
-        public OnSignalChangedBuilderAll_InputsAndOutputCaptured<O, T> withInputs(Collection<Wire<O>> inputs) {
+        public OnSignalChangedBuilderAll_InputsAndOutputCaptured<O, T> from(Collection<Wire<O>> inputs) {
             return new OnSignalChangedBuilderAll_InputsAndOutputCaptured<>(
                 this.observedWire, this.targetWire, requireNonNull(inputs)
             );
@@ -184,7 +189,7 @@ public abstract class Box {
             this.allInputs = new HashSet<>(allInputs);
         }
 
-        public OnSignalChangedBuilderAll_Reducing<O, T> withMapping(Function<O, T> mapper) {
+        public OnSignalChangedBuilderAll_Reducing<O, T> map(Function<O, T> mapper) {
             return new OnSignalChangedBuilderAll_Reducing<>(
                 observedWire,
                 targetWire,
@@ -193,7 +198,7 @@ public abstract class Box {
             );
         }
 
-        public void withCollection(Collector<Optional<O>, ?, Optional<T>> collector) {
+        public void collect(Collector<Optional<O>, ?, Optional<T>> collector) {
             Collector<Optional<O>, ?, Optional<T>> _collector = requireNonNull(collector);
 
             onSignalChanged(observedWire,
@@ -237,7 +242,7 @@ public abstract class Box {
             this.mapper = requireNonNull(mapper);
         }
 
-        public void withReduction(BinaryOperator<T> reducer, T neutralElement) {
+        public void reduce(BinaryOperator<T> reducer, T neutralElement) {
             BinaryOperator<T> _reducer = requireNonNull(reducer);
             T _neutralElement = requireNonNull(neutralElement);
 

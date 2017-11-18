@@ -4,7 +4,6 @@ import fr.cla.support.oo.Accumulable;
 import fr.cla.support.oo.Mutable;
 
 import java.util.EnumSet;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.*;
@@ -45,20 +44,20 @@ public abstract class CollectHomogeneousInputs<O, T> extends Box {
     private void startup(Wire<O> in) {
         this.<O, T>onSignalChanged(in)
             .set(out)
-            .withInputs(this.ins)
-            .withCollection(collection())
+            .from(this.ins)
+            .collect(collector())
         ;
     }
 
-    protected final Collector<Optional<O>, ?, Optional<T>> collection() {
-        return collection(accumulatorConstructor(), accumulator(), combiner());
+    private Collector<Optional<O>, ?, Optional<T>> collector() {
+        return collector(accumulatorConstructor(), accumulator(), combiner());
     }
 
     protected abstract Function<O, T> accumulatorConstructor();
     protected abstract BiFunction<T, O, T> accumulator();
     protected abstract BinaryOperator<T> combiner();
 
-    private Collector<Optional<O>, ?, Optional<T>> collection(
+    private Collector<Optional<O>, ?, Optional<T>> collector(
         Function<O, T> accumulationValue,
         BiFunction<T, O, T> accumulator,
         BinaryOperator<T> combiner
@@ -87,14 +86,6 @@ public abstract class CollectHomogeneousInputs<O, T> extends Box {
                 return EnumSet.of(UNORDERED);
             }
         };
-    }
-
-    protected static <O> Set<Wire<O>> checkNoNulls(Set<Wire<O>> ins) {
-        ins = new HashSet<>(requireNonNull(ins));
-        if(ins.stream().anyMatch(w -> w == null)) {
-            throw new NullPointerException("Detected null wires in " + ins);
-        }
-        return ins;
     }
 
 }
