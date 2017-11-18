@@ -6,7 +6,11 @@ public class Time {
 
     private Time() {}
 
+    /**
+     * @return the non-null Agenda
+     */
     Agenda agenda() {
+        if(agenda == null) throw new AssertionError();
         return agenda;
     }
 
@@ -15,11 +19,16 @@ public class Time {
     }
 
     public void tick() {
-        agenda.tick();
+        agenda().tick();
     }
 
+    /**
+     * @return the current non-null Tick
+     */
     public Tick now() {
-        return agenda.now();
+        Tick now = agenda().now();
+        if(now == null) throw new AssertionError();
+        return now;
     }
 
 }

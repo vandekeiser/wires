@@ -14,6 +14,7 @@ public abstract class Box {
     protected Box(Delay delay, Time time) {
         this.delay = requireNonNull(delay);
         this.agenda = time.agenda();
+        if(agenda == null) throw new AssertionError("Time::agenda promised not to return null!");
     }
 
     protected <V> void onSignalChanged(Wire<V> observedWire, OnSignalChanged<V> callback) {

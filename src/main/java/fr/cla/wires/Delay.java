@@ -23,7 +23,11 @@ public class Delay extends AbstractValueObject<Delay> {
         return new Delay(duration);
     }
 
+    /**
+     * @return the >0 duration
+     */
     public long duration() {
+        if(duration <= 0) throw new AssertionError("Duration managed to get <0! Was: " + duration);
         return duration;
     }
 }

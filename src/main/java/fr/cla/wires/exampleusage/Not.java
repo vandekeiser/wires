@@ -33,23 +33,24 @@ public class Not extends Box {
     }
 
     public static Builder in(Wire<Boolean> in) {
-        return new Builder(in);
+        return new Builder(requireNonNull(in));
     }
 
     public static class Builder {
         private Wire<Boolean> in, out;
 
-        public Builder(Wire<Boolean> in) {
-            this.in = in;
+        private Builder(Wire<Boolean> in) {
+            this.in = requireNonNull(in);
         }
 
         public Builder out(Wire<Boolean> out) {
-            this.out = out;
+            this.out = requireNonNull(out);
             return this;
         }
 
         public Not time(Time time) {
-            return new Not(in, out, time).startup();
+            Time _time = requireNonNull(time);
+            return new Not(in, out, _time).startup();
         }
     }
 }

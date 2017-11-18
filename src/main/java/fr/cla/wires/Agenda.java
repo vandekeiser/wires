@@ -22,6 +22,7 @@ class Agenda {
     }
 
     Tick now() {
+        if(now == null) throw new AssertionError();
         return now;
     }
 

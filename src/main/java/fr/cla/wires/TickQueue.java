@@ -7,7 +7,7 @@ import static java.util.Objects.requireNonNull;
 
 class TickQueue {
 
-    //Run actions in FIFO order
+    //Run callbacks in FIFO order
     private final Queue<Runnable> todos = new ArrayDeque<>();
 
     <V> void thenCall(OnSignalChanged<V> callback, Signal<V> signal) {

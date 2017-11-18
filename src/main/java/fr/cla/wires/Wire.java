@@ -1,15 +1,18 @@
 package fr.cla.wires;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import static java.util.Objects.requireNonNull;
 
 public class Wire<T> {
 
     private Signal<T> signal = Signal.none();
-    private final List<OnSignalChanged<T>> listeners = new ArrayList<>();
+    private final Set<OnSignalChanged<T>> listeners = new HashSet<>();
 
+    /**
+     * @return the current non-null Signal
+     */
     public Signal<T> getSignal() {
         if(signal == null) throw new AssertionError();
         return signal;

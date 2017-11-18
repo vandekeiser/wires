@@ -35,28 +35,29 @@ public class And extends Box {
     }
 
     public static Builder in1(Wire<Boolean> in1) {
-        return new Builder(in1);
+        return new Builder(requireNonNull(in1));
     }
 
     public static class Builder {
         private Wire<Boolean> in1, in2, out;
 
-        public Builder(Wire<Boolean> in) {
-            this.in1 = in;
+        private Builder(Wire<Boolean> in) {
+            this.in1 = requireNonNull(in);
         }
 
         public Builder in2(Wire<Boolean> in2) {
-            this.in2 = in2;
+            this.in2 = requireNonNull(in2);
             return this;
         }
 
         public Builder out(Wire<Boolean> out) {
-            this.out = out;
+            this.out = requireNonNull(out);
             return this;
         }
 
         public And time(Time time) {
-            return new And(in1, in2, out, time).startup();
+            Time _time = requireNonNull(time);
+            return new And(in1, in2, out, _time).startup();
         }
     }
 
