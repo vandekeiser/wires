@@ -11,16 +11,11 @@ import java.util.function.Function;
 //@formatter:off
 public class SelfAccumulable<A> extends Accumulable<A, A> {
 
-    private SelfAccumulable(
+    public SelfAccumulable(
         Optional<A> initialValue,
         BinaryOperator<A> accumulator
     ) {
-        super(
-            initialValue,
-            Function.identity(),
-            accumulator,
-            accumulator
-        );
+        super(initialValue, Function.identity(), accumulator, accumulator );
     }
 
 }

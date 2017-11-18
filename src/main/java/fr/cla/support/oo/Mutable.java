@@ -21,27 +21,27 @@ public class Mutable<T> {
         return new Mutable<>(Optional.of(initialVal));
     }
 
-    public Optional<T> current() {
+    public final Optional<T> current() {
         if(maybe == null) throw new AssertionError();
         return maybe;
     }
 
-    protected final boolean isPresent() {
+    public final boolean isPresent() {
         return maybe.isPresent();
     }
 
     /**
      * @throws java.util.NoSuchElementException if !isPresent
      */
-    protected final T get() {
+    public final T get() {
         return maybe.get();
     }
 
-    protected final void set(T t) {
+    public final void set(T t) {
         maybe = Optional.of(t);
     }
 
-    protected final void set(Optional<T> o) {
+    public final void set(Optional<T> o) {
         maybe = requireNonNull(o);
     }
 

@@ -29,9 +29,14 @@ public abstract class CollectHomogeneousInputs<O, T> extends Box {
         this.out = requireNonNull(out);
     }
 
-    //Don't do the startup in the constructor to not let "this" escape through the method ref,
-    // so that the Box is "properly constructed".
-    //protected ReduceHomogeneousInputs<O, T, B> startup() {
+    /**
+     * Don't do the startup in the constructor to not let "this" escape through the method ref,
+     * so that the Box is "properly constructed".
+     * Implementation note:
+     *     The contract of overriders is to call super.startup(), return this:
+     *     this method is only not marked final as a convenience to allow covariant return.
+     * @return this Box, started.
+     */
     protected CollectHomogeneousInputs<O, T> startup() {
         ins.forEach(this::startup);
         return this;

@@ -22,7 +22,7 @@ public abstract class Box {
     protected Box(Delay delay, Time time) {
         this.delay = requireNonNull(delay);
         this.agenda = time.agenda();
-        if(agenda == null) throw new AssertionError("Time::agenda promised not to return null!");
+        if(agenda == null) throw new AssertionError("Time::agenda broke its promise not to return null!");
     }
 
     protected <O> void onSignalChanged(Wire<O> observedWire, OnSignalChanged<O> callback) {
@@ -43,9 +43,9 @@ public abstract class Box {
     * Captures the input wire to observe
     */
     protected class OnSignalChangedBuilder_ObservedWireCaptured<O, T> {
-        protected Wire<O> observedWire;
+        protected final Wire<O> observedWire;
 
-        OnSignalChangedBuilder_ObservedWireCaptured(Wire<O> observedWire) {
+        private OnSignalChangedBuilder_ObservedWireCaptured(Wire<O> observedWire) {
             this.observedWire = requireNonNull(observedWire);
         }
 
@@ -65,9 +65,12 @@ public abstract class Box {
      */
     protected class OnSignalChangedBuilder_ObservedAndTargetWiresCaptured<O, T>
     extends OnSignalChangedBuilder_ObservedWireCaptured<O, T> {
-        protected Wire<T> targetWire;
+        protected final Wire<T> targetWire;
 
-        OnSignalChangedBuilder_ObservedAndTargetWiresCaptured(Wire<O> observedWire, Wire<T> targetWire) {
+        private OnSignalChangedBuilder_ObservedAndTargetWiresCaptured(
+            Wire<O> observedWire,
+            Wire<T> targetWire
+        ) {
             super(observedWire);
             this.targetWire = requireNonNull(targetWire);
         }
@@ -79,7 +82,6 @@ public abstract class Box {
         public OnSignalChangedBuilderAll_InputsAndOutputCaptured<O, T> withInputs(Collection<Wire<O>> inputs) {
             return new OnSignalChangedBuilderAll_InputsAndOutputCaptured<>(this.observedWire, this.targetWire, requireNonNull(inputs));
         }
-
     }
 
 
@@ -90,8 +92,10 @@ public abstract class Box {
      */
     protected class OnSignalChangedBuilder_Applying<O, T>
     extends OnSignalChangedBuilder_ObservedAndTargetWiresCaptured<O, T> {
-
-        OnSignalChangedBuilder_Applying(Wire<O> observedWire, Wire<T> targetWire) {
+        private OnSignalChangedBuilder_Applying(
+            Wire<O> observedWire,
+            Wire<T> targetWire
+        ) {
             super(observedWire, targetWire);
         }
 
@@ -159,9 +163,9 @@ public abstract class Box {
      */
     protected class OnSignalChangedBuilderAll_InputsAndOutputCaptured<O, T>
     extends OnSignalChangedBuilder_ObservedAndTargetWiresCaptured<O, T> {
-        protected Collection<Wire<O>> allInputs;
+        protected final Collection<Wire<O>> allInputs;
 
-        OnSignalChangedBuilderAll_InputsAndOutputCaptured(
+        private OnSignalChangedBuilderAll_InputsAndOutputCaptured(
             Wire<O> observedWire,
             Wire<T> targetWire,
             Collection<Wire<O>> allInputs
@@ -211,9 +215,9 @@ public abstract class Box {
      */
     protected class OnSignalChangedBuilderAll_Reducing<O, T>
     extends OnSignalChangedBuilderAll_InputsAndOutputCaptured<O, T> {
-        private Function<O, T> mapper;
+        private final Function<O, T> mapper;
 
-        OnSignalChangedBuilderAll_Reducing(
+        private OnSignalChangedBuilderAll_Reducing(
             Wire<O> observedWire,
             Wire<T> targetWire,
             Collection<Wire<O>> allInputs,

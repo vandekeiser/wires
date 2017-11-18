@@ -40,7 +40,6 @@ public class CollectMultipleAnd extends CollectHomogeneousInputsToOutputOfSameTy
 
 
 
-
     public static class Builder {
         private Set<Wire<Boolean>> ins;
         private Wire<Boolean> out;

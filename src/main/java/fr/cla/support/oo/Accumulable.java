@@ -14,7 +14,7 @@ public class Accumulable<A, T> extends Mutable<A> {
     private final BiFunction<A, T, A> accumulator;
     private final BinaryOperator<A> combiner;
 
-    protected Accumulable(
+    public Accumulable(
         Optional<A> initialValue,
         Function<T, A> accumulationValue,
         BiFunction<A, T, A> accumulator,
@@ -35,12 +35,12 @@ public class Accumulable<A, T> extends Mutable<A> {
     }
 
     public static <T, A> Accumulable<A, T> initially(
-        A t,
+        A initialValue,
         Function<T, A> accumulationValue,
         BiFunction<A, T, A> accumulator,
         BinaryOperator<A> combiner
     ) {
-        return new Accumulable<>(Optional.of(t), accumulationValue, accumulator, combiner);
+        return new Accumulable<>(Optional.of(initialValue), accumulationValue, accumulator, combiner);
     }
 
     public void accumulate(Optional<T> maybe) {
@@ -57,9 +57,7 @@ public class Accumulable<A, T> extends Mutable<A> {
 
         return initially(
             combiner.apply(this.get(), that.get()),
-        accumulationValue,
-            accumulator,
-            combiner
+            accumulationValue, accumulator, combiner
         );
     }
 
