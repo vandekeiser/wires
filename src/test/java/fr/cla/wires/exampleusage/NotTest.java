@@ -1,28 +1,24 @@
 package fr.cla.wires.exampleusage;
 
 
-import fr.cla.wires.Agenda;
-import fr.cla.wires.Clock;
-import fr.cla.wires.Signal;
-import fr.cla.wires.Wire;
+import fr.cla.wires.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class NotTest {
 
     private Wire<Boolean> in, out;
-    private Clock clock;
+    private Time time;
     private Not not;
 
     @Before
     public void setup() {
         in = Wire.make();
         out = Wire.make();
-        Agenda agenda = new Agenda();
-        clock = agenda;
-        not = Not.in(in).out(out).agenda(agenda);
+        time = Time.create();
+        not = Not.in(in).out(out).agenda(time);
     }
 
     @Test
@@ -34,7 +30,7 @@ public class NotTest {
     public void out_should_be_none_when_in_is_none() {
         //When
         in.setSignal(Signal.none());
-        clock.tick();
+        time.tick();
 
         //Then
         assertThat(out.getSignal()).isEqualTo(Signal.none());
@@ -44,7 +40,7 @@ public class NotTest {
     public void out_should_be_false_when_in_is_true() {
         //When
         in.setSignal(Signal.of(true));
-        clock.tick();
+        time.tick();
 
         //Then
         assertThat(out.getSignal()).isEqualTo(Signal.of(false));
@@ -54,7 +50,7 @@ public class NotTest {
     public void out_should_be_true_when_in_is_false() {
         //When
         in.setSignal(Signal.of(false));
-        clock.tick();
+        time.tick();
 
         //Then
         assertThat(out.getSignal()).isEqualTo(Signal.of(true));

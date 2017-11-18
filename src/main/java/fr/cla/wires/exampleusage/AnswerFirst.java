@@ -1,21 +1,18 @@
 package fr.cla.wires.exampleusage;
 
-import fr.cla.wires.Agenda;
-import fr.cla.wires.Box;
-import fr.cla.wires.Delay;
-import fr.cla.wires.Wire;
+import fr.cla.wires.*;
 
 import static java.util.Objects.requireNonNull;
 
 public class AnswerFirst extends Box {
     private final Wire<Boolean> in1, in2, out;
 
-    private AnswerFirst(Wire<Boolean> in1, Wire<Boolean> in2, Wire<Boolean> out, Agenda agenda) {
-        this(in1, in2, out, agenda, DEFAULT_DELAY);
+    private AnswerFirst(Wire<Boolean> in1, Wire<Boolean> in2, Wire<Boolean> out, Time time) {
+        this(in1, in2, out, time, DEFAULT_DELAY);
     }
 
-    private AnswerFirst(Wire<Boolean> in1, Wire<Boolean> in2, Wire<Boolean> out, Agenda agenda, Delay delay) {
-        super(delay, agenda);
+    private AnswerFirst(Wire<Boolean> in1, Wire<Boolean> in2, Wire<Boolean> out, Time time, Delay delay) {
+        super(delay, time);
         this.in1 = requireNonNull(in1);
         this.in2 = requireNonNull(in2);
         this.out = requireNonNull(out);
@@ -50,8 +47,8 @@ public class AnswerFirst extends Box {
             return this;
         }
 
-        public AnswerFirst agenda(Agenda agenda) {
-            return new AnswerFirst(in1, in2, out, agenda);
+        public AnswerFirst time(Time time) {
+            return new AnswerFirst(in1, in2, out, time);
         }
     }
 

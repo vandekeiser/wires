@@ -6,7 +6,7 @@ import java.util.Map;
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off
-public class Agenda implements Clock {
+class Agenda implements Clock {
 
     private Tick now = Tick.ZERO;
     private final Map<Tick, TickQueue> appointments = new HashMap<>();

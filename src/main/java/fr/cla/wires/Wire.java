@@ -29,4 +29,7 @@ public class Wire<T> {
     public static <T> Wire<T> make() {
         return new Wire<>();
     }
+
+    private Wire() {}
+
 }

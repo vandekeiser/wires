@@ -1,8 +1,8 @@
 package fr.cla.wires.exampleusage;
 
-import fr.cla.wires.Agenda;
 import fr.cla.wires.Box;
 import fr.cla.wires.Delay;
+import fr.cla.wires.Time;
 import fr.cla.wires.Wire;
 
 import static java.util.Objects.requireNonNull;
@@ -10,12 +10,12 @@ import static java.util.Objects.requireNonNull;
 public class Not extends Box {
     private final Wire<Boolean> in, out;
 
-    private Not(Wire<Boolean> in, Wire<Boolean> out, Agenda agenda) {
-        this(in, out, agenda, DEFAULT_DELAY);
+    private Not(Wire<Boolean> in, Wire<Boolean> out, Time time) {
+        this(in, out, time, DEFAULT_DELAY);
     }
 
-    private Not(Wire<Boolean> in, Wire<Boolean> out, Agenda agenda, Delay delay) {
-        super(delay, agenda);
+    private Not(Wire<Boolean> in, Wire<Boolean> out, Time time, Delay delay) {
+        super(delay, time);
         this.in = requireNonNull(in);
         this.out = requireNonNull(out);
 
@@ -42,8 +42,8 @@ public class Not extends Box {
             return this;
         }
 
-        public Not agenda(Agenda agenda) {
-            return new Not(in, out, agenda);
+        public Not agenda(Time time) {
+            return new Not(in, out, time);
         }
     }
 }

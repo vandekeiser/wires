@@ -11,9 +11,9 @@ public abstract class Box {
     private final Delay delay;
     private final Agenda agenda;
 
-    protected Box(Delay delay, Agenda agenda) {
+    protected Box(Delay delay, Time time) {
         this.delay = requireNonNull(delay);
-        this.agenda = requireNonNull(agenda);
+        this.agenda = time.agenda();
     }
 
     protected <V> void onSignalChanged(Wire<V> observedWire, OnSignalChanged<V> callback) {
