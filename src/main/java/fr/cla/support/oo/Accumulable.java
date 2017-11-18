@@ -43,7 +43,7 @@ public class Accumulable<A, T> extends Mutable<A> {
         return new Accumulable<>(Optional.of(initialValue), accumulationValue, accumulator, combiner);
     }
 
-    public void accumulate(Optional<T> maybe) {
+    public final void accumulate(Optional<T> maybe) {
         if(this.isPresent() && maybe.isPresent()) {
             set(accumulator.apply(this.get(), maybe.get()));
         } else if(maybe.isPresent()) {
@@ -51,7 +51,7 @@ public class Accumulable<A, T> extends Mutable<A> {
         }
     }
 
-    public Accumulable<A, T> combine(Accumulable<A, T> that) {
+    public final Accumulable<A, T> combine(Accumulable<A, T> that) {
         if(!this.isPresent()) return initiallyUnset(accumulationValue, accumulator, combiner);
         if(!that.isPresent()) return initiallyUnset(accumulationValue, accumulator, combiner);
 

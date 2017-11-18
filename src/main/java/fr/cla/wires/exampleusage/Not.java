@@ -8,7 +8,7 @@ import fr.cla.wires.Wire;
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off
-public class Not extends Box {
+public final class Not extends Box {
 
     private final Wire<Boolean> in, out;
 

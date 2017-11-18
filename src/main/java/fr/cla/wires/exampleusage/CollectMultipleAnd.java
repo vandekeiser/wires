@@ -11,7 +11,7 @@ import java.util.function.BinaryOperator;
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off
-public class CollectMultipleAnd extends CollectHomogeneousInputsToOutputOfSameType<Boolean> {
+public final class CollectMultipleAnd extends CollectHomogeneousInputsToOutputOfSameType<Boolean> {
 
     private CollectMultipleAnd(Set<Wire<Boolean>> ins, Wire<Boolean> out, Time time) {
         this(ins, out, time, DEFAULT_DELAY);

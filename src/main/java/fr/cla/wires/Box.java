@@ -23,7 +23,7 @@ public abstract class Box {
         if(agenda == null) throw new AssertionError("Time::agenda broke its promise not to return null!");
     }
 
-    protected <O> void onSignalChanged(Wire<O> observedWire, OnSignalChanged<O> callback) {
+    protected final <O> void onSignalChanged(Wire<O> observedWire, OnSignalChanged<O> callback) {
         OnSignalChanged<O> _callback = requireNonNull(callback);
 
         observedWire.onSignalChanged(
@@ -31,7 +31,7 @@ public abstract class Box {
         );
     }
 
-    protected static final <O> Set<Wire<O>> checkNoNulls(Set<Wire<O>> ins) {
+    protected static <O> Set<Wire<O>> checkNoNulls(Set<Wire<O>> ins) {
         ins = new HashSet<>(requireNonNull(ins));
         if(ins.stream().anyMatch(Objects::isNull)) {
             throw new NullPointerException("Detected null wires in " + ins);
@@ -43,7 +43,7 @@ public abstract class Box {
 
     //----------Convenience shortcuts for Boxes that have 1 or 2 inputs, or N homogeneous inputs--------------VVVVVVVVVVVVVVVV
     //----------(this follows the "Staged Builder" pattern)-------------
-    protected <O, T> OnSignalChangedBuilder_ObservedWireCaptured<O, T> onSignalChanged(Wire<O> observedWire) {
+    protected final <O, T> OnSignalChangedBuilder_ObservedWireCaptured<O, T> onSignalChanged(Wire<O> observedWire) {
         return new OnSignalChangedBuilder_ObservedWireCaptured<>(observedWire);
     }
 
@@ -60,7 +60,7 @@ public abstract class Box {
             this.observedWire = requireNonNull(observedWire);
         }
 
-        public OnSignalChangedBuilder_ObservedAndTargetWiresCaptured<O, T> set(Wire<T> targetWire) {
+        public final OnSignalChangedBuilder_ObservedAndTargetWiresCaptured<O, T> set(Wire<T> targetWire) {
             return new OnSignalChangedBuilder_ObservedAndTargetWiresCaptured<>(
                 observedWire,
                 requireNonNull(targetWire)
@@ -86,13 +86,13 @@ public abstract class Box {
             this.targetWire = requireNonNull(targetWire);
         }
 
-        public OnSignalChangedBuilder_Applying<O, T> toResultOfApplying() {
+        public final OnSignalChangedBuilder_Applying<O, T> toResultOfApplying() {
             return new OnSignalChangedBuilder_Applying<>(
                 this.observedWire, this.targetWire
             );
         }
 
-        public OnSignalChangedBuilderAll_InputsAndOutputCaptured<O, T> from(Collection<Wire<O>> inputs) {
+        public final OnSignalChangedBuilderAll_InputsAndOutputCaptured<O, T> from(Collection<Wire<O>> inputs) {
             return new OnSignalChangedBuilderAll_InputsAndOutputCaptured<>(
                 this.observedWire, this.targetWire, requireNonNull(inputs)
             );
@@ -117,7 +117,7 @@ public abstract class Box {
         /**
          * Applies {@code transformation} to the changed Signal
          */
-        public void transformation(Function<O, T> transformation) {
+        public final void transformation(Function<O, T> transformation) {
             Function<O, T> _transformation = requireNonNull(transformation);
 
             onSignalChanged(observedWire,
@@ -134,7 +134,7 @@ public abstract class Box {
          * @param transformation The function to apply to (changed Wire, unchanged Wire)
          * @param unchangedSecondWire The unchanged Wire, used as the 2nd parameter of {@code transformation}
          */
-        public <P> void transformation(
+        public final <P> void transformation(
             BiFunction<O, P, T> transformation,
             Wire<P> unchangedSecondWire
         ) {
@@ -155,7 +155,7 @@ public abstract class Box {
          * @param unchangedFirstWire The unchanged Wire, used as the 1st parameter of {@code transformation}
          * @param transformation The function to apply to (unchanged Wire, changed Wire)
          */
-        public <P> void transformation(
+        public final <P> void transformation(
             Wire<P> unchangedFirstWire,
             BiFunction<P, O, T> transformation
         ) {
@@ -189,7 +189,7 @@ public abstract class Box {
             this.allInputs = new HashSet<>(allInputs);
         }
 
-        public OnSignalChangedBuilderAll_Reducing<O, T> map(Function<O, T> mapper) {
+        public final OnSignalChangedBuilderAll_Reducing<O, T> map(Function<O, T> mapper) {
             return new OnSignalChangedBuilderAll_Reducing<>(
                 observedWire,
                 targetWire,
@@ -198,7 +198,7 @@ public abstract class Box {
             );
         }
 
-        public void collect(Collector<Optional<O>, ?, Optional<T>> collector) {
+        public final void collect(Collector<Optional<O>, ?, Optional<T>> collector) {
             Collector<Optional<O>, ?, Optional<T>> _collector = requireNonNull(collector);
 
             onSignalChanged(observedWire,
@@ -242,7 +242,7 @@ public abstract class Box {
             this.mapper = requireNonNull(mapper);
         }
 
-        public void reduce(BinaryOperator<T> reducer, T neutralElement) {
+        public final void reduce(BinaryOperator<T> reducer, T neutralElement) {
             BinaryOperator<T> _reducer = requireNonNull(reducer);
             T _neutralElement = requireNonNull(neutralElement);
 

@@ -8,7 +8,7 @@ import fr.cla.wires.Wire;
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off
-public class AnswerSecond extends Box {
+public final class AnswerSecond extends Box {
 
     private final Wire<Boolean> in1, in2, out;
 
