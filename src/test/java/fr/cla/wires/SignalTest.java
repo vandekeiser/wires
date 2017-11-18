@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+//@formatter:off
 public class SignalTest {
 
     //This test is required to justify the @SuppressWarnings("unchecked") comment in Signal::signalOfV
@@ -34,3 +35,4 @@ public class SignalTest {
     }
 
 }
+//@formatter:on

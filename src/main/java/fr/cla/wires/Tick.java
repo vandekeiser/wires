@@ -5,6 +5,7 @@ import fr.cla.AbstractValueObject;
 import java.util.Arrays;
 import java.util.List;
 
+//@formatter:off
 public class Tick extends AbstractValueObject<Tick> {
     public static final Tick ZERO = new Tick(0L);
 
@@ -29,3 +30,4 @@ public class Tick extends AbstractValueObject<Tick> {
         return new Tick(number);
     }
 }
+//@formatter:on

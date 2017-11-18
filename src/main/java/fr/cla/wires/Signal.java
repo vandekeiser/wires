@@ -10,6 +10,7 @@ import java.util.function.Function;
 
 import static java.util.Objects.requireNonNull;
 
+//@formatter:off
 public class Signal<V> extends AbstractValueObject<Signal<V>> {
     private final V value;
 
@@ -59,3 +60,4 @@ public class Signal<V> extends AbstractValueObject<Signal<V>> {
         return signalOfV;
     }
 }
+//@formatter:on

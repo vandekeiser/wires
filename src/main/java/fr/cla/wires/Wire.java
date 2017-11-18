@@ -5,6 +5,7 @@ import java.util.Set;
 
 import static java.util.Objects.requireNonNull;
 
+//@formatter:off
 public class Wire<T> {
 
     private Signal<T> signal = Signal.none();
@@ -36,3 +37,4 @@ public class Wire<T> {
     private Wire() {}
 
 }
+//@formatter:on

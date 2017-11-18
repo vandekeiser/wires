@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+//@formatter:off
 public class WireTest {
 
     @Test
@@ -14,3 +15,4 @@ public class WireTest {
     }
 
 }
+//@formatter:on

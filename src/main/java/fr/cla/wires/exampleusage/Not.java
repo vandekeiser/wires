@@ -7,6 +7,7 @@ import fr.cla.wires.Wire;
 
 import static java.util.Objects.requireNonNull;
 
+//@formatter:off
 public class Not extends Box {
 
     private final Wire<Boolean> in, out;
@@ -24,7 +25,11 @@ public class Not extends Box {
     //Don't do the startup in the constructor to not let "this" escape through the method ref,
     // so that the Box is "properly constructed".
     private Not startup() {
-        this.<Boolean, Boolean>onSignalChanged(in).set(out).toResultOfApplying(this::not);
+        this.<Boolean, Boolean>onSignalChanged(in)
+            .set(out)
+            .toResultOfApplying()
+            .transformation(this::not)
+        ;
         return this;
     }
 
@@ -54,3 +59,4 @@ public class Not extends Box {
         }
     }
 }
+//@formatter:on

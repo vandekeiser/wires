@@ -1,5 +1,6 @@
 package fr.cla.wires;
 
+//@formatter:off
 public class Time {
 
     private final Agenda agenda = new Agenda();
@@ -32,3 +33,4 @@ public class Time {
     }
 
 }
+//@formatter:on

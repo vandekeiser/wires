@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+//@formatter:off
 public class TimeTest {
 
     private final Time time = Time.create();
@@ -21,3 +22,4 @@ public class TimeTest {
     }
 
 }
+//@formatter:on

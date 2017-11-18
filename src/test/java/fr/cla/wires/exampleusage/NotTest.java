@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+//@formatter:off
 public class NotTest {
 
     private Wire<Boolean> in, out;
@@ -75,3 +76,4 @@ public class NotTest {
         assertThat(out.getSignal()).isEqualTo(Signal.none());
     }
 }
+//@formatter:on

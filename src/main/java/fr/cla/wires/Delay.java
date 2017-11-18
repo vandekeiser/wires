@@ -5,6 +5,7 @@ import fr.cla.AbstractValueObject;
 import java.util.Arrays;
 import java.util.List;
 
+//@formatter:off
 public class Delay extends AbstractValueObject<Delay> {
     private final int duration;
 
@@ -31,3 +32,4 @@ public class Delay extends AbstractValueObject<Delay> {
         return duration;
     }
 }
+//@formatter:on

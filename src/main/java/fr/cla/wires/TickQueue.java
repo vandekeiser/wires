@@ -5,6 +5,7 @@ import java.util.Queue;
 
 import static java.util.Objects.requireNonNull;
 
+//@formatter:off
 class TickQueue {
 
     //Run callbacks in FIFO order
@@ -22,3 +23,4 @@ class TickQueue {
     }
 
 }
+//@formatter:on

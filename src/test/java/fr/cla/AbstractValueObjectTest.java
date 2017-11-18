@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+//@formatter:off
 public class AbstractValueObjectTest {
 
     @Test
@@ -18,3 +19,4 @@ public class AbstractValueObjectTest {
     }
 
 }
+//@formatter:on

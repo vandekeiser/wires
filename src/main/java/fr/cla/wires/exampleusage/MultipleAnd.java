@@ -12,6 +12,7 @@ import java.util.function.Function;
 import static java.util.Objects.requireNonNull;
 import static java.util.function.Function.identity;
 
+//@formatter:off
 public class MultipleAnd extends Box {
 
     private final Set<Wire<Boolean>> ins;
@@ -37,7 +38,7 @@ public class MultipleAnd extends Box {
     private void startup(Wire<Boolean> in) {
         this.<Boolean, Boolean>onSignalChanged(in)
             .set(out)
-            .toResultOfReducing(this.ins)
+            .withInputs(this.ins)
             .withMapping(identity())
             .withReduction(this::and, true)
         ;
@@ -79,3 +80,4 @@ public class MultipleAnd extends Box {
     }
 
 }
+//@formatter:on

@@ -3,6 +3,7 @@ package fr.cla;
 import java.util.Optional;
 import java.util.function.BinaryOperator;
 
+//@formatter:off
 public class Monads {
 
     public static <T> BinaryOperator<Optional<T>> liftOptional(BinaryOperator<T> reducer) {
@@ -17,3 +18,4 @@ public class Monads {
     }
 
 }
+//@formatter:on

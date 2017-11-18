@@ -11,6 +11,7 @@ import java.util.function.Function;
 
 import static java.util.Objects.requireNonNull;
 
+//@formatter:off
 public abstract class Box {
 
     protected static final Delay DEFAULT_DELAY = Delay.of(1);
@@ -31,39 +32,66 @@ public abstract class Box {
         );
     }
 
-    protected <O, T> OnSignalChangedBuilder_observedWireCaptured<O, T> onSignalChanged(Wire<O> observedWire) {
-        return new OnSignalChangedBuilder_observedWireCaptured<>(observedWire);
+    protected <O, T> OnSignalChangedBuilder_ObservedWireCaptured<O, T> onSignalChanged(Wire<O> observedWire) {
+        return new OnSignalChangedBuilder_ObservedWireCaptured<>(observedWire);
     }
 
     //----------Convenience shortcuts for Boxes that have 1 or 2 inputs, or N homogeneous inputs--------------VVVVVVVVVVVVVVVV
-    protected class OnSignalChangedBuilder_observedWireCaptured<O, T> {
+
+    /**
+    * Captures the input wire to observe
+    */
+    protected class OnSignalChangedBuilder_ObservedWireCaptured<O, T> {
         protected Wire<O> observedWire;
 
-        OnSignalChangedBuilder_observedWireCaptured(Wire<O> observedWire) {
+        OnSignalChangedBuilder_ObservedWireCaptured(Wire<O> observedWire) {
             this.observedWire = requireNonNull(observedWire);
         }
 
-        public OnSignalChangedBuilder_observedAndTargetWiresCaptured<O, T> set(Wire<T> targetWire) {
-            return new OnSignalChangedBuilder_observedAndTargetWiresCaptured<>(
+        public OnSignalChangedBuilder_ObservedAndTargetWiresCaptured<O, T> set(Wire<T> targetWire) {
+            return new OnSignalChangedBuilder_ObservedAndTargetWiresCaptured<>(
                 observedWire,
                 requireNonNull(targetWire)
             );
         }
     }
 
-    protected class OnSignalChangedBuilder_observedAndTargetWiresCaptured<O, T>
-    extends OnSignalChangedBuilder_observedWireCaptured<O, T>{
+    /**
+     * Captures the input wire to observe, and the output wire to set
+     */
+    protected class OnSignalChangedBuilder_ObservedAndTargetWiresCaptured<O, T>
+    extends OnSignalChangedBuilder_ObservedWireCaptured<O, T> {
         protected Wire<T> targetWire;
 
-        OnSignalChangedBuilder_observedAndTargetWiresCaptured(Wire<O> observedWire, Wire<T> targetWire) {
+        OnSignalChangedBuilder_ObservedAndTargetWiresCaptured(Wire<O> observedWire, Wire<T> targetWire) {
             super(observedWire);
             this.targetWire = requireNonNull(targetWire);
+        }
+
+        public OnSignalChangedBuilder_Applying<O, T> toResultOfApplying() {
+            return new OnSignalChangedBuilder_Applying<>(this.observedWire, this.targetWire);
+        }
+
+        public OnSignalChangedBuilderAll_InputsAndOutputCaptured<O, T> withInputs(Collection<Wire<O>> inputs) {
+            return new OnSignalChangedBuilderAll_InputsAndOutputCaptured<>(this.observedWire, this.targetWire, requireNonNull(inputs));
+        }
+
+    }
+
+    /**
+     * Enables applying a mapper to 1 or 2 inputs
+     */
+    protected class OnSignalChangedBuilder_Applying<O, T>
+    extends OnSignalChangedBuilder_ObservedAndTargetWiresCaptured<O, T> {
+
+        OnSignalChangedBuilder_Applying(Wire<O> observedWire, Wire<T> targetWire) {
+            super(observedWire, targetWire);
         }
 
         /**
          * Applies {@code transformation} to the changed Signal
          */
-        public void toResultOfApplying(Function<O, T> transformation) {
+        public void transformation(Function<O, T> transformation) {
             Function<O, T> _transformation = requireNonNull(transformation);
 
             onSignalChanged(observedWire,
@@ -80,7 +108,7 @@ public abstract class Box {
          * @param transformation The function to apply to (changed Wire, unchanged Wire)
          * @param unchangedSecondWire The unchanged Wire, used as the 2nd parameter of {@code transformation}
          */
-        public <P> void toResultOfApplying(
+        public <P> void transformation(
             BiFunction<O, P, T> transformation,
             Wire<P> unchangedSecondWire
         ) {
@@ -101,7 +129,7 @@ public abstract class Box {
          * @param unchangedFirstWire The unchanged Wire, used as the 1st parameter of {@code transformation}
          * @param transformation The function to apply to (unchanged Wire, changed Wire)
          */
-        public <P> void toResultOfApplying(
+        public <P> void transformation(
             Wire<P> unchangedFirstWire,
             BiFunction<P, O, T> transformation
         ) {
@@ -114,17 +142,20 @@ public abstract class Box {
                 )
             );
         }
-
-        public OnSignalChangedBuilderAll_Multiple<O, T> toResultOfReducing(Collection<Wire<O>> allInputs) {
-            return new OnSignalChangedBuilderAll_Multiple<>(observedWire, targetWire, allInputs);
-        }
     }
 
-    protected class OnSignalChangedBuilderAll_Multiple<O, T>
-    extends OnSignalChangedBuilder_observedAndTargetWiresCaptured<O, T>{
+    /**
+     * Captures N homogeneous inputs
+     */
+    protected class OnSignalChangedBuilderAll_InputsAndOutputCaptured<O, T>
+    extends OnSignalChangedBuilder_ObservedAndTargetWiresCaptured<O, T> {
         protected Collection<Wire<O>> allInputs;
 
-        OnSignalChangedBuilderAll_Multiple(Wire<O> observedWire, Wire<T> targetWire, Collection<Wire<O>> allInputs) {
+        OnSignalChangedBuilderAll_InputsAndOutputCaptured(
+            Wire<O> observedWire,
+            Wire<T> targetWire,
+            Collection<Wire<O>> allInputs
+        ) {
             super(observedWire, targetWire);
             this.allInputs = new HashSet<>(allInputs);
         }
@@ -139,9 +170,11 @@ public abstract class Box {
         }
     }
 
-
+    /**
+     * Enables applying a reduction to N homogeneous inputs
+     */
     protected class OnSignalChangedBuilderAll_Reducing<O, T>
-    extends OnSignalChangedBuilderAll_Multiple<O, T>{
+    extends OnSignalChangedBuilderAll_InputsAndOutputCaptured<O, T> {
         private Function<O, T> mapper;
 
         OnSignalChangedBuilderAll_Reducing(
@@ -159,11 +192,18 @@ public abstract class Box {
             T _neutralElement = requireNonNull(neutralElement);
 
             onSignalChanged(observedWire,
-                newIn -> targetWire.setSignal(mapAndReduce(allInputs, mapper, _reducer, _neutralElement))
+                newIn -> targetWire.setSignal(
+                    mapAndReduce(allInputs, mapper, _reducer, _neutralElement)
+                )
             );
         }
 
-        private Signal<T> mapAndReduce(Collection<Wire<O>> allInputs, Function<O, T> mapper, BinaryOperator<T> reducer, T neutralElement) {
+        private Signal<T> mapAndReduce(
+            Collection<Wire<O>> allInputs,
+            Function<O, T> mapper,
+            BinaryOperator<T> reducer,
+            T neutralElement
+        ) {
             return Signal.of(allInputs.stream()
                 .map(Wire::getSignal)
                 .map(Signal::getValue)
@@ -178,3 +218,4 @@ public abstract class Box {
     //----------Convenience shortcuts for Boxes that have 1 or 2 inputs, or N homogeneous inputs--------------^^^^^^^^^^^^^^^^
 
 }
+//@formatter:on
