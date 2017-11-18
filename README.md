@@ -1,1 +1,1 @@
-A Java port of the "Simulator for digital circuits" from SICP (Structure and Interpreation of Computer Programs). 
+A Java port of the "Simulator for digital circuits" from SICP (Structure and Interpretation of Computer Programs). 
