@@ -29,6 +29,13 @@ public class CollectMultipleAnd extends CollectHomogeneousInputsToOutputOfSameTy
         return this::and;
     }
 
+    /**
+     * Don't do the startup in the constructor to not let "this" escape through the method ref,
+     * so that the Box is "properly constructed".
+     * @implNote The contract of overriders is to call super.startup(), return this:
+     * This method is only not marked final as a convenience to allow covariant return.
+     * @return this Box, started.
+     */
     @Override protected CollectMultipleAnd startup() {
         super.startup();
         return this;
