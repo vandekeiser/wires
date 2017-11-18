@@ -52,13 +52,13 @@ public class Accumulable<A, T> extends Mutable<A> {
     }
 
     public final Accumulable<A, T> combine(Accumulable<A, T> that) {
-        if(!this.isPresent()) return initiallyUnset(accumulationValue, accumulator, combiner);
-        if(!that.isPresent()) return initiallyUnset(accumulationValue, accumulator, combiner);
-
-        return initially(
-            combiner.apply(this.get(), that.get()),
-            accumulationValue, accumulator, combiner
-        );
+        return this.isPresent() && that.isPresent() ?
+            initially(
+                combiner.apply(this.get(), that.get()),
+                accumulationValue, accumulator, combiner
+            ):
+            initiallyUnset(accumulationValue, accumulator, combiner)
+        ;
     }
 
 }
