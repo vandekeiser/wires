@@ -21,7 +21,7 @@ public class Tick extends AbstractValueObject<Tick> {
         return Arrays.asList(tick);
     }
 
-    Tick plus(Delay delay) {
+    public Tick plus(Delay delay) {
         return new Tick(tick + delay.duration());
     }
 
