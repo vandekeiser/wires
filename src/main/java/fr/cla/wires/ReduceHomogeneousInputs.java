@@ -25,7 +25,6 @@ public abstract class ReduceHomogeneousInputs<O, T> extends Box {
 
     //Don't do the startup in the constructor to not let "this" escape through the method ref,
     // so that the Box is "properly constructed".
-    //protected ReduceHomogeneousInputs<O, T, B> startup() {
     protected ReduceHomogeneousInputs<O, T> startup() {
         ins.forEach(this::startup);
         return this;
