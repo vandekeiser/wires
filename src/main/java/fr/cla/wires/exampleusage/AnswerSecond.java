@@ -5,7 +5,11 @@ import fr.cla.wires.Delay;
 import fr.cla.wires.Time;
 import fr.cla.wires.Wire;
 
+import static java.util.Objects.requireNonNull;
+
 public class AnswerSecond extends Box {
+
+    private final Wire<Boolean> in1, in2, out;
 
     private AnswerSecond(Wire<Boolean> in1, Wire<Boolean> in2, Wire<Boolean> out, Time time) {
         this(in1, in2, out, time, DEFAULT_DELAY);
@@ -13,13 +17,18 @@ public class AnswerSecond extends Box {
 
     private AnswerSecond(Wire<Boolean> in1, Wire<Boolean> in2, Wire<Boolean> out, Time time, Delay delay) {
         super(delay, time);
-        //Warning not to let "this" escape through the method ref,
-        // for a stateful Box that needs thread-safety
-        // (otherwise the Box will not be "properly constructed").
-        this.<Boolean, Boolean>onSignalChanged(in1).set(out).toResultOf(this::answerSecond, in2);
-        this.<Boolean, Boolean>onSignalChanged(in2).set(out).toResultOf(in1, this::answerSecond);
+        this.in1 = requireNonNull(in1);
+        this.in2 = requireNonNull(in2);
+        this.out = requireNonNull(out);
     }
 
+    //Don't do the startup in the constructor to not let "this" escape through the method ref,
+    // so that the Box is "properly constructed".
+    private AnswerSecond startup() {
+        this.<Boolean, Boolean>onSignalChanged(in1).set(out).toResultOf(this::answerSecond, in2);
+        this.<Boolean, Boolean>onSignalChanged(in2).set(out).toResultOf(in1, this::answerSecond);
+        return this;
+    }
 
     private boolean answerSecond(boolean b1, boolean b2) {
         return b2;
@@ -47,7 +56,7 @@ public class AnswerSecond extends Box {
         }
 
         public AnswerSecond time(Time time) {
-            return new AnswerSecond(in1, in2, out, time);
+            return new AnswerSecond(in1, in2, out, time).startup();
         }
     }
 

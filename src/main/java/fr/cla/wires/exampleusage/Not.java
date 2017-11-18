@@ -5,7 +5,11 @@ import fr.cla.wires.Delay;
 import fr.cla.wires.Time;
 import fr.cla.wires.Wire;
 
+import static java.util.Objects.requireNonNull;
+
 public class Not extends Box {
+
+    private final Wire<Boolean> in, out;
 
     private Not(Wire<Boolean> in, Wire<Boolean> out, Time time) {
         this(in, out, time, DEFAULT_DELAY);
@@ -13,10 +17,15 @@ public class Not extends Box {
 
     private Not(Wire<Boolean> in, Wire<Boolean> out, Time time, Delay delay) {
         super(delay, time);
-        //Warning not to let "this" escape through the method ref,
-        // for a stateful Box that needs thread-safety
-        // (otherwise the Box will not be "properly constructed").
+        this.in = requireNonNull(in);
+        this.out = requireNonNull(out);
+    }
+
+    //Don't do the startup in the constructor to not let "this" escape through the method ref,
+    // so that the Box is "properly constructed".
+    private Not startup() {
         this.<Boolean, Boolean>onSignalChanged(in).set(out).toResultOf(this::not);
+        return this;
     }
 
     private boolean not(boolean b) {
@@ -40,7 +49,7 @@ public class Not extends Box {
         }
 
         public Not time(Time time) {
-            return new Not(in, out, time);
+            return new Not(in, out, time).startup();
         }
     }
 }
