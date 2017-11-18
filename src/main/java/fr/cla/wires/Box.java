@@ -38,6 +38,7 @@ public abstract class Box {
     }
 
     //----------Convenience shortcuts for Boxes that have 1 or 2 inputs, or N homogeneous inputs--------------VVVVVVVVVVVVVVVV
+    //----------(this follows the "Staged Builder" pattern)-------------
 
     /**
     * Captures the input wire to observe
