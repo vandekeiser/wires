@@ -6,6 +6,9 @@ import java.util.Arrays;
 import java.util.List;
 
 //@formatter:off
+/**
+ * A discretized time unit.
+ */
 public final class Tick extends AbstractValueObject<Tick> {
     public static final Tick ZERO = new Tick(0L);
 

@@ -6,6 +6,9 @@ import java.util.Map;
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off
+/**
+ * Remembers which tasks (TickQueue) to execute at each Tick.
+ */
 final class Agenda {
 
     private Tick now = Tick.ZERO;

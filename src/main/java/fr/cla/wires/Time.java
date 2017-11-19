@@ -1,6 +1,10 @@
 package fr.cla.wires;
 
 //@formatter:off
+/**
+ * A discretization of time:
+ * exposes {@code void tick()} and {@code Tick now()}
+ */
 public final class Time {
 
     private final Agenda agenda = new Agenda();

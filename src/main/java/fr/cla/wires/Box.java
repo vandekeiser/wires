@@ -11,6 +11,11 @@ import java.util.stream.Collector;
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off
+/**
+ * A box connecting wires.
+ * Each box has a specific discrete Delay:
+ *  changes to input wires are propagated to output wires after this delay.
+ */
 public abstract class Box {
 
     protected static final Delay DEFAULT_DELAY = Delay.of(1);

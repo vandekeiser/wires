@@ -6,6 +6,9 @@ import java.util.Arrays;
 import java.util.List;
 
 //@formatter:off
+/**
+ * A discrete Delay; each Box has a delay.
+ */
 public final class Delay extends AbstractValueObject<Delay> {
     private final int duration;
 

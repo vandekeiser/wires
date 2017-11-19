@@ -6,6 +6,9 @@ import java.util.Queue;
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off
+/**
+ * Remembers the callbacks to call at a given Tick.
+ */
 final class TickQueue {
 
     //Run callbacks in FIFO order

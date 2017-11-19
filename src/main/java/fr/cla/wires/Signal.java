@@ -11,6 +11,9 @@ import java.util.function.Function;
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off
+/**
+ * A signal each transiting on a Wire.
+ */
 public final class Signal<V> extends AbstractValueObject<Signal<V>> {
     private final V value;
 

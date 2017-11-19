@@ -6,6 +6,10 @@ import java.util.Set;
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off
+/**
+ * A wire on which a Signal transit.
+ * When the Signal changes, all listeners are notified.
+ */
 public final class Wire<T> {
 
     private Signal<T> signal = Signal.none();
