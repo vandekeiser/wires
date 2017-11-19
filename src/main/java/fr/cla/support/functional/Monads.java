@@ -5,6 +5,7 @@ import java.util.function.BinaryOperator;
 import java.util.function.Function;
 
 //@formatter:off
+//TODO? liftMutable/liftAccumulable
 public final class Monads {
 
     public static <T> BinaryOperator<Optional<T>> liftOptional(BinaryOperator<T> reducer) {
