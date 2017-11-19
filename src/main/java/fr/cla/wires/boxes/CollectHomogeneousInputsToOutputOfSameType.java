@@ -1,4 +1,8 @@
-package fr.cla.wires;
+package fr.cla.wires.boxes;
+
+import fr.cla.wires.Delay;
+import fr.cla.wires.Time;
+import fr.cla.wires.Wire;
 
 import java.util.Set;
 import java.util.function.BiFunction;
@@ -19,7 +23,7 @@ import java.util.function.Function;
 public abstract class CollectHomogeneousInputsToOutputOfSameType<O> extends CollectHomogeneousInputs<O, O> {
 
     protected CollectHomogeneousInputsToOutputOfSameType(
-        Set<Wire<O>> ins, Wire<O> out, Time time
+    Set<Wire<O>> ins, Wire<O> out, Time time
     ) {
         this(ins, out, time, DEFAULT_DELAY);
     }

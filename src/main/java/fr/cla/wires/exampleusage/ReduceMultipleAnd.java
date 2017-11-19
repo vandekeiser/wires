@@ -1,7 +1,7 @@
 package fr.cla.wires.exampleusage;
 
 import fr.cla.wires.Delay;
-import fr.cla.wires.ReduceHomogeneousInputs;
+import fr.cla.wires.boxes.ReduceHomogeneousInputs;
 import fr.cla.wires.Time;
 import fr.cla.wires.Wire;
 

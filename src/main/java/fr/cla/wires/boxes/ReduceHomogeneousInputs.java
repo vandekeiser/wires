@@ -1,4 +1,9 @@
-package fr.cla.wires;
+package fr.cla.wires.boxes;
+
+import fr.cla.wires.Box;
+import fr.cla.wires.Delay;
+import fr.cla.wires.Time;
+import fr.cla.wires.Wire;
 
 import java.util.Set;
 import java.util.function.BinaryOperator;
