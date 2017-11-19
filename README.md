@@ -5,7 +5,7 @@ See:
  -Classes in /src/main/java/fr/cla/wires/boxes/exampleusage/ for example usages of how to connect wires to boxes
  -Tests in /src/test/java/fr/cla/wires/boxes/exampleusage/ for expected behaviour and examples of how to tick the clock. In particular tests in /src/test/java/fr/cla/wires/boxes/exampleusage/pbt/ use Property-Based testing to assert invariants. 
 
-#####(Developper note)
+##### (Developper note)
 If you're wondering what the "//@formatter:off" "//@formatter:on" comments are all about, it's because: 
     -even though IntelliJ is overall a better IDE than Eclipse IMO,
     -it's also more annoying in some regards ("La perfection n'est pas de ce monde"),
