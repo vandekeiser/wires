@@ -70,7 +70,7 @@ public class CollectMultipleAndTest {
         with_1_in_out_should_be_same_signal(Signal.none());
     }
 
-    public void with_1_in_out_should_be_same_signal(Signal<Boolean> signal) {
+    private void with_1_in_out_should_be_same_signal(Signal<Boolean> signal) {
         given: {
             setup(1);
             ins.iterator().next().setSignal(signal);
