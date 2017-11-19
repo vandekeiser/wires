@@ -28,7 +28,7 @@ public class Mutable<T> {
     }
 
 
-    //----------Optional methods----------VVVVVVVVVVVVVVV
+    //----------Optional-like methods----------VVVVVVVVVVVVVVV
     public static <T> Mutable<T> empty() {
         return new Mutable<>(Optional.empty());
     }
@@ -77,7 +77,7 @@ public class Mutable<T> {
     public final Mutable<T> filter(Predicate<? super T> predicate) {
         return Mutable.of(current().filter(predicate));
     }
-    //----------Optional methods----------^^^^^^^^^^^^^^^
+    //----------Optional-like methods----------^^^^^^^^^^^^^^^
 
 
     //----------Equality based solely on current()----------VVVVVVVVVVVVVVV
