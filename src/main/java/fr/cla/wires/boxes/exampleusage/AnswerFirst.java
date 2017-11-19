@@ -1,4 +1,4 @@
-package fr.cla.wires.exampleusage;
+package fr.cla.wires.boxes.exampleusage;
 
 import fr.cla.wires.Box;
 import fr.cla.wires.Delay;
@@ -8,15 +8,15 @@ import fr.cla.wires.Wire;
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off
-public final class AnswerSecond extends Box {
+public final class AnswerFirst extends Box {
 
     private final Wire<Boolean> in1, in2, out;
 
-    private AnswerSecond(Wire<Boolean> in1, Wire<Boolean> in2, Wire<Boolean> out, Time time) {
+    private AnswerFirst(Wire<Boolean> in1, Wire<Boolean> in2, Wire<Boolean> out, Time time) {
         this(in1, in2, out, time, DEFAULT_DELAY);
     }
 
-    private AnswerSecond(Wire<Boolean> in1, Wire<Boolean> in2, Wire<Boolean> out, Time time, Delay delay) {
+    private AnswerFirst(Wire<Boolean> in1, Wire<Boolean> in2, Wire<Boolean> out, Time time, Delay delay) {
         super(delay, time);
         this.in1 = requireNonNull(in1);
         this.in2 = requireNonNull(in2);
@@ -29,34 +29,34 @@ public final class AnswerSecond extends Box {
      *      onSignalChanged(in1)
      *          .set(out)
      *          .toResultOfApplying()
-     *          .transformation(this::answerSecond, in2)
+     *          .transformation(this::answerFirst, in2)
      *      ;
      * }
      * to the less linear:
      * {@code
      *      onSignalChanged(in1,
-     *          newIn1 -> targetWire.setSignal(
-     *              Signal.map(newIn1, in2.getSignal(), this::answerSecond)
+     *          newIn1 -> out.setSignal(
+     *              Signal.map(newIn1, in2.getSignal(), this::answerFirst)
      *          )
      *      );
      * }
      */
-    private AnswerSecond startup() {
+    private AnswerFirst startup() {
         this.<Boolean, Boolean>onSignalChanged(in1)
             .set(out)
             .toResultOfApplying()
-            .transformation(this::answerSecond, in2)
+            .transformation(this::answerFirst, in2)
         ;
         this.<Boolean, Boolean>onSignalChanged(in2)
             .set(out)
             .toResultOfApplying()
-            .transformation(in1, this::answerSecond)
+            .transformation(in1, this::answerFirst)
         ;
         return this;
     }
 
-    private boolean answerSecond(boolean b1, boolean b2) {
-        return b2;
+    private boolean answerFirst(boolean b1, boolean b2) {
+        return b1;
     }
 
     public static Builder in1(Wire<Boolean> in1) {
@@ -83,9 +83,9 @@ public final class AnswerSecond extends Box {
             return this;
         }
 
-        public AnswerSecond time(Time time) {
+        public AnswerFirst time(Time time) {
             Time _time = requireNonNull(time);
-            return new AnswerSecond(in1, in2, out, _time).startup();
+            return new AnswerFirst(in1, in2, out, _time).startup();
         }
     }
 

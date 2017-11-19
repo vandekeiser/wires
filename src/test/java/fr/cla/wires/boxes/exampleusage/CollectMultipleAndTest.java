@@ -1,4 +1,4 @@
-package fr.cla.wires.exampleusage;
+package fr.cla.wires.boxes.exampleusage;
 
 
 import fr.cla.wires.Signal;
@@ -14,7 +14,7 @@ import static java.util.stream.Collectors.toSet;
 import static org.assertj.core.api.Assertions.assertThat;
 
 //@formatter:off
-public class ReduceMultipleAndTest {
+public class CollectMultipleAndTest {
 
     private static final int MULTIPLICITY = 100;
     private Set<Wire<Boolean>> ins;
@@ -23,10 +23,14 @@ public class ReduceMultipleAndTest {
 
     @Before
     public void setup() {
-        ins = Stream.generate(() -> Wire.<Boolean>make()).limit(MULTIPLICITY).collect(toSet());
+        setup(MULTIPLICITY);
+    }
+
+    private void setup(long multiplicity) {
+        ins = Stream.generate(() -> Wire.<Boolean>make()).limit(multiplicity).collect(toSet());
         out = Wire.make();
         time = Time.create();
-        ReduceMultipleAnd.ins(ins).out(out).time(time);
+        CollectMultipleAnd.ins(ins).out(out).time(time);
     }
 
     @Test
@@ -36,6 +40,37 @@ public class ReduceMultipleAndTest {
 
         //Then
         assertThat(out.getSignal()).isEqualTo(Signal.none());
+    }
+
+    @Test
+    public void without_ins_out_should_be_no_signal() {
+        //Given
+        setup(0);
+
+        //When
+        time.tick();
+
+        //Then
+        assertThat(out.getSignal()).isEqualTo(Signal.none());
+    }
+
+    @Test
+    public void with_1_in_out_should_be_same_signal() {
+        with_1_in_out_should_be_same_signal(Signal.of(true));
+        with_1_in_out_should_be_same_signal(Signal.of(false));
+        with_1_in_out_should_be_same_signal(Signal.none());
+    }
+
+    public void with_1_in_out_should_be_same_signal(Signal<Boolean> signal) {
+        //Given
+        setup(1);
+
+        //When
+        ins.iterator().next().setSignal(signal);
+        time.tick();
+
+        //Then
+        assertThat(out.getSignal()).isEqualTo(signal);
     }
 
     @Test

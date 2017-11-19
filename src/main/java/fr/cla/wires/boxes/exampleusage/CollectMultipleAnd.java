@@ -1,34 +1,27 @@
-package fr.cla.wires.exampleusage;
+package fr.cla.wires.boxes.exampleusage;
 
+import fr.cla.wires.boxes.CollectHomogeneousInputsToOutputOfSameType;
 import fr.cla.wires.Delay;
-import fr.cla.wires.boxes.ReduceHomogeneousInputs;
 import fr.cla.wires.Time;
 import fr.cla.wires.Wire;
 
 import java.util.Set;
 import java.util.function.BinaryOperator;
-import java.util.function.Function;
 
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off
-public class ReduceMultipleAnd extends ReduceHomogeneousInputs<Boolean, Boolean> {
+public final class CollectMultipleAnd extends CollectHomogeneousInputsToOutputOfSameType<Boolean> {
 
-    private ReduceMultipleAnd(Set<Wire<Boolean>> ins, Wire<Boolean> out, Time time) {
+    private CollectMultipleAnd(Set<Wire<Boolean>> ins, Wire<Boolean> out, Time time) {
         this(ins, out, time, DEFAULT_DELAY);
     }
 
-    private ReduceMultipleAnd(Set<Wire<Boolean>> ins, Wire<Boolean> out, Time time, Delay delay) {
+    private CollectMultipleAnd(Set<Wire<Boolean>> ins, Wire<Boolean> out, Time time, Delay delay) {
         super(ins, out, time, delay);
     }
 
-    @Override protected Function<Boolean, Boolean> mapping() {
-        return Function.identity();
-    }
-    @Override protected Boolean neutralElement() {
-        return true;
-    }
-    @Override protected BinaryOperator<Boolean> reduction() {
+    @Override protected BinaryOperator<Boolean> combiner() {
         return this::and;
     }
 
@@ -43,7 +36,7 @@ public class ReduceMultipleAnd extends ReduceHomogeneousInputs<Boolean, Boolean>
      * This method is only not marked final as a convenience to allow covariant return.
      * @return this Box, started.
      */
-    @Override protected ReduceMultipleAnd startup() {
+    @Override protected CollectMultipleAnd startup() {
         super.startup();
         return this;
     }
@@ -51,7 +44,6 @@ public class ReduceMultipleAnd extends ReduceHomogeneousInputs<Boolean, Boolean>
     public static Builder ins(Set<Wire<Boolean>> ins) {
         return new Builder(checkNoNulls(ins));
     }
-
 
 
 
@@ -68,9 +60,9 @@ public class ReduceMultipleAnd extends ReduceHomogeneousInputs<Boolean, Boolean>
             return this;
         }
 
-        public ReduceMultipleAnd time(Time time) {
+        public CollectMultipleAnd time(Time time) {
             Time _time = requireNonNull(time);
-            return new ReduceMultipleAnd(ins, out, _time).startup();
+            return new CollectMultipleAnd(ins, out, _time).startup();
         }
     }
 
