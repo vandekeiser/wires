@@ -7,6 +7,8 @@ import fr.cla.wires.Wire;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Iterator;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 //@formatter:off
@@ -30,46 +32,58 @@ public class AndTest {
 
     @Test
     public void out_should_be_false_when_1_and_2_are_false() {
-        //When
-        in1.setSignal(Signal.of(false));
-        in2.setSignal(Signal.of(false));
-        time.tick();
-
-        //Then
-        assertThat(out.getSignal()).isEqualTo(Signal.of(false));
+        given: {
+            in1.setSignal(Signal.of(false));
+            in2.setSignal(Signal.of(false));
+        }
+        when: {
+            time.tick();
+        }
+        then: {
+            assertThat(out.getSignal()).isEqualTo(Signal.of(false));
+        }
     }
 
     @Test
     public void out_should_be_false_when_1_is_false_and_2_is_true() {
-        //When
-        in1.setSignal(Signal.of(false));
-        in2.setSignal(Signal.of(true));
-        time.tick();
-
-        //Then
-        assertThat(out.getSignal()).isEqualTo(Signal.of(false));
+        given: {
+            in1.setSignal(Signal.of(false));
+            in2.setSignal(Signal.of(true));
+        }
+        when: {
+            time.tick();
+        }
+        then: {
+            assertThat(out.getSignal()).isEqualTo(Signal.of(false));
+        }
     }
 
     @Test
     public void out_should_be_false_when_1_is_true_and_2_is_false() {
-        //When
-        in1.setSignal(Signal.of(true));
-        in2.setSignal(Signal.of(false));
-        time.tick();
-
-        //Then
-        assertThat(out.getSignal()).isEqualTo(Signal.of(false));
+        given: {
+            in1.setSignal(Signal.of(false));
+            in2.setSignal(Signal.of(true));
+        }
+        when: {
+            time.tick();
+        }
+        then: {
+            assertThat(out.getSignal()).isEqualTo(Signal.of(false));
+        }
     }
 
     @Test
     public void out_should_be_true_when_1_and_2_are_true() {
-        //When
-        in1.setSignal(Signal.of(true));
-        in2.setSignal(Signal.of(true));
-        time.tick();
-
-        //Then
-        assertThat(out.getSignal()).isEqualTo(Signal.of(true));
+        given: {
+            in1.setSignal(Signal.of(true));
+            in2.setSignal(Signal.of(true));
+        }
+        when: {
+            time.tick();
+        }
+        then: {
+            assertThat(out.getSignal()).isEqualTo(Signal.of(true));
+        }
     }
 
     /*

@@ -35,31 +35,42 @@ public class ReduceMultipleAndTest {
 
     @Test
     public void out_should_initially_be_no_signal() {
-        //When
-        time.tick();
-
-        //Then
-        assertThat(out.getSignal()).isEqualTo(Signal.none());
+        given: {
+            //Nothing
+        }
+        when: {
+            //No time::tick
+        }
+        then: {
+            assertThat(out.getSignal()).isEqualTo(Signal.none());
+        }
     }
 
     @Test
     public void out_should_be_false_when_an_input_is_false() {
-        //When
-        ins.forEach(i -> i.setSignal(Signal.of(true)));
-        ins.iterator().next().setSignal(Signal.of(false));
-        time.tick();
-
-        //Then
-        assertThat(out.getSignal()).isEqualTo(Signal.of(false));
+        given: {
+            ins.forEach(i -> i.setSignal(Signal.of(true)));
+            ins.iterator().next().setSignal(Signal.of(false));
+        }
+        when: {
+            time.tick();
+        }
+        then: {
+            assertThat(out.getSignal()).isEqualTo(Signal.of(false));
+        }
     }
 
     @Test
     public void out_should_be_true_when_no_input_is_false() {
-        ins.forEach(i -> i.setSignal(Signal.of(true)));
-        time.tick();
-
-        //Then
-        assertThat(out.getSignal()).isEqualTo(Signal.of(true));
+        given: {
+            ins.forEach(i -> i.setSignal(Signal.of(true)));
+        }
+        when: {
+            time.tick();
+        }
+        then: {
+            assertThat(out.getSignal()).isEqualTo(Signal.of(true));
+        }
     }
 
 }

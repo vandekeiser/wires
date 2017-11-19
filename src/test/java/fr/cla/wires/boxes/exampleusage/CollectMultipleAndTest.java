@@ -39,23 +39,28 @@ public class CollectMultipleAndTest {
 
     @Test
     public void out_should_initially_be_no_signal() {
-        //When
-        time.tick();
-
-        //Then
-        assertThat(out.getSignal()).isEqualTo(Signal.none());
+        given: {
+            //Nothing
+        }
+        when: {
+            time.tick();
+        }
+        then: {
+            assertThat(out.getSignal()).isEqualTo(Signal.none());
+        }
     }
 
     @Test
     public void without_ins_out_should_be_no_signal() {
-        //Given
-        setup(0);
-
-        //When
-        time.tick();
-
-        //Then
-        assertThat(out.getSignal()).isEqualTo(Signal.none());
+        given: {
+            setup(0);
+        }
+        when: {
+            time.tick();
+        }
+        then: {
+            assertThat(out.getSignal()).isEqualTo(Signal.none());
+        }
     }
 
     @Test
@@ -66,35 +71,43 @@ public class CollectMultipleAndTest {
     }
 
     public void with_1_in_out_should_be_same_signal(Signal<Boolean> signal) {
-        //Given
-        setup(1);
-
-        //When
-        ins.iterator().next().setSignal(signal);
-        time.tick();
-
-        //Then
-        assertThat(out.getSignal()).isEqualTo(signal);
+        given: {
+            setup(1);
+            ins.iterator().next().setSignal(signal);
+        }
+        when: {
+            time.tick();
+        }
+        then: {
+            assertThat(out.getSignal()).isEqualTo(signal);
+        }
     }
 
     @Test
     public void out_should_be_false_when_an_input_is_false() {
-        //When
-        ins.forEach(i -> i.setSignal(Signal.of(true)));
-        ins.iterator().next().setSignal(Signal.of(false));
-        time.tick();
-
-        //Then
-        assertThat(out.getSignal()).isEqualTo(Signal.of(false));
+        given: {
+            ins.forEach(i -> i.setSignal(Signal.of(true)));
+            ins.iterator().next().setSignal(Signal.of(false));
+        }
+        when: {
+            time.tick();
+        }
+        then: {
+            assertThat(out.getSignal()).isEqualTo(Signal.of(false));
+        }
     }
 
     @Test
     public void out_should_be_true_when_no_input_is_false() {
-        ins.forEach(i -> i.setSignal(Signal.of(true)));
-        time.tick();
-
-        //Then
-        assertThat(out.getSignal()).isEqualTo(Signal.of(true));
+        given: {
+            ins.forEach(i -> i.setSignal(Signal.of(true)));
+        }
+        when: {
+            time.tick();
+        }
+        then: {
+            assertThat(out.getSignal()).isEqualTo(Signal.of(true));
+        }
     }
 
 }

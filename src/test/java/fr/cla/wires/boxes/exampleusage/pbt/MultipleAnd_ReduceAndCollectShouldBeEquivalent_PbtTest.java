@@ -31,14 +31,14 @@ import static org.junit.Assume.assumeThat;
 @RunWith(JUnitQuickcheck.class)
 public class MultipleAnd_ReduceAndCollectShouldBeEquivalent_PbtTest {
 
-    private static final int TRIALS = 1000;
+//    private static final int TRIALS = 100_000; //Checked: passes
+    private static final int TRIALS = 1_000;
 
     private Set<Wire<Boolean>> ins;
     private Wire<Boolean> collectOut, reduceOut;
     private Time time;
 
-    @Before
-    public void setup() {
+    @Before public void setup() {
         setup(MULTIPLICITY);
     }
 
@@ -58,14 +58,16 @@ public class MultipleAnd_ReduceAndCollectShouldBeEquivalent_PbtTest {
     public void should_give_same_result_when_inputs_are_all_set(
         @RandomBooleans List<Boolean> signals
     ) {
-        Iterator<Boolean> _signals = signals.iterator();
-        ins.forEach(w -> w.setSignal(Signal.of(_signals.next())));
-
-        //When
-        time.tick();
-
-        //Then
-        assertThat(collectOut.getSignal()).isEqualTo(reduceOut.getSignal());
+        given: {
+            Iterator<Boolean> _signals = signals.iterator();
+            ins.forEach(w -> w.setSignal(Signal.of(_signals.next())));
+        }
+        when: {
+            time.tick();
+        }
+        then: {
+            assertThat(collectOut.getSignal()).isEqualTo(reduceOut.getSignal());
+        }
     }
 
     @Ignore //TODO see BooleanSignalsGenerator::listOfBooleanSignals?
@@ -73,14 +75,16 @@ public class MultipleAnd_ReduceAndCollectShouldBeEquivalent_PbtTest {
     public void should_give_same_result_even_when_inputs_are_not_all_set(
         @RandomBooleanSignals List<Signal<Boolean>> signals
     ) {
-        Iterator<Signal<Boolean>> _signals = signals.iterator();
-        ins.forEach(w -> w.setSignal(_signals.next()));
-
-        //When
-        time.tick();
-
-        //Then
-        assertThat(collectOut.getSignal()).isEqualTo(reduceOut.getSignal());
+        given: {
+            Iterator<Signal<Boolean>> _signals = signals.iterator();
+            ins.forEach(w -> w.setSignal(_signals.next()));
+        }
+        when: {
+            time.tick();
+        }
+        then: {
+            assertThat(collectOut.getSignal()).isEqualTo(reduceOut.getSignal());
+        }
     }
 
     @Property(trials = TRIALS)
@@ -130,14 +134,16 @@ public class MultipleAnd_ReduceAndCollectShouldBeEquivalent_PbtTest {
         List<Signal<Boolean>> signals,
         Signal<Boolean> assumedResult
     ) {
-        Iterator<Signal<Boolean>> _signals = signals.iterator();
-        ins.forEach(w -> w.setSignal(_signals.next()));
-
-        //When
-        time.tick();
-
-        //Then
-        assumeThat(collectOut.getSignal(), is(assumedResult));
+        given: {
+            Iterator<Signal<Boolean>> _signals = signals.iterator();
+            ins.forEach(w -> w.setSignal(_signals.next()));
+        }
+        when: {
+            time.tick();
+        }
+        then: {
+            assumeThat(collectOut.getSignal(), is(assumedResult));
+        }
     }
 
 }
