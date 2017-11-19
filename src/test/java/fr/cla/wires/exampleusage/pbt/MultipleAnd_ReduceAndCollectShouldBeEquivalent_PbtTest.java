@@ -3,6 +3,7 @@ package fr.cla.wires.exampleusage.pbt;
 
 import com.pholser.junit.quickcheck.Property;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
+import fr.cla.support.tests.pbt.RandomBooleanSignals;
 import fr.cla.support.tests.pbt.RandomBooleans;
 import fr.cla.wires.Signal;
 import fr.cla.wires.Time;
@@ -10,6 +11,7 @@ import fr.cla.wires.Wire;
 import fr.cla.wires.exampleusage.CollectMultipleAnd;
 import fr.cla.wires.exampleusage.ReduceMultipleAnd;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 
 import java.util.Iterator;
@@ -19,6 +21,7 @@ import java.util.stream.Stream;
 
 import static fr.cla.support.tests.pbt.BooleansGenerator.MULTIPLICITY;
 import static java.lang.String.format;
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
@@ -65,6 +68,21 @@ public class MultipleAnd_ReduceAndCollectShouldBeEquivalent_PbtTest {
         assertThat(collectOut.getSignal()).isEqualTo(reduceOut.getSignal());
     }
 
+    @Ignore //TODO see BooleanSignalsGenerator::listOfBooleanSignals?
+    @Property(trials = TRIALS)
+    public void should_give_same_result_even_when_inputs_are_not_all_set(
+        @RandomBooleanSignals List<Signal<Boolean>> signals
+    ) {
+        Iterator<Signal<Boolean>> _signals = signals.iterator();
+        ins.forEach(w -> w.setSignal(_signals.next()));
+
+        //When
+        time.tick();
+
+        //Then
+        assertThat(collectOut.getSignal()).isEqualTo(reduceOut.getSignal());
+    }
+
     @Property(trials = TRIALS)
     public void should_sometimes_give_false(
         @RandomBooleans List<Boolean> signals
@@ -83,18 +101,43 @@ public class MultipleAnd_ReduceAndCollectShouldBeEquivalent_PbtTest {
         should_sometimes_give(signals, true);
     }
 
-    public void should_sometimes_give(
+    private void should_sometimes_give(
         List<Boolean> signals,
         boolean assumedResult
     ) {
-        Iterator<Boolean> _signals = signals.iterator();
-        ins.forEach(w -> w.setSignal(Signal.of(_signals.next())));
+        should_sometimes_give(signals, Signal.of(assumedResult));
+    }
+
+    private void should_sometimes_give(
+        List<Boolean> signals,
+        Signal<Boolean> assumedResult
+    ) {
+        should_sometimes_give0(
+            signals.stream().map(Signal::of).collect(toList()),
+            assumedResult
+        );
+    }
+
+    @Ignore //TODO see BooleanSignalsGenerator::listOfBooleanSignals?
+    @Property(trials = TRIALS)
+    public void should_sometimes_give_not_set(
+        @RandomBooleanSignals List<Signal<Boolean>> signals
+    ) {
+        should_sometimes_give0(signals, Signal.none());
+    }
+
+    private void should_sometimes_give0(
+        List<Signal<Boolean>> signals,
+        Signal<Boolean> assumedResult
+    ) {
+        Iterator<Signal<Boolean>> _signals = signals.iterator();
+        ins.forEach(w -> w.setSignal(_signals.next()));
 
         //When
         time.tick();
 
         //Then
-        assumeThat(collectOut.getSignal(), is(Signal.of(assumedResult)));
+        assumeThat(collectOut.getSignal(), is(assumedResult));
     }
 
 }

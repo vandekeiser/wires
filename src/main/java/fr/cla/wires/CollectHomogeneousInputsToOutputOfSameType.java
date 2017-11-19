@@ -5,6 +5,17 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 //@formatter:off
+/**
+ * TODO
+ * A CollectHomogeneousInputs whose T type (as in "target", output type)
+ *  is the same as its O type (as in "observed", input type).
+ * @param <O> O like "observed".
+ *           The type of {@code Signal} that transits on both:
+ *              -the observed {@code Wire}s.
+ *              -the target {@code Wire}
+ *           This means this Box's input is N {@code Wire}s of type {@code O},
+ *           and its output is 1 {@code Wire} of type {@code O}.
+ */
 public abstract class CollectHomogeneousInputsToOutputOfSameType<O> extends CollectHomogeneousInputs<O, O> {
 
     protected CollectHomogeneousInputsToOutputOfSameType(Set<Wire<O>> ins, Wire<O> out, Time time) {

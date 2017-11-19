@@ -13,6 +13,16 @@ import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collector.Characteristics.UNORDERED;
 
 //@formatter:off
+/**
+ * TODO
+ * A Box that has N inputs, but all of the same type of {@code Signal}.
+ * @param <O> O like "observed".
+ *           The type of {@code Signal} that transits on the observed {@code Wire}s.
+ *           This means this Box's input is N {@code Wire}s of type {@code O}.
+ * @param <T> T like "target".
+ *           The type of {@code Signal} that transits on the target {@code Wire}
+ *           This means this Box's output is 1 {@code Wire} of type {@code T}.
+ */
 public abstract class CollectHomogeneousInputs<O, T> extends Box {
 
     private final Set<Wire<O>> ins;

@@ -26,7 +26,7 @@ public class BooleansGenerator extends Generator<List<Boolean>> {
     private static Class<List<Boolean>> listOfBooleans() {
         Class<?> unbounded = List.class;
 
-        //We promise to only ever produce Set<Boolean>
+        //We promise to only ever produce List<Boolean>
         @SuppressWarnings("unchecked")
         Class<List<Boolean>> listOfBooleans = (Class<List<Boolean>>) unbounded;
 
