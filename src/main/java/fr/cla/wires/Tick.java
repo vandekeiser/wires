@@ -5,6 +5,8 @@ import fr.cla.support.oo.ddd.AbstractValueObject;
 import java.util.Arrays;
 import java.util.List;
 
+import static java.util.Collections.singletonList;
+
 //@formatter:off
 /**
  * A discretized time unit.
@@ -22,7 +24,7 @@ public final class Tick extends AbstractValueObject<Tick> {
 
     @Override
     protected List<Object> equalityCriteria() {
-        return Arrays.asList(tick);
+        return singletonList(tick);
     }
 
     public Tick plus(Delay delay) {

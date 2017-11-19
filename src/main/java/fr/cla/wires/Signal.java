@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off
@@ -51,7 +52,7 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
 
     @Override
     protected List<Object> equalityCriteria() {
-        return Arrays.asList(value);
+        return singletonList(value);
     }
 
     public Optional<V> getValue() {

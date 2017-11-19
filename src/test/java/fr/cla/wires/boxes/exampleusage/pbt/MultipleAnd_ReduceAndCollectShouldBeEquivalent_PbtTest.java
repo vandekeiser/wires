@@ -44,7 +44,8 @@ public class MultipleAnd_ReduceAndCollectShouldBeEquivalent_PbtTest {
 
     private void setup(long multiplicity) {
         if(multiplicity > MULTIPLICITY) throw new IllegalArgumentException(format(
-            "multiplicity must be <= %d, was %d"
+            "multiplicity must be <= %d, was %d",
+            MULTIPLICITY, multiplicity
         ));
         ins = Stream.generate(() -> Wire.<Boolean>make()).limit(multiplicity).collect(toSet());
         collectOut = Wire.make();
