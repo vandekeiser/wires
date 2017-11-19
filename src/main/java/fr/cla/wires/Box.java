@@ -94,13 +94,13 @@ public abstract class Box {
 
         public final OnSignalChangedBuilder_Applying<O, T> toResultOfApplying() {
             return new OnSignalChangedBuilder_Applying<>(
-                this.observedWire, this.targetWire
+                observedWire, targetWire
             );
         }
 
         public final OnSignalChangedBuilder_InputsAndOutputCaptured<O, T> from(Collection<Wire<O>> inputs) {
             return new OnSignalChangedBuilder_InputsAndOutputCaptured<>(
-                this.observedWire, this.targetWire, requireNonNull(inputs)
+                observedWire, targetWire, requireNonNull(inputs)
             );
         }
     }
