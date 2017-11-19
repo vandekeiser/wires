@@ -13,15 +13,15 @@ public class SelfAccumulable<A> extends Accumulable<A, A> {
 
     protected SelfAccumulable(
         Optional<A> initialValue,
-        BinaryOperator<A> accumulator
+        BinaryOperator<A> combiner
     ) {
-        super(initialValue, Function.identity(), accumulator, accumulator );
+        super(initialValue, Function.identity(), combiner, combiner );
     }
 
     public static <A> SelfAccumulable<A> initiallyEmpty(
-        BinaryOperator<A> accumulator
+        BinaryOperator<A> combiner
     ) {
-        return new SelfAccumulable<>(Optional.empty(), accumulator);
+        return new SelfAccumulable<>(Optional.empty(), combiner);
     }
 
     public static <A> SelfAccumulable<A> initially(
