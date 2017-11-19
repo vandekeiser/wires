@@ -37,10 +37,13 @@ public class ReduceMultipleAnd extends ReduceHomogeneousInputs<Boolean, Boolean>
     }
 
     /**
-     * Don't do the startup in the constructor to not let "this" escape through the method ref,
+     * This private method is used to not do the startup in the constructor,
+     * to not let "this" escape through the method ref,
      * so that the Box is "properly constructed".
+     *
      * @implNote The contract of overriders is to call super.startup(), return this:
      * This method is only not marked final as a convenience to allow covariant return.
+     *
      * @return this Box, started.
      */
     @Override protected ReduceMultipleAnd startup() {

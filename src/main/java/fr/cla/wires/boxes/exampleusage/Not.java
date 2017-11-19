@@ -22,9 +22,11 @@ public final class Not extends Box {
         this.out = requireNonNull(out);
     }
 
-    //Don't do the startup in the constructor to not let "this" escape through the method ref,
-    // so that the Box is "properly constructed".
     /**
+     * This private method is used to not do the startup in the constructor,
+     * to not let "this" escape through the method ref,
+     * so that the Box is "properly constructed".
+     *
      * The DSL implemented by the "Staged Builder" pattern translates:
      * {@code
      *      onSignalChanged(in)

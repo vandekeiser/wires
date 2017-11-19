@@ -11,7 +11,8 @@ import java.util.function.BinaryOperator;
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off
-public final class CollectMultipleAnd extends CollectHomogeneousInputsToOutputOfSameType<Boolean> {
+public final class CollectMultipleAnd
+extends CollectHomogeneousInputsToOutputOfSameType<Boolean> {
 
     private CollectMultipleAnd(Set<Wire<Boolean>> ins, Wire<Boolean> out, Time time) {
         this(ins, out, time, DEFAULT_DELAY);
@@ -30,10 +31,13 @@ public final class CollectMultipleAnd extends CollectHomogeneousInputsToOutputOf
     }
 
     /**
-     * Don't do the startup in the constructor to not let "this" escape through the method ref,
+     * This private method is used to not do the startup in the constructor,
+     * to not let "this" escape through the method ref,
      * so that the Box is "properly constructed".
+     *
      * @implNote The contract of overriders is to call super.startup(), return this:
      * This method is only not marked final as a convenience to allow covariant return.
+     *
      * @return this Box, started.
      */
     @Override protected CollectMultipleAnd startup() {
