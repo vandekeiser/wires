@@ -33,6 +33,8 @@ import static java.util.Objects.requireNonNull;
  *  -actual occurences of switching the wires by mistake,
  *  -whether this class is itself the business logic
  *   or a component used by the real business logic (in that case favor the DSL).
+ * The point is that even though the API is internally implemented using the elaborate approach,
+ *  the API's client may or may not use the simpler approach.
  */
 public final class SimpleCollectMultipleAnd
 extends CollectHomogeneousInputsToOutputOfSameType<Boolean> {
