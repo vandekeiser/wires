@@ -11,11 +11,12 @@ import java.util.function.BinaryOperator;
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off
-
 /**
- * Discussion of possible design choices:
+ * An example usage of how to connect wires to boxes.
+ * @see fr.cla.wires.boxes.exampleusage
  *
- * This class is an alternative implementation to CollectMultipleAnd.
+ * Discussion of possible design choices:
+ * 1. This class is an alternative implementation to CollectMultipleAnd.
  * It takes the other design trade-off compared to CollectMultipleAnd:
  *  -It is shorter and has a better "Payload / Builder code ratio"
  *  -On the other hand it does not expose a DSL to instantiate it like this:
@@ -23,17 +24,19 @@ import static java.util.Objects.requireNonNull;
  *   So clients of this API need to do this:
  *      SimpleCollectMultipleAnd.create(ins, out, time);
  *
- * It could thus be considered a less expressive API,
+ * 2. It could thus be considered a less expressive API,
  *  and makes it more likely that the client of this API will
  *  switch in1/in2 by mistake if several inputs have the same type.
  *
- * The trade-off depends on:
+ * 3. The trade-off depends on:
  *  -how many in/out wires the box has,
  *  -the taste of the implementer,
  *  -actual occurences of switching the wires by mistake,
  *  -whether this class is itself the business logic
  *   or a component used by the real business logic (in that case favor the DSL).
- * The point is that even though the API is internally implemented using the elaborate approach,
+ *
+ * 4. The point is that:
+ *  even though the API is internally implemented using the elaborate approach,
  *  the API's client may or may not use the simpler approach.
  */
 public final class SimpleCollectMultipleAnd

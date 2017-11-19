@@ -11,6 +11,10 @@ import java.util.function.BinaryOperator;
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off
+/**
+ * An example usage of how to connect wires to boxes.
+ * @see fr.cla.wires.boxes.exampleusage
+ */
 public final class CollectMultipleAnd
 extends CollectHomogeneousInputsToOutputOfSameType<Boolean> {
 

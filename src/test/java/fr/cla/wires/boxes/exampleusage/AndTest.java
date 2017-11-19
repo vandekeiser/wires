@@ -10,6 +10,10 @@ import org.junit.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 //@formatter:off
+/**
+ * An example of the expected behaviour of Boxes, and of how to tick the clock.
+ * @see fr.cla.wires.boxes.exampleusage
+ */
 public class AndTest {
 
     private Wire<Boolean> in1, in2, out;

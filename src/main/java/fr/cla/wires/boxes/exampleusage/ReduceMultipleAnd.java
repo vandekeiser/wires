@@ -12,6 +12,10 @@ import java.util.function.Function;
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off
+/**
+ * An example usage of how to connect wires to boxes.
+ * @see fr.cla.wires.boxes.exampleusage
+ */
 public class ReduceMultipleAnd extends ReduceHomogeneousInputs<Boolean, Boolean> {
 
     private ReduceMultipleAnd(Set<Wire<Boolean>> ins, Wire<Boolean> out, Time time) {

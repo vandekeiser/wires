@@ -14,6 +14,10 @@ import static java.util.stream.Collectors.toSet;
 import static org.assertj.core.api.Assertions.assertThat;
 
 //@formatter:off
+/**
+ * An example of the expected behaviour of Boxes, and of how to tick the clock.
+ * @see fr.cla.wires.boxes.exampleusage
+ */
 public class CollectMultipleAndTest {
 
     private static final int MULTIPLICITY = 100;
