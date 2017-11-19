@@ -24,6 +24,24 @@ public final class Not extends Box {
 
     //Don't do the startup in the constructor to not let "this" escape through the method ref,
     // so that the Box is "properly constructed".
+    /**
+     * The DSL implemented by the "Staged Builder" pattern translates:
+     * {@code
+     *      onSignalChanged(in)
+     *          .set(out)
+     *          .toResultOfApplying()
+     *          .transformation(this::not)
+     *      ;
+     * }
+     * to the less linear:
+     * {@code
+     *      onSignalChanged(observedWire,
+     *          newIn -> targetWire.setSignal(
+     *              newIn.map(this::not)
+     *          )
+     *      );
+     * }
+     */
     private Not startup() {
         this.<Boolean, Boolean>onSignalChanged(in)
             .set(out)

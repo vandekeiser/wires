@@ -23,8 +23,24 @@ public final class And extends Box {
         this.out = requireNonNull(out);
     }
 
-    //Don't do the startup in the constructor to not let "this" escape through the method ref,
-    // so that the Box is "properly constructed".
+    /**
+     * The DSL implemented by the "Staged Builder" pattern translates:
+     * {@code
+     *      onSignalChanged(in1)
+     *          .set(out)
+     *          .toResultOfApplying()
+     *          .transformation(this::and, in2)
+     *      ;
+     * }
+     * to the less linear:
+     * {@code
+     *      onSignalChanged(in1,
+     *          newIn1 -> out.setSignal(
+     *              Signal.map(newIn1, in2.getSignal(), this::and)
+     *          )
+     *      );
+     * }
+     */
     private And startup() {
         this.<Boolean, Boolean>onSignalChanged(in1)
             .set(out)
