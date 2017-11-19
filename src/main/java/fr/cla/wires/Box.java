@@ -28,6 +28,7 @@ public abstract class Box {
         if(agenda == null) throw new AssertionError("Time::agenda broke its promise not to return null!");
     }
 
+    //Don't make private as this is the only alternative to the "Staged Builder"
     protected final <O> void onSignalChanged(Wire<O> observedWire, OnSignalChanged<O> callback) {
         OnSignalChanged<O> _callback = requireNonNull(callback);
 
@@ -59,7 +60,7 @@ public abstract class Box {
     * Captures the input wire to observe
     */
     protected class OnSignalChangedBuilder_ObservedWireCaptured<O, T> {
-        protected final Wire<O> observedWire;
+        final Wire<O> observedWire;
 
         private OnSignalChangedBuilder_ObservedWireCaptured(Wire<O> observedWire) {
             this.observedWire = requireNonNull(observedWire);
@@ -81,7 +82,7 @@ public abstract class Box {
      */
     protected class OnSignalChangedBuilder_ObservedAndTargetWiresCaptured<O, T>
     extends OnSignalChangedBuilder_ObservedWireCaptured<O, T> {
-        protected final Wire<T> targetWire;
+        final Wire<T> targetWire;
 
         private OnSignalChangedBuilder_ObservedAndTargetWiresCaptured(
             Wire<O> observedWire,
@@ -183,7 +184,7 @@ public abstract class Box {
      */
     protected class OnSignalChangedBuilderAll_InputsAndOutputCaptured<O, T>
     extends OnSignalChangedBuilder_ObservedAndTargetWiresCaptured<O, T> {
-        protected final Collection<Wire<O>> allInputs;
+        final Collection<Wire<O>> allInputs;
 
         private OnSignalChangedBuilderAll_InputsAndOutputCaptured(
             Wire<O> observedWire,
