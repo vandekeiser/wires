@@ -50,10 +50,28 @@ public abstract class CollectHomogeneousInputs<O, T> extends Box {
         return this;
     }
 
+    /**
+     * The DSL implemented by the "Staged Builder" pattern translates:
+     * {@code
+     *      onSignalChanged(in)
+     *          .set(out)
+     *          .from(ins)
+     *          .collect(collector())
+     *      ;
+     * }
+     * to the less linear:
+     * {@code
+     *      onSignalChanged(in,
+     *          newIn -> out.setSignal(
+     *              collect(ins, collector())
+     *          )
+     *      );
+     * }
+     */
     private void startup(Wire<O> in) {
         this.<O, T>onSignalChanged(in)
             .set(out)
-            .from(this.ins)
+            .from(ins)
             .collect(collector())
         ;
     }
@@ -65,6 +83,9 @@ public abstract class CollectHomogeneousInputs<O, T> extends Box {
     protected abstract Function<O, T> accumulationValue();
     protected abstract BiFunction<T, O, T> accumulator();
     protected abstract BinaryOperator<T> combiner();
+
+
+
 
     private Collector<Optional<O>, ?, Optional<T>> collector(
         Function<O, T> accumulationValue,

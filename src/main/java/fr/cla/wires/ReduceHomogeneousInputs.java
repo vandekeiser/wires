@@ -35,6 +35,25 @@ public abstract class ReduceHomogeneousInputs<O, T> extends Box {
         return this;
     }
 
+    /**
+     * The DSL implemented by the "Staged Builder" pattern translates:
+     * {@code
+     *      onSignalChanged(in)
+     *          .set(out)
+     *          .from(ins)
+     *          .map(mapping())
+     *          .reduce(reduction(), neutralElement()
+     *      ;
+     * }
+     * to the less linear:
+     * {@code
+     *      onSignalChanged(in,
+     *          newIn -> out.setSignal(
+     *              mapAndReduce(ins, mapping(), reduction(), neutralElement())
+     *          )
+     *      )
+     * }
+     */
     private void startup(Wire<O> in) {
         this.<O, T>onSignalChanged(in)
             .set(out)

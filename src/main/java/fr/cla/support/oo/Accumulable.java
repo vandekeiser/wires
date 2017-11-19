@@ -5,6 +5,7 @@ import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 
+import static java.lang.String.*;
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off
@@ -52,6 +53,13 @@ public class Accumulable<A, T> extends Mutable<A> {
     }
 
     public final Accumulable<A, T> combine(Accumulable<A, T> that) {
+        //TODO
+//        if(this.accumulationValue != that.accumulationValue) {
+//            throw new UnsupportedOperationException(format(
+//                ""
+//            ));
+//        }
+
         return
             this.isPresent() && that.isPresent() ?
             initially(
