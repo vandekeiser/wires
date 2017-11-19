@@ -8,6 +8,7 @@
     <packaging>jar</packaging>
 
     <name>wires</name>
+    <description>A Java port of the "Simulator for digital circuits" from SICP (Structure and Interpretation of Computer Programs)</description>
     <url>https://github.com/vandekeiser/wires</url>
 
     <properties>
