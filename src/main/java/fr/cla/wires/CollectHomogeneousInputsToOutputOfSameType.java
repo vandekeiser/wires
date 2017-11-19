@@ -15,7 +15,7 @@ public abstract class CollectHomogeneousInputsToOutputOfSameType<O> extends Coll
         super(ins, out, time, delay);
     }
 
-    @Override protected final Function<O, O> accumulatorConstructor() {
+    @Override protected final Function<O, O> accumulationValue() {
         return Function.identity();
     }
     @Override protected final BiFunction<O, O, O> accumulator() {

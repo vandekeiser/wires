@@ -49,10 +49,10 @@ public abstract class CollectHomogeneousInputs<O, T> extends Box {
     }
 
     private Collector<Optional<O>, ?, Optional<T>> collector() {
-        return collector(accumulatorConstructor(), accumulator(), combiner());
+        return collector(accumulationValue(), accumulator(), combiner());
     }
 
-    protected abstract Function<O, T> accumulatorConstructor();
+    protected abstract Function<O, T> accumulationValue();
     protected abstract BiFunction<T, O, T> accumulator();
     protected abstract BinaryOperator<T> combiner();
 
