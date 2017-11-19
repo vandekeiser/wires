@@ -31,7 +31,7 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
     // -pas de Wire
     // -pas de Signal sur un Wire (FLOATING/HIGH_IMPEDANCE?)
     //
-    //-->interface Signal avec enum SpecialSignals.FLOATING/NO_SIGNAL?
+    //-->interface Signal avec enum SpecialSignals.FLOATING/NO_SIGNAL? 
     //
     //https://en.wikipedia.org/wiki/High_impedance
     //In digital circuits,
