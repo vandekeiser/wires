@@ -21,12 +21,12 @@ public final class CollectMultipleAnd extends CollectHomogeneousInputsToOutputOf
         super(ins, out, time, delay);
     }
 
-    private boolean and(boolean b1, boolean b2) {
-        return b1 && b2;
-    }
-
     @Override protected BinaryOperator<Boolean> combiner() {
         return this::and;
+    }
+
+    private boolean and(boolean b1, boolean b2) {
+        return b1 && b2;
     }
 
     /**
