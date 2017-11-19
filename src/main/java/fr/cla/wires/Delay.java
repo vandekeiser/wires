@@ -2,8 +2,6 @@ package fr.cla.wires;
 
 import fr.cla.support.oo.ddd.AbstractValueObject;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static java.util.Collections.singletonList;

@@ -20,7 +20,7 @@ public abstract class Box {
 
     protected static final Delay DEFAULT_DELAY = Delay.of(1);
     private final Delay delay;
-    private final Agenda agenda;
+    private final Time.Agenda agenda;
 
     protected Box(Time time, Delay delay) {
         this.agenda = time.agenda();

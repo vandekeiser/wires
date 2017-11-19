@@ -2,7 +2,6 @@ package fr.cla.wires;
 
 import fr.cla.support.oo.ddd.AbstractValueObject;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;

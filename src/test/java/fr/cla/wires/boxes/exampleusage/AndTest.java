@@ -4,7 +4,6 @@ package fr.cla.wires.boxes.exampleusage;
 import fr.cla.wires.Signal;
 import fr.cla.wires.Time;
 import fr.cla.wires.Wire;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
