@@ -77,7 +77,7 @@ public abstract class CollectHomogeneousInputs<O, T> extends Box {
                 BiFunction<T, O, T> _accumulator = requireNonNull(accumulator);
                 BinaryOperator<T> _combiner = requireNonNull(combiner);
 
-                return () -> Accumulable.initiallyUnset(
+                return () -> Accumulable.initiallyEmpty(
                     _accumulationValue, _accumulator, _combiner
                 );
             }

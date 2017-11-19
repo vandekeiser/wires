@@ -18,7 +18,7 @@ public class SelfAccumulable<A> extends Accumulable<A, A> {
         super(initialValue, Function.identity(), accumulator, accumulator );
     }
 
-    public static <A> SelfAccumulable<A> initiallyUnset(
+    public static <A> SelfAccumulable<A> initiallyEmpty(
         BinaryOperator<A> accumulator
     ) {
         return new SelfAccumulable<>(Optional.empty(), accumulator);

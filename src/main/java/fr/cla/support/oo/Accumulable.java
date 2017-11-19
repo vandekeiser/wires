@@ -26,7 +26,7 @@ public class Accumulable<A, T> extends Mutable<A> {
         this.combiner = requireNonNull(combiner);
     }
 
-    public static <T, A> Accumulable<A, T> initiallyUnset(
+    public static <T, A> Accumulable<A, T> initiallyEmpty(
         Function<T, A> accumulationValue,
         BiFunction<A, T, A> accumulator,
         BinaryOperator<A> combiner
@@ -58,7 +58,9 @@ public class Accumulable<A, T> extends Mutable<A> {
                 combiner.apply(this.get(), that.get()),
                 accumulationValue, accumulator, combiner
             ):
-            initiallyUnset(accumulationValue, accumulator, combiner)
+            initiallyEmpty(
+                accumulationValue, accumulator, combiner
+            )
         ;
     }
 
