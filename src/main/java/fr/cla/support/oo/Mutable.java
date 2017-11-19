@@ -56,12 +56,11 @@ public class Mutable<T> {
     public final <U> Mutable<U> map(Function<T, U> mapper) {
         return Mutable.of(current().map(mapper));
     }
-    public final <U> Mutable<U> flatMap(Function<T, Optional<U>> mapper) {
-        return current()
-            .flatMap(mapper)
-            .map(Mutable::of)
-            .orElseGet(Mutable::empty)
-        ;
+    public final <U> Mutable<U> flatMapMutable(Function<T, Mutable<U>> mapper) {
+        return current().map(mapper).orElseGet(Mutable::empty);
+    }
+    public final <U> Mutable<U> flatMapOptional(Function<T, Optional<U>> mapper) {
+        return current().flatMap(mapper).map(Mutable::of).orElseGet(Mutable::empty);
     }
     public final Mutable<T> orElse(T replacement) {
         return Mutable.of(current().orElse(replacement));
