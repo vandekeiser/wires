@@ -63,8 +63,12 @@ public abstract class CollectHomogeneousInputs<O, T> extends Box {
     ) {
         return new Collector<Optional<O>, Accumulable<T, O>, Optional<T>>() {
             @Override public Supplier<Accumulable<T, O>> supplier() {
+                Function<O, T> _accumulationValue = requireNonNull(accumulationValue);
+                BiFunction<T, O, T> _accumulator = requireNonNull(accumulator);
+                BinaryOperator<T> _combiner = requireNonNull(combiner);
+
                 return () -> Accumulable.initiallyUnset(
-                    accumulationValue, accumulator, combiner
+                    _accumulationValue, _accumulator, _combiner
                 );
             }
 
