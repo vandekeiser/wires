@@ -265,7 +265,7 @@ public abstract class Box {
             return Signal.of(allInputs.stream()
                 .map(Wire::getSignal)
                 .map(Signal::getValue)
-                .map(maybeValue -> maybeValue.map(accumulationValue))
+                .map(Monads.liftOptional(accumulationValue))
                 .reduce(
                     Optional.of(neutralElement),
                     Monads.liftOptional(reducer)

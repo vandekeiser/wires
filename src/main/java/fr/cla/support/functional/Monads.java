@@ -2,6 +2,7 @@ package fr.cla.support.functional;
 
 import java.util.Optional;
 import java.util.function.BinaryOperator;
+import java.util.function.Function;
 
 //@formatter:off
 public final class Monads {
@@ -12,6 +13,12 @@ public final class Monads {
             Optional.of(reducer.apply(maybe1.get(), maybe2.get())) :
             Optional.empty()
         ;
+    }
+
+    public static <O, T> Function<Optional<O>, Optional<T>> liftOptional(
+        Function<O, T> accumulationValue
+    ) {
+        return maybe1 -> maybe1.map(accumulationValue);
     }
 
 }
