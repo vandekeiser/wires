@@ -18,7 +18,7 @@ import static java.util.stream.Collector.Characteristics.UNORDERED;
 
 //@formatter:off
 /**
- * TODO
+ * TODO: javadoc in same style as CollectHomogeneousInputsToOutputOfSameType
  * A Box that has N inputs, but all of the same type of {@code Signal}.
  * @param <O> O like "observed".
  *           The type of {@code Signal} that transits on the observed {@code Wire}s.
@@ -27,7 +27,8 @@ import static java.util.stream.Collector.Characteristics.UNORDERED;
  *           The type of {@code Signal} that transits on the target {@code Wire}
  *           This means this Box's output is 1 {@code Wire} of type {@code T}.
  */
-public abstract class CollectHomogeneousInputs<O, T> extends Box {
+public abstract class CollectHomogeneousInputs<O, T>
+extends Box {
 
     private final Set<Wire<O>> ins;
     private final Wire<T> out;

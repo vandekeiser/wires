@@ -12,8 +12,13 @@ import java.util.function.Function;
 import static java.util.Objects.requireNonNull;
 
 //TODO: refact as extending CollectHomogeneousInputs (reduction->collector)
+
+/**
+ * TODO javadoc in same style as CollectHomogeneousInputsToOutputOfSameType
+ */
 //@formatter:off
-public abstract class ReduceHomogeneousInputs<O, T> extends Box {
+public abstract class ReduceHomogeneousInputs<O, T>
+extends Box {
 
     private final Set<Wire<O>> ins;
     private final Wire<T> out;
