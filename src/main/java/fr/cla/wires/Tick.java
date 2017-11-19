@@ -14,7 +14,7 @@ public final class Tick extends AbstractValueObject<Tick> {
 
     private final long tick;
 
-    public Tick(long tick) {
+    private Tick(long tick) {
         super(Tick.class);
         if(tick < 0) throw new IllegalArgumentException("tick must be >= 0, was: " + tick);
         this.tick = tick;
