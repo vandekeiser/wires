@@ -11,7 +11,7 @@ import java.util.function.Function;
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off
-public class Signal<V> extends AbstractValueObject<Signal<V>> {
+public final class Signal<V> extends AbstractValueObject<Signal<V>> {
     private final V value;
 
     private Signal(V v, boolean acceptNull) {

@@ -6,7 +6,7 @@ import java.util.Queue;
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off
-class TickQueue {
+final class TickQueue {
 
     //Run callbacks in FIFO order
     private final Queue<Runnable> todos = new ArrayDeque<>();

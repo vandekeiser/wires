@@ -6,7 +6,7 @@ import java.util.Set;
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off
-public class Wire<T> {
+public final class Wire<T> {
 
     private Signal<T> signal = Signal.none();
     private final Set<OnSignalChanged<T>> listeners = new HashSet<>();

@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 //@formatter:off
-public class Tick extends AbstractValueObject<Tick> {
+public final class Tick extends AbstractValueObject<Tick> {
     public static final Tick ZERO = new Tick(0L);
 
     private final long tick;

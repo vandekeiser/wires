@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 //@formatter:off
-public class Delay extends AbstractValueObject<Delay> {
+public final class Delay extends AbstractValueObject<Delay> {
     private final int duration;
 
     private Delay(int duration) {
