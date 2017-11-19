@@ -5,7 +5,6 @@ import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 
-import static java.lang.String.*;
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off

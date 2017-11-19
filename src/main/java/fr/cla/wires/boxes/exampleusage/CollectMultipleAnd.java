@@ -1,9 +1,9 @@
 package fr.cla.wires.boxes.exampleusage;
 
-import fr.cla.wires.boxes.CollectHomogeneousInputsToOutputOfSameType;
 import fr.cla.wires.Delay;
 import fr.cla.wires.Time;
 import fr.cla.wires.Wire;
+import fr.cla.wires.boxes.CollectHomogeneousInputsToOutputOfSameType;
 
 import java.util.Set;
 import java.util.function.BinaryOperator;

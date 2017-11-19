@@ -7,8 +7,6 @@ import fr.cla.wires.Wire;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Iterator;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 //@formatter:off

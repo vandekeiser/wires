@@ -8,8 +8,6 @@ import fr.cla.wires.boxes.CollectHomogeneousInputsToOutputOfSameType;
 import java.util.Set;
 import java.util.function.BinaryOperator;
 
-import static java.util.Objects.requireNonNull;
-
 //@formatter:off
 /**
  * An example usage of how to connect wires to boxes.
