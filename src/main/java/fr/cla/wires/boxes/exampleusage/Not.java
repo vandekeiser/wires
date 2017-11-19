@@ -21,7 +21,7 @@ public final class Not extends Box {
     }
 
     private Not(Wire<Boolean> in, Wire<Boolean> out, Time time, Delay delay) {
-        super(delay, time);
+        super(time, delay);
         this.in = requireNonNull(in);
         this.out = requireNonNull(out);
     }

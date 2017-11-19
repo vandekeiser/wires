@@ -28,7 +28,7 @@ extends Box {
     }
 
     protected ReduceHomogeneousInputs(Set<Wire<O>> ins, Wire<T> out, Time time, Delay delay) {
-        super(delay, time);
+        super(time, delay);
         this.ins = requireNonNull(ins);
         this.out = requireNonNull(out);
     }

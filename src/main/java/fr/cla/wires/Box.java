@@ -22,9 +22,9 @@ public abstract class Box {
     private final Delay delay;
     private final Agenda agenda;
 
-    protected Box(Delay delay, Time time) {
-        this.delay = requireNonNull(delay);
+    protected Box(Time time, Delay delay) {
         this.agenda = time.agenda();
+        this.delay = requireNonNull(delay);
         if(agenda == null) throw new AssertionError("Time::agenda broke its promise not to return null!");
     }
 

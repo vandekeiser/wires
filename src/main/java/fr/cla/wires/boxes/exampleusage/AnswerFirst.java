@@ -21,7 +21,7 @@ public final class AnswerFirst extends Box {
     }
 
     private AnswerFirst(Wire<Boolean> in1, Wire<Boolean> in2, Wire<Boolean> out, Time time, Delay delay) {
-        super(delay, time);
+        super(time, delay);
         this.in1 = requireNonNull(in1);
         this.in2 = requireNonNull(in2);
         this.out = requireNonNull(out);
