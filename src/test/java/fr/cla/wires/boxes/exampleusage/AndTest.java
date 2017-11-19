@@ -4,6 +4,7 @@ package fr.cla.wires.boxes.exampleusage;
 import fr.cla.wires.Signal;
 import fr.cla.wires.Time;
 import fr.cla.wires.Wire;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,14 +20,29 @@ public class AndTest {
     private Wire<Boolean> in1, in2, out;
     private Time time;
 
-    @Before
-    public void setup() {
+    @Before public void setup() {
         in1 = Wire.make();
         in2 = Wire.make();
         out = Wire.make();
         time = Time.create();
         And.in1(in1).in2(in2).out(out).time(time);
     }
+
+    //TODO?
+//    @After public void teardown() {
+////        in1.destroy();
+////        in2.destroy();
+////        out.destroy();
+////        in1 = null;
+////        in2 = null;
+////        out = null;
+////        time.destroy();
+////        time = null;
+//
+//        //or
+//
+////        and.destroy();
+//    }
 
     @Test
     public void out_should_be_false_when_1_and_2_are_false() {

@@ -10,6 +10,17 @@ import java.util.function.Supplier;
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off
+/**
+ * This doesn't follow the generally heard advice to not use Optional as field or parameter.
+ * But that advice sounds (from what Brian Goetz says in his "the good, the bad, and the ugly" talk)
+ *  like a limitation of how Optional is not Serializable because that's too much JDK maintenance work,
+ *  and thus not a prime Entity property, not as an absolute prohibition.
+ * -->As long as that Optional is not used as an "Entity property" (persistence/serialization/...)
+ *  it should be OK.
+ *  Maybe I should rename this to "TransientMutable"?
+ *  That sounds good since instances of this class are intended to be used are intermediary accumulators.
+ * @param <T> type of value held
+ */
 public class Mutable<T> {
 
     private Optional<T> maybe;
