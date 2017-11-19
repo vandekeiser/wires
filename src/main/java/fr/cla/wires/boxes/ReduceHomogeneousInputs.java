@@ -54,7 +54,7 @@ extends Box {
      *      onSignalChanged(in)
      *          .set(out)
      *          .from(ins)
-     *          .map(mapping())
+     *          .map(accumulationValue())
      *          .reduce(reduction(), neutralElement()
      *      ;
      * }
@@ -62,7 +62,7 @@ extends Box {
      * {@code
      *      onSignalChanged(in,
      *          newIn -> out.setSignal(
-     *              mapAndReduce(ins, mapping(), reduction(), neutralElement())
+     *              mapAndReduce(ins, accumulationValue(), reduction(), neutralElement())
      *          )
      *      )
      * }
@@ -71,12 +71,12 @@ extends Box {
         this.<O, T>onSignalChanged(in)
             .set(out)
             .from(ins)
-            .map(mapping())
+            .map(accumulationValue())
             .reduce(reduction(), neutralElement())
         ;
     }
 
-    protected abstract Function<O,T> mapping();
+    protected abstract Function<O,T> accumulationValue();
     protected abstract T neutralElement();
     protected abstract BinaryOperator<T> reduction();
 
