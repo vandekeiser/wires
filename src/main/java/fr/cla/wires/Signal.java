@@ -23,7 +23,7 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         this.value = acceptNull ? v : requireNonNull(v);
     }
 
-    public static <V> Signal<V> of(V v) {
+    public static final <V> Signal<V> of(V v) {
         return new Signal<>(v, false);
     }
 
@@ -46,7 +46,7 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
     //     it will instead
     //          itself be pulled to the same voltage as the actively driven output.
     //-->La logique de Wire::setSignal devra être conforme à cette métaphore.
-    public static <V> Signal<V> none() {
+    public static final <V> Signal<V> none() {
         return new Signal<>(null, true);
     }
 
@@ -63,7 +63,7 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         return getValue().map(mapper).map(Signal::of).orElse(Signal.none());
     }
 
-    public static <V1, V2, W> Signal<W> map(Signal<V1> s1, Signal<V2> s2, BiFunction<V1, V2, W> mapper) {
+    public static final <V1, V2, W> Signal<W> map(Signal<V1> s1, Signal<V2> s2, BiFunction<V1, V2, W> mapper) {
         if(!s1.getValue().isPresent()) return Signal.none();
         if(!s2.getValue().isPresent()) return Signal.none();
         return Signal.of(mapper.apply(s1.getValue().get(), s2.getValue().get()));

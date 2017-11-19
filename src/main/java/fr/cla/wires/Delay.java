@@ -26,7 +26,7 @@ public final class Delay extends AbstractValueObject<Delay> {
         return singletonList(duration);
     }
 
-    public static Delay of(int duration) {
+    public static final Delay of(int duration) {
         return new Delay(duration);
     }
 

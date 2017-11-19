@@ -4,7 +4,7 @@ import java.util.Optional;
 import java.util.function.BinaryOperator;
 
 //@formatter:off
-public class Monads {
+public final class Monads {
 
     public static <T> BinaryOperator<Optional<T>> liftOptional(BinaryOperator<T> reducer) {
         return (maybe1, maybe2) ->

@@ -29,7 +29,7 @@ public class Mutable<T> {
         this.maybe = requireNonNull(maybe);
     }
 
-    public static <T> Mutable<T> of(Optional<T> initialVal) {
+    public static final <T> Mutable<T> of(Optional<T> initialVal) {
         return new Mutable<>(initialVal);
     }
 
@@ -41,13 +41,13 @@ public class Mutable<T> {
 
     //TODO is this not wrong?? should be mutable..
     //----------Optional-like methods----------VVVVVVVVVVVVVVV
-    public static <T> Mutable<T> empty() {
+    public static final <T> Mutable<T> empty() {
         return new Mutable<>(Optional.empty());
     }
-    public static <T> Mutable<T> of(T initialVal) {
+    public static final <T> Mutable<T> of(T initialVal) {
         return of(Optional.of(initialVal));
     }
-    public static <T> Mutable<T> ofNullable(T initialVal) {
+    public static final <T> Mutable<T> ofNullable(T initialVal) {
         return of(Optional.ofNullable(initialVal));
     }
     public final boolean isPresent() {

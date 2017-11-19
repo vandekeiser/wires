@@ -26,7 +26,7 @@ public class Accumulable<A, T> extends Mutable<A> {
         this.combiner = requireNonNull(combiner);
     }
 
-    public static <T, A> Accumulable<A, T> initiallyEmpty(
+    public static final <T, A> Accumulable<A, T> initiallyEmpty(
         Function<T, A> accumulationValue,
         BiFunction<A, T, A> accumulator,
         BinaryOperator<A> combiner
@@ -34,7 +34,7 @@ public class Accumulable<A, T> extends Mutable<A> {
         return new Accumulable<>(Optional.empty(), accumulationValue, accumulator, combiner);
     }
 
-    public static <T, A> Accumulable<A, T> initially(
+    public static final <T, A> Accumulable<A, T> initially(
         A initialValue,
         Function<T, A> accumulationValue,
         BiFunction<A, T, A> accumulator,
