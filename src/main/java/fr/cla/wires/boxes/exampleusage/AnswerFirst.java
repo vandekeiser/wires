@@ -24,7 +24,7 @@ public final class AnswerFirst extends Box {
     }
 
     /**
-     * This private method is used to not do the startup in the constructor,
+     * This method is used to not do the startup in the constructor,
      * to not let "this" escape through the method ref,
      * so that the Box is "properly constructed".
      *
