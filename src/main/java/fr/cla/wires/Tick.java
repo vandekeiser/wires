@@ -45,7 +45,6 @@ public final class Tick extends AbstractValueObject<Tick> {
      * Remembers the callbacks to call at a given Tick.
      */
     static final class Queue {
-
         //Run callbacks in FIFO order
         private final java.util.Queue<Runnable> todos = new ArrayDeque<>();
 
