@@ -39,7 +39,7 @@ public class ReduceMultipleAndTest {
             //Nothing
         }
         when: {
-            //No time::tick
+            //No time.tick()
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.none());

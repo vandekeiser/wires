@@ -33,7 +33,7 @@ public class NotTest {
             //Nothing
         }
         when: {
-            //No time::tick
+            //No time.tick()
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.none());
@@ -85,7 +85,7 @@ public class NotTest {
             in.setSignal(Signal.of(true));
         }
         when: {
-            //No time::tick
+            //No time.tick()
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.none());
@@ -98,7 +98,7 @@ public class NotTest {
             in.setSignal(Signal.of(false));
         }
         when: {
-            //No time::tick
+            //No time.tick()
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.none());
