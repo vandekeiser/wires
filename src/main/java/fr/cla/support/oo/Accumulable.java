@@ -59,6 +59,7 @@ public class Accumulable<A, T> extends Mutable<A> {
 //                ""
 //            ));
 //        }
+//        ...
 
         return
             this.isPresent() && that.isPresent() ?
