@@ -7,17 +7,17 @@ import static java.util.Objects.requireNonNull;
 
 //@formatter:off
 /**
- * Remembers which tasks (TickQueue) to execute at each Tick.
+ * Remembers which tasks (Tick.Queue) to execute at each Tick.
  */
 final class Agenda {
 
     private Tick now = Tick.ZERO;
-    private final Map<Tick, TickQueue> appointments = new HashMap<>();
+    private final Map<Tick, Tick.Queue> appointments = new HashMap<>();
 
     void tick() {
         now = now.plus(Delay.of(1));
 
-        TickQueue todo = appointments.get(now);
+        Tick.Queue todo = appointments.get(now);
         if(todo == null) return;
 
         todo.runAll();
@@ -36,10 +36,10 @@ final class Agenda {
         return v -> waitFor(_delay).thenCall(_callback, v);
     }
 
-    private TickQueue waitFor(Delay delay) {
+    private Tick.Queue waitFor(Delay delay) {
         return appointments.computeIfAbsent(
             now.plus(delay),
-            k -> new TickQueue()
+            k -> new Tick.Queue()
         );
     }
 
