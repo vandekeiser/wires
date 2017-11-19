@@ -82,7 +82,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <!--No warnings for you! This is the PAPA pinball circuit final.-->
+                    <!--No warnings for you! _TILT_ This is the PAPA pinball circuit final-->
                     <compilerArguments>
                         <Werror/>
                     </compilerArguments>
