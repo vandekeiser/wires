@@ -33,7 +33,9 @@ public abstract class AbstractValueObject<T extends AbstractValueObject<T>> {
     }
 
     @Override public final int hashCode() {
-        return Objects.hash(attributesToIncludeInEqualityCheck());
+        return Objects.hash(
+            attributesToIncludeInEqualityCheck()
+        );
     }
 
     @Override public String toString() {
