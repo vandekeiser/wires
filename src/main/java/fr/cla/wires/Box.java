@@ -113,10 +113,7 @@ public abstract class Box {
      */
     protected class OnSignalChangedBuilder_Applying<O, T>
     extends OnSignalChangedBuilder_ObservedAndTargetWiresCaptured<O, T> {
-        private OnSignalChangedBuilder_Applying(
-            Wire<O> observedWire,
-            Wire<T> targetWire
-        ) {
+        private OnSignalChangedBuilder_Applying(Wire<O> observedWire,Wire<T> targetWire) {
             super(observedWire, targetWire);
         }
 
