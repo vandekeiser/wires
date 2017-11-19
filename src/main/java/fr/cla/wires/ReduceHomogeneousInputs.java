@@ -57,7 +57,7 @@ public abstract class ReduceHomogeneousInputs<O, T> extends Box {
     private void startup(Wire<O> in) {
         this.<O, T>onSignalChanged(in)
             .set(out)
-            .from(this.ins)
+            .from(ins)
             .map(mapping())
             .reduce(reduction(), neutralElement())
         ;
