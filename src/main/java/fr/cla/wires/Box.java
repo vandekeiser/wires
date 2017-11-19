@@ -192,12 +192,12 @@ public abstract class Box {
             this.allInputs = new HashSet<>(allInputs);
         }
 
-        public final OnSignalChangedBuilder_Reducing<O, T> map(Function<O, T> mapper) {
+        public final OnSignalChangedBuilder_Reducing<O, T> map(Function<O, T> accumulationValue) {
             return new OnSignalChangedBuilder_Reducing<>(
                 observedWire,
                 targetWire,
                 allInputs,
-                requireNonNull(mapper)
+                requireNonNull(accumulationValue)
             );
         }
 
@@ -233,16 +233,16 @@ public abstract class Box {
      */
     protected class OnSignalChangedBuilder_Reducing<O, T>
     extends OnSignalChangedBuilder_InputsAndOutputCaptured<O, T> {
-        private final Function<O, T> mapper;
+        private final Function<O, T> accumulationValue;
 
         private OnSignalChangedBuilder_Reducing(
             Wire<O> observedWire,
             Wire<T> targetWire,
             Collection<Wire<O>> allInputs,
-            Function<O, T> mapper
+            Function<O, T> accumulationValue
         ) {
             super(observedWire, targetWire, allInputs);
-            this.mapper = requireNonNull(mapper);
+            this.accumulationValue = requireNonNull(accumulationValue);
         }
 
         public final void reduce(BinaryOperator<T> reducer, T neutralElement) {
@@ -251,21 +251,21 @@ public abstract class Box {
 
             onSignalChanged(observedWire,
                 newIn -> targetWire.setSignal(
-                    mapAndReduce(allInputs, mapper, _reducer, _neutralElement)
+                    mapAndReduce(allInputs, accumulationValue, _reducer, _neutralElement)
                 )
             );
         }
 
         private Signal<T> mapAndReduce(
             Collection<Wire<O>> allInputs,
-            Function<O, T> mapper,
+            Function<O, T> accumulationValue,
             BinaryOperator<T> reducer,
             T neutralElement
         ) {
             return Signal.of(allInputs.stream()
                 .map(Wire::getSignal)
                 .map(Signal::getValue)
-                .map(maybeValue -> maybeValue.map(mapper))
+                .map(maybeValue -> maybeValue.map(accumulationValue))
                 .reduce(
                     Optional.of(neutralElement),
                     Monads.liftOptional(reducer)
