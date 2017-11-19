@@ -98,8 +98,8 @@ public abstract class Box {
             );
         }
 
-        public final OnSignalChangedBuilderAll_InputsAndOutputCaptured<O, T> from(Collection<Wire<O>> inputs) {
-            return new OnSignalChangedBuilderAll_InputsAndOutputCaptured<>(
+        public final OnSignalChangedBuilder_InputsAndOutputCaptured<O, T> from(Collection<Wire<O>> inputs) {
+            return new OnSignalChangedBuilder_InputsAndOutputCaptured<>(
                 this.observedWire, this.targetWire, requireNonNull(inputs)
             );
         }
@@ -182,11 +182,11 @@ public abstract class Box {
     /**
      * Captures N homogeneous inputs
      */
-    protected class OnSignalChangedBuilderAll_InputsAndOutputCaptured<O, T>
+    protected class OnSignalChangedBuilder_InputsAndOutputCaptured<O, T>
     extends OnSignalChangedBuilder_ObservedAndTargetWiresCaptured<O, T> {
         final Collection<Wire<O>> allInputs;
 
-        private OnSignalChangedBuilderAll_InputsAndOutputCaptured(
+        private OnSignalChangedBuilder_InputsAndOutputCaptured(
             Wire<O> observedWire,
             Wire<T> targetWire,
             Collection<Wire<O>> allInputs
@@ -195,8 +195,8 @@ public abstract class Box {
             this.allInputs = new HashSet<>(allInputs);
         }
 
-        public final OnSignalChangedBuilderAll_Reducing<O, T> map(Function<O, T> mapper) {
-            return new OnSignalChangedBuilderAll_Reducing<>(
+        public final OnSignalChangedBuilder_Reducing<O, T> map(Function<O, T> mapper) {
+            return new OnSignalChangedBuilder_Reducing<>(
                 observedWire,
                 targetWire,
                 allInputs,
@@ -234,11 +234,11 @@ public abstract class Box {
     /**
      * Enables applying a reduction to N homogeneous inputs
      */
-    protected class OnSignalChangedBuilderAll_Reducing<O, T>
-    extends OnSignalChangedBuilderAll_InputsAndOutputCaptured<O, T> {
+    protected class OnSignalChangedBuilder_Reducing<O, T>
+    extends OnSignalChangedBuilder_InputsAndOutputCaptured<O, T> {
         private final Function<O, T> mapper;
 
-        private OnSignalChangedBuilderAll_Reducing(
+        private OnSignalChangedBuilder_Reducing(
             Wire<O> observedWire,
             Wire<T> targetWire,
             Collection<Wire<O>> allInputs,
