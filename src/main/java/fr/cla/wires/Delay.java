@@ -19,7 +19,7 @@ public final class Delay extends AbstractValueObject<Delay> {
     }
 
     @Override
-    protected List<Object> attributesToIncludeInEqualityCheck() {
+    protected List<Object> equalityCriteria() {
         return Arrays.asList(duration);
     }
 

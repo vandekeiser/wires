@@ -50,7 +50,7 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
     }
 
     @Override
-    protected List<Object> attributesToIncludeInEqualityCheck() {
+    protected List<Object> equalityCriteria() {
         return Arrays.asList(value);
     }
 

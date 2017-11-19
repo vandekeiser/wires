@@ -21,7 +21,7 @@ public final class Tick extends AbstractValueObject<Tick> {
     }
 
     @Override
-    protected List<Object> attributesToIncludeInEqualityCheck() {
+    protected List<Object> equalityCriteria() {
         return Arrays.asList(tick);
     }
 

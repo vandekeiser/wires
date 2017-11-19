@@ -27,14 +27,14 @@ public abstract class AbstractValueObject<T extends AbstractValueObject<T>> {
         T that = type.cast(obj);
         
         return Objects.equals(
-            this.attributesToIncludeInEqualityCheck(),
-            that.attributesToIncludeInEqualityCheck()
+            this.equalityCriteria(),
+            that.equalityCriteria()
         );
     }
 
     @Override public final int hashCode() {
         return Objects.hash(
-            attributesToIncludeInEqualityCheck()
+            equalityCriteria()
         );
     }
 
@@ -43,12 +43,12 @@ public abstract class AbstractValueObject<T extends AbstractValueObject<T>> {
             "%s@%s%s",
             getClass().getSimpleName(),
             Integer.toHexString(System.identityHashCode(this)),
-            attributesToIncludeInEqualityCheck()
+            equalityCriteria()
         );
     }
 
     //It doesn't matter if a field is included twice, since that would not change the result of equals().
-    protected abstract List<Object> attributesToIncludeInEqualityCheck();
+    protected abstract List<Object> equalityCriteria();
 
 }
 //@formatter:on
