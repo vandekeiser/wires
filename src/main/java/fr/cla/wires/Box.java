@@ -8,7 +8,6 @@ import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collector;
 
-import static java.lang.System.out;
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off

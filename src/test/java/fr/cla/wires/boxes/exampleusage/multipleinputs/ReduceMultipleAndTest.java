@@ -4,7 +4,6 @@ package fr.cla.wires.boxes.exampleusage.multipleinputs;
 import fr.cla.wires.Signal;
 import fr.cla.wires.Time;
 import fr.cla.wires.Wire;
-import fr.cla.wires.boxes.exampleusage.multipleinputs.ReduceMultipleAnd;
 import org.junit.Before;
 import org.junit.Test;
 
