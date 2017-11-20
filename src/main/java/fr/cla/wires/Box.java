@@ -99,8 +99,7 @@ public abstract class Box {
         /**
          * @return goto Stage 3.1: next, apply a transformation to the 1 Wire,
          *  maybe (depending on what is called next)
-         *  taking into account a 2nd Wire depending on whether this Box
-         *  has 1 or 2 inout wires
+         *  taking into account a 2nd Wire depending on whether this Box has 1 or 2 input wires.
          */
         public final OnSignalChangedBuilder_Applying<O, T> toResultOfApplying() {
             return new OnSignalChangedBuilder_Applying<>(
@@ -212,7 +211,7 @@ public abstract class Box {
         }
 
         /**
-         * @return goto Stage 4.1: next, specify the reducer to apply
+         * @return goto Stage 4.1: next, specify the reducer to apply.
          */
         public final OnSignalChangedBuilder_Reducing<O, T> map(Function<O, T> accumulationValue) {
             return new OnSignalChangedBuilder_Reducing<>(
