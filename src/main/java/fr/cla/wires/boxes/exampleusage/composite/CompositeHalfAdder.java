@@ -4,6 +4,9 @@ import fr.cla.wires.Box;
 import fr.cla.wires.Delay;
 import fr.cla.wires.Time;
 import fr.cla.wires.Wire;
+import fr.cla.wires.boxes.exampleusage.basic.And;
+import fr.cla.wires.boxes.exampleusage.basic.Not;
+import fr.cla.wires.boxes.exampleusage.basic.Or;
 
 import static java.util.Objects.requireNonNull;
 
@@ -14,7 +17,8 @@ import static java.util.Objects.requireNonNull;
  */
 public final class CompositeHalfAdder extends Box {
 
-    private final Wire<Boolean> inA, inB, sum, carry;
+    private final Wire<Boolean> inA, inB, sum, carry; //Externally exposed Wires
+    private final Wire<Boolean> d, e; //Internal wiring between or/and/not and from/to the inputs/outputs
 
     private CompositeHalfAdder(
         Wire<Boolean> inA, Wire<Boolean> inB,
@@ -34,38 +38,16 @@ public final class CompositeHalfAdder extends Box {
         this.inB = requireNonNull(inB);
         this.sum = requireNonNull(sum);
         this.carry = requireNonNull(carry);
+        this.d = Wire.make();
+        this.e = Wire.make();
     }
 
     private CompositeHalfAdder startup() {
-        this.<Boolean, Boolean>onSignalChanged(inA)
-            .set(sum)
-            .toResultOfApplying()
-            .transformation(this::sum, inB)
-        ;
-        this.<Boolean, Boolean>onSignalChanged(inB)
-            .set(sum)
-            .toResultOfApplying()
-            .transformation(inA, this::sum)
-        ;
-        this.<Boolean, Boolean>onSignalChanged(inA)
-            .set(carry)
-            .toResultOfApplying()
-            .transformation(this::carry, inB)
-        ;
-        this.<Boolean, Boolean>onSignalChanged(inB)
-            .set(carry)
-            .toResultOfApplying()
-            .transformation(inA, this::carry)
-        ;
+        Or.in1(inA).in2(inB).out(d).time(time);
+        And.in1(inA).in2(inB).out(carry).time(time);
+        Not.in(carry).out(e).time(time);
+        And.in1(d).in2(e).out(sum).time(time);
         return this;
-    }
-
-    private boolean sum(boolean bA, boolean bB) {
-        return bA != bB;
-    }
-
-    private boolean carry(boolean bA, boolean bB) {
-        return bA && bB;
     }
 
     public static Builder inA(Wire<Boolean> inA) {

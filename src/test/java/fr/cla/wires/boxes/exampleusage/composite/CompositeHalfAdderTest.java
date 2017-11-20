@@ -4,10 +4,12 @@ package fr.cla.wires.boxes.exampleusage.composite;
 import fr.cla.wires.Signal;
 import fr.cla.wires.Time;
 import fr.cla.wires.Wire;
-import fr.cla.wires.boxes.exampleusage.composite.CompositeHalfAdder;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.stream.IntStream;
+
+import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
 
 //@formatter:off
@@ -16,6 +18,12 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @see fr.cla.wires.boxes.exampleusage
  */
 public class CompositeHalfAdderTest {
+
+    //The max number of DELAY=1 boxes the Signal takes through a CompositeHalfAdder
+    //TODO 1: extract an abstract longestPath() method in Box
+    //TODO 2: PBT test that CompositeHalfAdder gives the same result as HalfAdder,
+    // after enough ticks, but not before.
+    private static final int COMPOSITE_HALF_ADDER_LONGEST_PATH = 3;
 
     private Wire<Boolean> inA, inB, sum, carry;
     private Time time;
@@ -29,6 +37,10 @@ public class CompositeHalfAdderTest {
         CompositeHalfAdder.inA(inA).inB(inB).sum(sum).carry(carry).time(time);
     }
 
+    private void tickCompositeHalfAdder() {
+        range(0, COMPOSITE_HALF_ADDER_LONGEST_PATH).forEach(i -> time.tick());
+    }
+
     //-------------------Sum-------------------VVVVVVVVVVVVVVVVVVVVVVV
     @Test
     public void sum_should_be_false_when_A_and_B_are_false() {
@@ -37,7 +49,7 @@ public class CompositeHalfAdderTest {
             inB.setSignal(Signal.of(false));
         }
         when: {
-            time.tick();
+            tickCompositeHalfAdder();
         }
         then: {
             assertThat(sum.getSignal()).isEqualTo(Signal.of(false));
@@ -51,7 +63,7 @@ public class CompositeHalfAdderTest {
             inB.setSignal(Signal.of(true));
         }
         when: {
-            time.tick();
+            tickCompositeHalfAdder();
         }
         then: {
             assertThat(sum.getSignal()).isEqualTo(Signal.of(false));
@@ -65,7 +77,7 @@ public class CompositeHalfAdderTest {
             inB.setSignal(Signal.of(true));
         }
         when: {
-            time.tick();
+            tickCompositeHalfAdder();
         }
         then: {
             assertThat(sum.getSignal()).isEqualTo(Signal.of(true));
@@ -79,7 +91,7 @@ public class CompositeHalfAdderTest {
             inB.setSignal(Signal.of(false));
         }
         when: {
-            time.tick();
+            tickCompositeHalfAdder();
         }
         then: {
             assertThat(sum.getSignal()).isEqualTo(Signal.of(true));
@@ -95,7 +107,7 @@ public class CompositeHalfAdderTest {
             inB.setSignal(Signal.of(false));
         }
         when: {
-            time.tick();
+            tickCompositeHalfAdder();
         }
         then: {
             assertThat(carry.getSignal()).isEqualTo(Signal.of(false));
@@ -109,7 +121,7 @@ public class CompositeHalfAdderTest {
             inB.setSignal(Signal.of(true));
         }
         when: {
-            time.tick();
+            tickCompositeHalfAdder();
         }
         then: {
             assertThat(carry.getSignal()).isEqualTo(Signal.of(true));
@@ -123,7 +135,7 @@ public class CompositeHalfAdderTest {
             inB.setSignal(Signal.of(true));
         }
         when: {
-            time.tick();
+            tickCompositeHalfAdder();
         }
         then: {
             assertThat(carry.getSignal()).isEqualTo(Signal.of(false));
@@ -137,7 +149,7 @@ public class CompositeHalfAdderTest {
             inB.setSignal(Signal.of(false));
         }
         when: {
-            time.tick();
+            tickCompositeHalfAdder();
         }
         then: {
             assertThat(carry.getSignal()).isEqualTo(Signal.of(false));
