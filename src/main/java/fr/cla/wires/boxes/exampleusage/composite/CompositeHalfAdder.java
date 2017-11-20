@@ -14,76 +14,76 @@ import static java.util.Objects.requireNonNull;
  */
 public final class CompositeHalfAdder extends Box {
 
-    private final Wire<Boolean> in1, in2, sum, carry;
+    private final Wire<Boolean> inA, inB, sum, carry;
 
     private CompositeHalfAdder(
-        Wire<Boolean> in1, Wire<Boolean> in2,
+        Wire<Boolean> inA, Wire<Boolean> inB,
         Wire<Boolean> sum, Wire<Boolean> carry,
         Time time
     ) {
-        this(in1, in2, sum, carry, time, DEFAULT_DELAY);
+        this(inA, inB, sum, carry, time, DEFAULT_DELAY);
     }
 
     private CompositeHalfAdder(
-        Wire<Boolean> in1, Wire<Boolean> in2,
+        Wire<Boolean> inA, Wire<Boolean> inB,
         Wire<Boolean> sum, Wire<Boolean> carry,
         Time time, Delay delay
     ) {
         super(time, delay);
-        this.in1 = requireNonNull(in1);
-        this.in2 = requireNonNull(in2);
+        this.inA = requireNonNull(inA);
+        this.inB = requireNonNull(inB);
         this.sum = requireNonNull(sum);
         this.carry = requireNonNull(carry);
     }
 
     private CompositeHalfAdder startup() {
-        this.<Boolean, Boolean>onSignalChanged(in1)
+        this.<Boolean, Boolean>onSignalChanged(inA)
             .set(sum)
             .toResultOfApplying()
-            .transformation(this::sum, in2)
+            .transformation(this::sum, inB)
         ;
-        this.<Boolean, Boolean>onSignalChanged(in2)
+        this.<Boolean, Boolean>onSignalChanged(inB)
             .set(sum)
             .toResultOfApplying()
-            .transformation(in1, this::sum)
+            .transformation(inA, this::sum)
         ;
-        this.<Boolean, Boolean>onSignalChanged(in1)
+        this.<Boolean, Boolean>onSignalChanged(inA)
             .set(carry)
             .toResultOfApplying()
-            .transformation(this::carry, in2)
+            .transformation(this::carry, inB)
         ;
-        this.<Boolean, Boolean>onSignalChanged(in2)
+        this.<Boolean, Boolean>onSignalChanged(inB)
             .set(carry)
             .toResultOfApplying()
-            .transformation(in1, this::carry)
+            .transformation(inA, this::carry)
         ;
         return this;
     }
 
-    private boolean sum(boolean b1, boolean b2) {
-        return b1 != b2;
+    private boolean sum(boolean bA, boolean bB) {
+        return bA != bB;
     }
 
-    private boolean carry(boolean b1, boolean b2) {
-        return b1 && b2;
+    private boolean carry(boolean bA, boolean bB) {
+        return bA && bB;
     }
 
-    public static Builder in1(Wire<Boolean> in1) {
-        return new Builder(requireNonNull(in1));
+    public static Builder inA(Wire<Boolean> inA) {
+        return new Builder(requireNonNull(inA));
     }
 
 
 
 
     public static class Builder {
-        private Wire<Boolean> in1, in2, sum, carry;
+        private Wire<Boolean> inA, inB, sum, carry;
 
         private Builder(Wire<Boolean> in) {
-            this.in1 = requireNonNull(in);
+            this.inA = requireNonNull(in);
         }
 
-        public Builder in2(Wire<Boolean> in2) {
-            this.in2 = requireNonNull(in2);
+        public Builder inB(Wire<Boolean> inB) {
+            this.inB = requireNonNull(inB);
             return this;
         }
 
@@ -99,7 +99,7 @@ public final class CompositeHalfAdder extends Box {
 
         public CompositeHalfAdder time(Time time) {
             Time _time = requireNonNull(time);
-            return new CompositeHalfAdder(in1, in2, sum, carry, _time).startup();
+            return new CompositeHalfAdder(inA, inB, sum, carry, _time).startup();
         }
     }
 

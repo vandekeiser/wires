@@ -17,24 +17,24 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class CompositeHalfAdderTest {
 
-    private Wire<Boolean> in1, in2, sum, carry;
+    private Wire<Boolean> inA, inB, sum, carry;
     private Time time;
 
     @Before public void setup() {
-        in1 = Wire.make();
-        in2 = Wire.make();
+        inA = Wire.make();
+        inB = Wire.make();
         sum = Wire.make();
         carry = Wire.make();
         time = Time.create();
-        CompositeHalfAdder.in1(in1).in2(in2).sum(sum).carry(carry).time(time);
+        CompositeHalfAdder.inA(inA).inB(inB).sum(sum).carry(carry).time(time);
     }
 
     //-------------------Sum-------------------VVVVVVVVVVVVVVVVVVVVVVV
     @Test
-    public void sum_should_be_false_when_1_and_2_are_false() {
+    public void sum_should_be_false_when_A_and_B_are_false() {
         given: {
-            in1.setSignal(Signal.of(false));
-            in2.setSignal(Signal.of(false));
+            inA.setSignal(Signal.of(false));
+            inB.setSignal(Signal.of(false));
         }
         when: {
             time.tick();
@@ -45,10 +45,10 @@ public class CompositeHalfAdderTest {
     }
 
     @Test
-    public void sum_should_be_false_when_1_and_2_are_true() {
+    public void sum_should_be_false_when_A_and_B_are_true() {
         given: {
-            in1.setSignal(Signal.of(true));
-            in2.setSignal(Signal.of(true));
+            inA.setSignal(Signal.of(true));
+            inB.setSignal(Signal.of(true));
         }
         when: {
             time.tick();
@@ -59,10 +59,10 @@ public class CompositeHalfAdderTest {
     }
 
     @Test
-    public void sum_should_be_true_when_1_is_false_and_2_is_true() {
+    public void sum_should_be_true_when_A_is_false_and_B_is_true() {
         given: {
-            in1.setSignal(Signal.of(false));
-            in2.setSignal(Signal.of(true));
+            inA.setSignal(Signal.of(false));
+            inB.setSignal(Signal.of(true));
         }
         when: {
             time.tick();
@@ -73,10 +73,10 @@ public class CompositeHalfAdderTest {
     }
 
     @Test
-    public void sum_should_be_true_when_1_is_true_and_2_is_false() {
+    public void sum_should_be_true_when_A_is_true_and_B_is_false() {
         given: {
-            in1.setSignal(Signal.of(true));
-            in2.setSignal(Signal.of(false));
+            inA.setSignal(Signal.of(true));
+            inB.setSignal(Signal.of(false));
         }
         when: {
             time.tick();
@@ -89,10 +89,10 @@ public class CompositeHalfAdderTest {
 
     //-------------------Carry-------------------VVVVVVVVVVVVVVVVVVVVVVV
     @Test
-    public void carry_should_be_false_when_1_and_2_are_false() {
+    public void carry_should_be_false_when_A_and_B_are_false() {
         given: {
-            in1.setSignal(Signal.of(false));
-            in2.setSignal(Signal.of(false));
+            inA.setSignal(Signal.of(false));
+            inB.setSignal(Signal.of(false));
         }
         when: {
             time.tick();
@@ -103,10 +103,10 @@ public class CompositeHalfAdderTest {
     }
 
     @Test
-    public void carry_should_be_true_when_1_and_2_are_true() {
+    public void carry_should_be_true_when_A_and_B_are_true() {
         given: {
-            in1.setSignal(Signal.of(true));
-            in2.setSignal(Signal.of(true));
+            inA.setSignal(Signal.of(true));
+            inB.setSignal(Signal.of(true));
         }
         when: {
             time.tick();
@@ -117,10 +117,10 @@ public class CompositeHalfAdderTest {
     }
 
     @Test
-    public void carry_should_be_false_when_1_is_false_and_2_is_true() {
+    public void carry_should_be_false_when_A_is_false_and_B_is_true() {
         given: {
-            in1.setSignal(Signal.of(false));
-            in2.setSignal(Signal.of(true));
+            inA.setSignal(Signal.of(false));
+            inB.setSignal(Signal.of(true));
         }
         when: {
             time.tick();
@@ -131,10 +131,10 @@ public class CompositeHalfAdderTest {
     }
 
     @Test
-    public void carry_should_be_false_when_1_is_true_and_2_is_false() {
+    public void carry_should_be_false_when_A_is_true_and_B_is_false() {
         given: {
-            in1.setSignal(Signal.of(true));
-            in2.setSignal(Signal.of(false));
+            inA.setSignal(Signal.of(true));
+            inB.setSignal(Signal.of(false));
         }
         when: {
             time.tick();
