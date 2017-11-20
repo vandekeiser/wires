@@ -42,6 +42,7 @@ public final class CompositeHalfAdder extends Box {
         this.e = Wire.make();
     }
 
+    //TODO? abstract startup in Box
     private CompositeHalfAdder startup() {
         //SICP p. 274
         Or.in1(inA).in2(inB).out(d).time(time);
