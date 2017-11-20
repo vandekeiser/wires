@@ -25,11 +25,11 @@ public class Mutable<T> {
         this.maybe = requireNonNull(maybe);
     }
 
-    public static final <T> Mutable<T> initially(Optional<T> initialVal) {
+    public static <T> Mutable<T> initially(Optional<T> initialVal) {
         return new Mutable<>(initialVal);
     }
 
-    public static final <T> Mutable<T> initiallyEmpty() {
+    public static <T> Mutable<T> initiallyEmpty() {
         return new Mutable<>(Optional.empty());
     }
 

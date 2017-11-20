@@ -18,13 +18,13 @@ public class SelfAccumulable<A> extends Accumulable<A, A> {
         super(initialValue, Function.identity(), combiner, combiner );
     }
 
-    public static final <A> SelfAccumulable<A> initiallyEmpty(
+    public static <A> SelfAccumulable<A> initiallyEmpty(
         BinaryOperator<A> combiner
     ) {
         return new SelfAccumulable<>(Optional.empty(), combiner);
     }
 
-    public static final <A> SelfAccumulable<A> initially(
+    public static <A> SelfAccumulable<A> initially(
         A initialValue,
         BinaryOperator<A> combiner
     ) {
