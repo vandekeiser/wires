@@ -28,7 +28,11 @@ public class ReduceMultipleAndTest {
 
     @Before
     public void setup() {
-        ins = Stream.generate(() -> Wire.<Boolean>make()).limit(MULTIPLICITY).collect(toSet());
+        setup(MULTIPLICITY);
+    }
+
+    private void setup(long multiplicity) {
+        ins = Stream.generate(() -> Wire.<Boolean>make()).limit(multiplicity).collect(toSet());
         out = Wire.make();
         time = Time.create();
         ReduceMultipleAnd.ins(ins).out(out).time(time);
@@ -74,7 +78,6 @@ public class ReduceMultipleAndTest {
         }
     }
 
-    @Ignore //TODO: another bug??
     @Test
     public void out_should_be_none_when_any_input_is_none__even_if_all_others_are_false() {
         given: {
@@ -89,7 +92,6 @@ public class ReduceMultipleAndTest {
         }
     }
 
-    @Ignore //TODO: another bug??
     @Test
     public void out_should_be_none_when_any_input_is_none__even_if_all_others_are_true() {
         given: {

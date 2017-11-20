@@ -8,6 +8,7 @@ import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collector;
 
+import static java.lang.System.out;
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off
@@ -262,15 +263,16 @@ public abstract class Box {
             BinaryOperator<T> reducer,
             T neutralElement
         ) {
-            return Signal.of(allInputs.stream()
+            return allInputs.stream()
                 .map(Wire::getSignal)
                 .map(Signal::getValue)
                 .map(Monads.liftOptional(accumulationValue))
                 .reduce(
                     Optional.of(neutralElement),
                     Monads.liftOptional(reducer)
-                ).get()
-            );
+                ).map(Signal::of)
+                .orElse(Signal.none())
+            ;
         }
     }
     //----------Convenience shortcuts for Boxes that have 1 or 2 inputs, or N homogeneous inputs--------------^^^^^^^^^^^^^^^^
