@@ -77,7 +77,7 @@ public final class Time {
         private Tick.Queue waitFor(Delay delay) {
             return appointments.computeIfAbsent(
                 now.plus(delay),
-                k -> new Tick.Queue()
+                Tick.Queue::new
             );
         }
     }

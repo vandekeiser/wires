@@ -43,8 +43,13 @@ public final class Tick extends AbstractValueObject<Tick> {
      * Remembers the callbacks to call at a given Tick.
      */
     static final class Queue {
+        private final Tick tick;
         //Run callbacks in FIFO order
         private final java.util.Queue<Runnable> todos = new ArrayDeque<>();
+
+        public Queue(Tick tick) {
+            this.tick = requireNonNull(tick);
+        }
 
         <V> void thenCall(OnSignalChanged<V> callback, Signal<V> signal) {
             OnSignalChanged<V> _callback = requireNonNull(callback);
@@ -55,6 +60,13 @@ public final class Tick extends AbstractValueObject<Tick> {
 
         void runAll() {
             todos.forEach(Runnable::run);
+        }
+
+        @Override public String toString() {
+            return String.format(
+                "{tick: %s, todos:%s}",
+                tick, todos
+            );
         }
     }
 
