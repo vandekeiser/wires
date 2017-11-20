@@ -30,7 +30,7 @@ public abstract class Box {
         if(agenda == null) throw new AssertionError("Time::agenda broke its promise not to return null!");
     }
 
-    //Don't make private as this is the only alternative to the "Staged Builder"
+    //Don't make package-private as this is the only alternative to the "Staged Builder"
     protected final <O> void onSignalChanged(Wire<O> observedWire, OnSignalChanged<O> callback) {
         OnSignalChanged<O> _callback = requireNonNull(callback);
 
