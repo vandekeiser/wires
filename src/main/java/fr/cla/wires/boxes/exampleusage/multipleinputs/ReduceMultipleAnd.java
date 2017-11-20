@@ -1,12 +1,13 @@
-package fr.cla.wires.boxes.exampleusage;
+package fr.cla.wires.boxes.exampleusage.multipleinputs;
 
 import fr.cla.wires.Delay;
 import fr.cla.wires.Time;
 import fr.cla.wires.Wire;
-import fr.cla.wires.boxes.CollectHomogeneousInputsToOutputOfSameType;
+import fr.cla.wires.boxes.ReduceHomogeneousInputs;
 
 import java.util.Set;
 import java.util.function.BinaryOperator;
+import java.util.function.Function;
 
 import static java.util.Objects.requireNonNull;
 
@@ -15,18 +16,23 @@ import static java.util.Objects.requireNonNull;
  * An example usage of how to connect wires to boxes.
  * @see fr.cla.wires.boxes.exampleusage
  */
-public final class CollectMultipleAnd
-extends CollectHomogeneousInputsToOutputOfSameType<Boolean> {
+public class ReduceMultipleAnd extends ReduceHomogeneousInputs<Boolean, Boolean> {
 
-    private CollectMultipleAnd(Set<Wire<Boolean>> ins, Wire<Boolean> out, Time time) {
+    private ReduceMultipleAnd(Set<Wire<Boolean>> ins, Wire<Boolean> out, Time time) {
         this(ins, out, time, DEFAULT_DELAY);
     }
 
-    private CollectMultipleAnd(Set<Wire<Boolean>> ins, Wire<Boolean> out, Time time, Delay delay) {
+    private ReduceMultipleAnd(Set<Wire<Boolean>> ins, Wire<Boolean> out, Time time, Delay delay) {
         super(ins, out, time, delay);
     }
 
-    @Override protected BinaryOperator<Boolean> combiner() {
+    @Override protected Function<Boolean, Boolean> accumulationValue() {
+        return Function.identity();
+    }
+    @Override protected Boolean neutralElement() {
+        return true;
+    }
+    @Override protected BinaryOperator<Boolean> reduction() {
         return this::and;
     }
 
@@ -44,7 +50,7 @@ extends CollectHomogeneousInputsToOutputOfSameType<Boolean> {
      *
      * @return this Box, started.
      */
-    @Override protected CollectMultipleAnd startup() {
+    @Override protected ReduceMultipleAnd startup() {
         super.startup();
         return this;
     }
@@ -52,6 +58,7 @@ extends CollectHomogeneousInputsToOutputOfSameType<Boolean> {
     public static Builder ins(Set<Wire<Boolean>> ins) {
         return new Builder(checkNoNulls(ins));
     }
+
 
 
 
@@ -68,9 +75,9 @@ extends CollectHomogeneousInputsToOutputOfSameType<Boolean> {
             return this;
         }
 
-        public CollectMultipleAnd time(Time time) {
+        public ReduceMultipleAnd time(Time time) {
             Time _time = requireNonNull(time);
-            return new CollectMultipleAnd(ins, out, _time).startup();
+            return new ReduceMultipleAnd(ins, out, _time).startup();
         }
     }
 

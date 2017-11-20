@@ -1,4 +1,4 @@
-package fr.cla.wires.boxes.exampleusage;
+package fr.cla.wires.boxes.exampleusage.multipleinputs;
 
 import fr.cla.wires.Delay;
 import fr.cla.wires.Time;

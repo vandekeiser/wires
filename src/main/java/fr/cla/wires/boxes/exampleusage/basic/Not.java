@@ -1,4 +1,4 @@
-package fr.cla.wires.boxes.exampleusage;
+package fr.cla.wires.boxes.exampleusage.basic;
 
 import fr.cla.wires.Box;
 import fr.cla.wires.Delay;

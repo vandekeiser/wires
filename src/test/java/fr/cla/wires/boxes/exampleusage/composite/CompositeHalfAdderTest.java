@@ -1,9 +1,10 @@
-package fr.cla.wires.boxes.exampleusage;
+package fr.cla.wires.boxes.exampleusage.composite;
 
 
 import fr.cla.wires.Signal;
 import fr.cla.wires.Time;
 import fr.cla.wires.Wire;
+import fr.cla.wires.boxes.exampleusage.composite.CompositeHalfAdder;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * An example of the expected behaviour of Boxes, and of how to tick the clock.
  * @see fr.cla.wires.boxes.exampleusage
  */
-public class HalfAdderTest {
+public class CompositeHalfAdderTest {
 
     private Wire<Boolean> in1, in2, sum, carry;
     private Time time;
@@ -25,7 +26,7 @@ public class HalfAdderTest {
         sum = Wire.make();
         carry = Wire.make();
         time = Time.create();
-        HalfAdder.in1(in1).in2(in2).sum(sum).carry(carry).time(time);
+        CompositeHalfAdder.in1(in1).in2(in2).sum(sum).carry(carry).time(time);
     }
 
     //-------------------Sum-------------------VVVVVVVVVVVVVVVVVVVVVVV

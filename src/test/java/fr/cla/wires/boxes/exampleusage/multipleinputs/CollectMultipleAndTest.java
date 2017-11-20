@@ -1,11 +1,11 @@
-package fr.cla.wires.boxes.exampleusage;
+package fr.cla.wires.boxes.exampleusage.multipleinputs;
 
 
 import fr.cla.wires.Signal;
 import fr.cla.wires.Time;
 import fr.cla.wires.Wire;
+import fr.cla.wires.boxes.exampleusage.multipleinputs.CollectMultipleAnd;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Set;

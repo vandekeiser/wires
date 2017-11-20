@@ -1,4 +1,4 @@
-package fr.cla.wires.boxes.exampleusage.pbt;
+package fr.cla.wires.boxes.exampleusage.propertybasedtesting;
 
 
 import com.pholser.junit.quickcheck.Property;
@@ -8,8 +8,8 @@ import fr.cla.support.tests.pbt.RandomBooleans;
 import fr.cla.wires.Signal;
 import fr.cla.wires.Time;
 import fr.cla.wires.Wire;
-import fr.cla.wires.boxes.exampleusage.CollectMultipleAnd;
-import fr.cla.wires.boxes.exampleusage.ReduceMultipleAnd;
+import fr.cla.wires.boxes.exampleusage.multipleinputs.CollectMultipleAnd;
+import fr.cla.wires.boxes.exampleusage.multipleinputs.ReduceMultipleAnd;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
