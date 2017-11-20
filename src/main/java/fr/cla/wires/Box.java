@@ -194,7 +194,7 @@ public abstract class Box {
 
 
     /**
-     * @return Stage 3.2: Captures N homogeneous inputs.
+     * Stage 3.2: Captures N homogeneous inputs.
      *  Next, apply a transformation (reduce / collect) to the N input Wires
      */
     protected class OnSignalChangedBuilder_InputsAndOutputCaptured<O, T>
@@ -239,7 +239,8 @@ public abstract class Box {
         }
 
         /**
-         * goto Stage 4.2: next, specify the reducer to apply.
+         * Specify the accumulationValue to apply to inputs for reduction.
+         * @return goto Stage 4.2: next, specify the reducer to apply.
          */
         public final OnSignalChangedBuilder_Reducing<O, T> map(Function<O, T> accumulationValue) {
             return new OnSignalChangedBuilder_Reducing<>(
