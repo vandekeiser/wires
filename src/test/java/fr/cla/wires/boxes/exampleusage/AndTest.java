@@ -27,22 +27,6 @@ public class AndTest {
         And.in1(in1).in2(in2).out(out).time(time);
     }
 
-    //TODO?
-//    @After public void teardown() {
-////        in1.destroy();
-////        in2.destroy();
-////        out.destroy();
-////        in1 = null;
-////        in2 = null;
-////        out = null;
-////        time.destroy();
-////        time = null;
-//
-//        //or
-//
-////        and.destroy();
-//    }
-
     @Test
     public void out_should_be_false_when_1_and_2_are_false() {
         given: {
