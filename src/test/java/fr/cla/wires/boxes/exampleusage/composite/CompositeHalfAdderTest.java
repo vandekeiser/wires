@@ -20,7 +20,7 @@ public class CompositeHalfAdderTest {
     //The max number of DELAY=1 boxes the Signal takes through a CompositeHalfAdder
     //TODO 1: extract abstract Box::longestPath
     //TODO 2: PBT test that CompositeHalfAdder gives the same result as HalfAdder,
-    //TODO? 3: add box Box::tickToCompletion, but account for recurring boxes
+    //TODO? 3: add box Box::tickToQuiescence, but account for infinite loops in recurring boxes
     // after enough ticks, but not before.
     private static final int COMPOSITE_HALF_ADDER_LONGEST_PATH = 3;
 
