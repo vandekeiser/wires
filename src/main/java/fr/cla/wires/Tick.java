@@ -47,7 +47,7 @@ public final class Tick extends AbstractValueObject<Tick> {
         //Run callbacks in FIFO order
         private final java.util.Queue<Runnable> todos = new ArrayDeque<>();
 
-        public Queue(Tick tick) {
+        Queue(Tick tick) {
             this.tick = requireNonNull(tick);
         }
 
