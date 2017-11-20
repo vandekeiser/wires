@@ -61,7 +61,7 @@ public abstract class Box {
 
 
     /**
-    * Stage 1: Capture the input wire to observe
+    * Stage 1: Capture the input wire to observe.
     */
     protected class OnSignalChangedBuilder_ObservedWireCaptured<O, T> {
         final Wire<O> observedWire;
@@ -82,7 +82,7 @@ public abstract class Box {
 
 
     /**
-     * Stage 2: Captures the input wire to observe, and the output wire to set
+     * Stage 2: Captures the input wire to observe, and the output wire to set.
      */
     protected class OnSignalChangedBuilder_ObservedAndTargetWiresCaptured<O, T>
     extends OnSignalChangedBuilder_ObservedWireCaptured<O, T> {
@@ -122,7 +122,7 @@ public abstract class Box {
 
 
     /**
-     * Stage 3.1: Enables applying a transformation to 1 or 2 inputs
+     * Stage 3.1: Enables applying a transformation to 1 or 2 inputs.
      */
     protected class OnSignalChangedBuilder_Applying<O, T>
     extends OnSignalChangedBuilder_ObservedAndTargetWiresCaptured<O, T> {
@@ -131,7 +131,7 @@ public abstract class Box {
         }
 
         /**
-        * Stage 3.1.1: apply the transformation to just the changed input
+        * Stage 3.1.1: Apply the transformation to just the changed input.
         */
         public final void transformation(Function<O, T> transformation) {
             Function<O, T> _transformation = requireNonNull(transformation);
@@ -144,7 +144,7 @@ public abstract class Box {
         }
 
         /**
-         * Stage 3.1.2: apply the transformation to (the changed input, the other input)
+         * Stage 3.1.2: Apply the transformation to (the changed input, the other input).
          *
          * Applies {@code transformation} to (changed Signal, unchanged Signal).
          * Of course calling this method or the other BiFunction one
@@ -167,7 +167,7 @@ public abstract class Box {
         }
 
         /**
-         * Stage 3.1.3: apply the transformation to (the other input, the changed input)
+         * Stage 3.1.3: Apply the transformation to (the other input, the changed input).
          *
          * Applies {@code transformation} to (unchanged Signal, changed Signal).
          * Of course calling this method or the other BiFunction one
@@ -211,32 +211,19 @@ public abstract class Box {
         }
 
         /**
-         * @return goto Stage 4.1: next, specify the reducer to apply.
-         */
-        public final OnSignalChangedBuilder_Reducing<O, T> map(Function<O, T> accumulationValue) {
-            return new OnSignalChangedBuilder_Reducing<>(
-                observedWire,
-                targetWire,
-                allInputs,
-                requireNonNull(accumulationValue)
-            );
-        }
-
-        /**
-         * Stage 4.2: Collection inputs->output is now fully specified, register it
+         * Stage 4.1: Collection inputs->output is now fully specified, register it.
          */
         public final void collect(Collector<Optional<O>, ?, Optional<T>> collector) {
             Collector<Optional<O>, ?, Optional<T>> _collector = requireNonNull(collector);
 
             onSignalChanged(observedWire,
                 newIn -> targetWire.setSignal(
-                    collect(allInputs, _collector)
-                )
-            );
+                collect(allInputs, _collector)
+            ));
         }
 
         /**
-         * Stage 4.2: apply the collector
+         * Stage 4.1.later: Apply the collector.
          */
         private Signal<T> collect(
             Collection<Wire<O>> allInputs,
@@ -250,14 +237,26 @@ public abstract class Box {
                 .orElse(Signal.none())
             ;
         }
+
+        /**
+         * goto Stage 4.2: next, specify the reducer to apply.
+         */
+        public final OnSignalChangedBuilder_Reducing<O, T> map(Function<O, T> accumulationValue) {
+            return new OnSignalChangedBuilder_Reducing<>(
+                observedWire,
+                targetWire,
+                allInputs,
+                requireNonNull(accumulationValue)
+            );
+        }
     }
 
 
 
 
     /**
-     * @return Stage 4.1: Specify the accumulationValue to apply to inputs.
-     *  that value is what is going to be reduced over.
+     * @return Stage 4.2: Specify the accumulationValue to apply to inputs for reduction.
+     *  That function will be mapped to inputs before reduce.
      */
     protected class OnSignalChangedBuilder_Reducing<O, T>
     extends OnSignalChangedBuilder_InputsAndOutputCaptured<O, T> {
@@ -274,7 +273,8 @@ public abstract class Box {
         }
 
         /**
-         * Stage 4.1.1: Reduction inputs->output is now fully specified, register it
+         * Stage 4.2.1: Now that the reduction itself is known,
+         *  reduction inputs->output is now fully specified, register it.
          */
         public final void reduce(BinaryOperator<T> reducer, T neutralElement) {
             BinaryOperator<T> _reducer = requireNonNull(reducer);
@@ -288,7 +288,7 @@ public abstract class Box {
         }
 
         /**
-         * Stage 4.1.1: apply the accumulationValue and reducer to changed inputs
+         * Stage 4.1.1: Apply the accumulationValue and reducer to changed inputs.
          */
         private Signal<T> mapAndReduce(
             Collection<Wire<O>> allInputs,
