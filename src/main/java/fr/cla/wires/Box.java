@@ -26,8 +26,10 @@ public abstract class Box {
     protected Box(Time time, Delay delay) {
         this.time = requireNonNull(time);
         this.agenda = time.agenda();
+        if(agenda == null) throw new AssertionError(
+            "Time::agenda broke its promise not to return null!"
+        );
         this.delay = requireNonNull(delay);
-        if(agenda == null) throw new AssertionError("Time::agenda broke its promise not to return null!");
     }
 
     //Don't make package-private as this is the only alternative to the "Staged Builder"
