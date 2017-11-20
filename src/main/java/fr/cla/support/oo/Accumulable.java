@@ -14,6 +14,8 @@ public class Accumulable<A, T> extends Mutable<A> {
     private final BiFunction<A, T, A> accumulator;
     private final BinaryOperator<A> combiner;
 
+    private boolean explicitlySetToEmpty = false;
+
     protected Accumulable(
         Optional<A> initialValue,
         Function<T, A> accumulationValue,
@@ -44,11 +46,18 @@ public class Accumulable<A, T> extends Mutable<A> {
     }
 
     public final void accumulate(Optional<T> maybe) {
+        if(!maybe.isPresent()) explicitlySetToEmpty = true;
+        if(explicitlySetToEmpty) return;
+
         if(this.isPresent() && maybe.isPresent()) {
             set(accumulator.apply(this.get(), maybe.get()));
         } else if(maybe.isPresent()) {
             set(accumulationValue.apply(maybe.get()));
         }
+    }
+
+    private void weAreExplicitlySetToEmpty() {
+        this.explicitlySetToEmpty = true;
     }
 
     public final Accumulable<A, T> combine(Accumulable<A, T> that) {

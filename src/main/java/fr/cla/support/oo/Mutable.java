@@ -62,6 +62,9 @@ public class Mutable<T> {
     public final void set(T t) {
         maybe = Optional.of(t);
     }
+    public final void unset() {
+        maybe = Optional.empty();
+    }
     public final void set(Optional<T> o) {
         maybe = requireNonNull(o);
     }

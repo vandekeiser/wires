@@ -5,6 +5,7 @@ import fr.cla.wires.Signal;
 import fr.cla.wires.Time;
 import fr.cla.wires.Wire;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Set;
@@ -70,6 +71,36 @@ public class ReduceMultipleAndTest {
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.of(true));
+        }
+    }
+
+    @Ignore //TODO: another bug??
+    @Test
+    public void out_should_be_none_when_any_input_is_none__even_if_all_others_are_false() {
+        given: {
+            ins.forEach(i -> i.setSignal(Signal.of(false)));
+            ins.iterator().next().setSignal(Signal.none());
+        }
+        when: {
+            time.tick();
+        }
+        then: {
+            assertThat(out.getSignal()).isEqualTo(Signal.none());
+        }
+    }
+
+    @Ignore //TODO: another bug??
+    @Test
+    public void out_should_be_none_when_any_input_is_none__even_if_all_others_are_true() {
+        given: {
+            ins.forEach(i -> i.setSignal(Signal.of(true)));
+            ins.iterator().next().setSignal(Signal.none());
+        }
+        when: {
+            time.tick();
+        }
+        then: {
+            assertThat(out.getSignal()).isEqualTo(Signal.none());
         }
     }
 

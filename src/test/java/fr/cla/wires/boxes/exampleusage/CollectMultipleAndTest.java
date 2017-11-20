@@ -111,11 +111,10 @@ public class CollectMultipleAndTest {
         }
     }
 
-    @Ignore //TODO: see comment in Signal::none
     @Test
-    public void out_should_be_none_when_any_input_is_none__even_if_all_others_are_true() {
+    public void out_should_be_none_when_any_input_is_none__even_if_all_others_are_false() {
         given: {
-            ins.forEach(i -> i.setSignal(Signal.of(true)));
+            ins.forEach(i -> i.setSignal(Signal.of(false)));
             ins.iterator().next().setSignal(Signal.none());
         }
         when: {
@@ -126,11 +125,10 @@ public class CollectMultipleAndTest {
         }
     }
 
-    @Ignore //TODO: see comment in Signal::none
     @Test
-    public void out_should_be_none_when_any_input_is_none__even_if_all_others_are_false() {
+    public void out_should_be_none_when_any_input_is_none__even_if_all_others_are_true() {
         given: {
-            ins.forEach(i -> i.setSignal(Signal.of(false)));
+            ins.forEach(i -> i.setSignal(Signal.of(true)));
             ins.iterator().next().setSignal(Signal.none());
         }
         when: {
