@@ -29,8 +29,12 @@ public class Mutable<T> {
         this.maybe = requireNonNull(maybe);
     }
 
-    public static final <T> Mutable<T> of(Optional<T> initialVal) {
+    public static final <T> Mutable<T> initially(Optional<T> initialVal) {
         return new Mutable<>(initialVal);
+    }
+
+    public static final <T> Mutable<T> initiallyEmpty() {
+        return new Mutable<>(Optional.empty());
     }
 
     public final Optional<T> current() {
@@ -38,62 +42,20 @@ public class Mutable<T> {
         return maybe;
     }
 
-
-    //TODO is this not wrong?? should be mutable..
-    //----------Optional-like methods----------VVVVVVVVVVVVVVV
-    public static final <T> Mutable<T> empty() {
-        return new Mutable<>(Optional.empty());
-    }
-    public static final <T> Mutable<T> of(T initialVal) {
-        return of(Optional.of(initialVal));
-    }
-    public static final <T> Mutable<T> ofNullable(T initialVal) {
-        return of(Optional.ofNullable(initialVal));
-    }
     public final boolean isPresent() {
         return maybe.isPresent();
     }
+
     /**
      * @throws java.util.NoSuchElementException if !isPresent
      */
     public final T get() {
         return maybe.get();
     }
+
     public final void set(T t) {
         maybe = Optional.of(t);
     }
-    public final void unset() {
-        maybe = Optional.empty();
-    }
-    public final void set(Optional<T> o) {
-        maybe = requireNonNull(o);
-    }
-    public final <U> Mutable<U> map(Function<T, U> mapper) {
-        return Mutable.of(current().map(mapper));
-    }
-    public final <U> Mutable<U> flatMapMutable(Function<T, Mutable<U>> mapper) {
-        return current().map(mapper).orElseGet(Mutable::empty);
-    }
-    public final <U> Mutable<U> flatMapOptional(Function<T, Optional<U>> mapper) {
-        return current().flatMap(mapper).map(Mutable::of).orElseGet(Mutable::empty);
-    }
-    public final Mutable<T> orElse(T replacement) {
-        return Mutable.of(current().orElse(replacement));
-    }
-    public final Mutable<T> orElseGet(Supplier<? extends T> supplier) {
-        return Mutable.of(current().orElseGet(supplier));
-    }
-    public <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
-        return current().orElseThrow(exceptionSupplier);
-    }
-    public final void ifPresent(Consumer<? super T> consumer) {
-        current().ifPresent(consumer);
-    }
-    public final Mutable<T> filter(Predicate<? super T> predicate) {
-        return Mutable.of(current().filter(predicate));
-    }
-    //----------Optional-like methods----------^^^^^^^^^^^^^^^
-
 
     //----------Equality based solely on current()----------VVVVVVVVVVVVVVV
     @Override public final boolean equals(Object obj) {
@@ -122,7 +84,6 @@ public class Mutable<T> {
         );
     }
     //----------Equality based solely on current()----------^^^^^^^^^^^^^^^
-
 
 }
 //@formatter:on

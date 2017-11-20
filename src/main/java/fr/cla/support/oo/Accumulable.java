@@ -56,10 +56,6 @@ public class Accumulable<A, T> extends Mutable<A> {
         }
     }
 
-    private void weAreExplicitlySetToEmpty() {
-        this.explicitlySetToEmpty = true;
-    }
-
     public final Accumulable<A, T> combine(Accumulable<A, T> that) {
         //TODO
 //        if(this.accumulationValue != that.accumulationValue) {
@@ -68,7 +64,6 @@ public class Accumulable<A, T> extends Mutable<A> {
 //            ));
 //        }
 //        ...
-
         return
             this.isPresent() && that.isPresent() ?
             initially(
