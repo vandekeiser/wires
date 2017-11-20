@@ -43,6 +43,7 @@ public final class CompositeHalfAdder extends Box {
     }
 
     private CompositeHalfAdder startup() {
+        //SICP p. 274
         Or.in1(inA).in2(inB).out(d).time(time);
         And.in1(inA).in2(inB).out(carry).time(time);
         Not.in(carry).out(e).time(time);
