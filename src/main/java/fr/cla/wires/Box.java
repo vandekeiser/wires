@@ -70,6 +70,9 @@ public abstract class Box {
             this.observedWire = requireNonNull(observedWire);
         }
 
+        /**
+         * @return goto Stage 2: next, capture the input wire to observe.
+         */
         public final OnSignalChangedBuilder_ObservedAndTargetWiresCaptured<O, T> set(Wire<T> targetWire) {
             return new OnSignalChangedBuilder_ObservedAndTargetWiresCaptured<>(
                 observedWire,
@@ -256,7 +259,7 @@ public abstract class Box {
 
 
     /**
-     * @return Stage 4.2: Specify the accumulationValue to apply to inputs for reduction.
+     * Stage 4.2: Specify the accumulationValue to apply to inputs for reduction.
      *  That function will be mapped to inputs before reduce.
      */
     protected class OnSignalChangedBuilder_Reducing<O, T>
