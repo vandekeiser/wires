@@ -18,7 +18,7 @@ import static java.util.Objects.requireNonNull;
 public final class CompositeHalfAdder extends Box {
 
     private final Wire<Boolean> inA, inB, sum, carry; //Externally exposed Wires
-    private final Wire<Boolean> d, e; //Internal wiring between or/and/not and from/to the inputs/outputs
+    private final Wire<Boolean> d, e; //Internal wiring between the Or/And/Not gates and from/to the inputs/outputs
 
     private CompositeHalfAdder(
         Wire<Boolean> inA, Wire<Boolean> inB,
