@@ -1,12 +1,11 @@
 package fr.cla.wires;
 
-//@formatter:off
-
 import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Objects.requireNonNull;
 
+//@formatter:off
 /**
  * A discretization of time:
  * exposes {@code void tick()} and {@code Tick now()}
