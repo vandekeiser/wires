@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * An example of the expected behaviour of Boxes, and of how to tick the clock.
  * @see fr.cla.wires.boxes.exampleusage
  */
-public class HalfAdderTest {
+public class LeafHalfAdderTest {
 
     private Wire<Boolean> inA, inB, sum, carry;
     private Time time;
@@ -25,7 +25,7 @@ public class HalfAdderTest {
         sum = Wire.make();
         carry = Wire.make();
         time = Time.create();
-        HalfAdder.inA(inA).inB(inB).sum(sum).carry(carry).time(time);
+        LeafHalfAdder.inA(inA).inB(inB).sum(sum).carry(carry).time(time);
     }
 
     //-------------------Sum-------------------VVVVVVVVVVVVVVVVVVVVVVV

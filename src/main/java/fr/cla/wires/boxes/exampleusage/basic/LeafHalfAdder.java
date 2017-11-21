@@ -10,13 +10,14 @@ import static java.util.Objects.requireNonNull;
 //@formatter:off
 /**
  * An example usage of how to connect wires to boxes.
- * @see fr.cla.wires.boxes.exampleusage
+ * @see fr.cla.wires.boxes.exampleusage.basic for a general description of the examples of basic Boxes
+ * @see fr.cla.wires.boxes.exampleusage.composite.CompositeHalfAdder for the alternative composite implementation
  */
-public final class HalfAdder extends Box {
+public final class LeafHalfAdder extends Box {
 
     private final Wire<Boolean> inA, inB, sum, carry;
 
-    private HalfAdder(
+    private LeafHalfAdder(
         Wire<Boolean> inA, Wire<Boolean> inB,
         Wire<Boolean> sum, Wire<Boolean> carry,
         Time time
@@ -24,7 +25,7 @@ public final class HalfAdder extends Box {
         this(inA, inB, sum, carry, time, DEFAULT_DELAY);
     }
 
-    private HalfAdder(
+    private LeafHalfAdder(
         Wire<Boolean> inA, Wire<Boolean> inB,
         Wire<Boolean> sum, Wire<Boolean> carry,
         Time time, Delay delay
@@ -36,7 +37,7 @@ public final class HalfAdder extends Box {
         this.carry = requireNonNull(carry);
     }
 
-    private HalfAdder startup() {
+    private LeafHalfAdder startup() {
         this.<Boolean, Boolean>onSignalChanged(inA)
             .set(sum)
             .toResultOfApplying()
@@ -97,9 +98,9 @@ public final class HalfAdder extends Box {
             return this;
         }
 
-        public HalfAdder time(Time time) {
+        public LeafHalfAdder time(Time time) {
             Time _time = requireNonNull(time);
-            return new HalfAdder(inA, inB, sum, carry, _time).startup();
+            return new LeafHalfAdder(inA, inB, sum, carry, _time).startup();
         }
     }
 

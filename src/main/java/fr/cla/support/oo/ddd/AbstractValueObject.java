@@ -6,7 +6,11 @@ import java.util.Objects;
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off
-//TODO: factor what is common with Mutable
+//TODO: factor what is common with Mutable:
+//  IntrinsicallyIdentifiable/ExtrinsicallyIdentifiable
+//  IntrinsicallyIdentifiable/CriteriaIdentifiable
+//  Individual/CriteriaIdentifiable
+//  Entity/CriteriaIdentifiable
 /**
  * A DDD Value Object: immutable object with no identity (equality defined by a set of fields).
  * (it just doesn't have validation)
@@ -26,6 +30,7 @@ public abstract class AbstractValueObject<T extends AbstractValueObject<T>> {
         if(! type.isInstance(obj)) return false;
         T that = type.cast(obj);
         
+        //TODO attack with TDD, challenging the "contract of equals" properties with pathological counter-examples
         return Objects.equals(
             this.equalityCriteria(),
             that.equalityCriteria()
