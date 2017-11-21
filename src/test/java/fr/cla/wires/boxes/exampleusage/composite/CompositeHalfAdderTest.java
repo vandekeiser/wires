@@ -99,7 +99,7 @@ public class CompositeHalfAdderTest {
     }
     //-------------------Sum-------------------^^^^^^^^^^^^^^^^^^^^^^^
 
-    //-------------------Carry-------------------VVVVVVVVVVVVVVVVVVVVVVV
+    //-------------------Carry-------------------VVVVVVVVVVVVVVVVVVVVV
     @Test
     public void carry_should_be_false_when_A_and_B_are_false() {
         given: {
@@ -155,7 +155,7 @@ public class CompositeHalfAdderTest {
             assertThat(carry.getSignal()).isEqualTo(Signal.of(false));
         }
     }
-    //-------------------Carry-------------------^^^^^^^^^^^^^^^^^^^^^^^
+    //-------------------Carry-------------------^^^^^^^^^^^^^^^^^^^^^
 
 }
 //@formatter:on

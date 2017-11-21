@@ -87,7 +87,7 @@ public class LeafHalfAdderTest {
     }
     //-------------------Sum-------------------^^^^^^^^^^^^^^^^^^^^^^^
 
-    //-------------------Carry-------------------VVVVVVVVVVVVVVVVVVVVVVV
+    //-------------------Carry-----------------VVVVVVVVVVVVVVVVVVVVVVV
     @Test
     public void carry_should_be_false_when_A_and_B_are_false() {
         given: {
@@ -143,7 +143,7 @@ public class LeafHalfAdderTest {
             assertThat(carry.getSignal()).isEqualTo(Signal.of(false));
         }
     }
-    //-------------------Carry-------------------^^^^^^^^^^^^^^^^^^^^^^^
+    //-------------------Carry-------------------^^^^^^^^^^^^^^^^^^^^^
 
 }
 //@formatter:on

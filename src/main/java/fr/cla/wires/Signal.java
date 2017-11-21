@@ -39,14 +39,14 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         return Optional.ofNullable(value);
     }
 
-    public <W> Signal<W> map(Function<V, W> mapper) {
-        return getValue().map(mapper).map(Signal::of).orElse(Signal.none());
+    public <W> Signal<W> map(Function<V, W> mapping) {
+        return getValue().map(mapping).map(Signal::of).orElse(Signal.none());
     }
 
-    public static <V1, V2, W> Signal<W> map(Signal<V1> s1, Signal<V2> s2, BiFunction<V1, V2, W> mapper) {
+    public static <V1, V2, W> Signal<W> map(Signal<V1> s1, Signal<V2> s2, BiFunction<V1, V2, W> mapping) {
         if(!s1.getValue().isPresent()) return Signal.none();
         if(!s2.getValue().isPresent()) return Signal.none();
-        return Signal.of(mapper.apply(s1.getValue().get(), s2.getValue().get()));
+        return Signal.of(mapping.apply(s1.getValue().get(), s2.getValue().get()));
     }
 
     private static <V> Class<Signal<V>> signalOfV() {
