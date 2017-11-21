@@ -1,4 +1,4 @@
-package fr.cla.wires.boxes.exampleusage.basic;
+package fr.cla.wires.boxes.exampleusage.composite;
 
 
 import fr.cla.wires.Signal;
@@ -7,6 +7,7 @@ import fr.cla.wires.Wire;
 import org.junit.Before;
 import org.junit.Test;
 
+import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
 
 //@formatter:off
@@ -14,8 +15,11 @@ import static org.assertj.core.api.Assertions.assertThat;
  * An example of the expected behaviour of Boxes, and of how to tick the clock.
  * @see fr.cla.wires.boxes.exampleusage
  * See the expected "truth table" at https://en.wikipedia.org/wiki/Adder_(electronics)
-*/
-public class LeafHalfAdderTest {
+ */
+public class CompositeFullAdderTest {
+
+    //The max number of DELAY=1 boxes the Signal takes through a CompositeHalfAdder
+    private static final int COMPOSITE_HALF_ADDER_LONGEST_PATH = 3;
 
     private Wire<Boolean> inA, inB, sum, carry;
     private Time time;
@@ -26,7 +30,11 @@ public class LeafHalfAdderTest {
         sum = Wire.make();
         carry = Wire.make();
         time = Time.create();
-        LeafHalfAdder.inA(inA).inB(inB).sum(sum).carry(carry).time(time);
+        CompositeFullAdder.inA(inA).inB(inB).sum(sum).carry(carry).time(time);
+    }
+
+    private void tickCompositeHalfAdder() {
+        range(0, COMPOSITE_HALF_ADDER_LONGEST_PATH).forEach(i -> time.tick());
     }
 
     //-------------------Sum-------------------VVVVVVVVVVVVVVVVVVVVVVV
@@ -37,7 +45,7 @@ public class LeafHalfAdderTest {
             inB.setSignal(Signal.of(false));
         }
         when: {
-            time.tick();
+            tickCompositeHalfAdder();
         }
         then: {
             assertThat(sum.getSignal()).isEqualTo(Signal.of(false));
@@ -51,7 +59,7 @@ public class LeafHalfAdderTest {
             inB.setSignal(Signal.of(true));
         }
         when: {
-            time.tick();
+            tickCompositeHalfAdder();
         }
         then: {
             assertThat(sum.getSignal()).isEqualTo(Signal.of(false));
@@ -65,7 +73,7 @@ public class LeafHalfAdderTest {
             inB.setSignal(Signal.of(true));
         }
         when: {
-            time.tick();
+            tickCompositeHalfAdder();
         }
         then: {
             assertThat(sum.getSignal()).isEqualTo(Signal.of(true));
@@ -79,7 +87,7 @@ public class LeafHalfAdderTest {
             inB.setSignal(Signal.of(false));
         }
         when: {
-            time.tick();
+            tickCompositeHalfAdder();
         }
         then: {
             assertThat(sum.getSignal()).isEqualTo(Signal.of(true));
@@ -95,7 +103,7 @@ public class LeafHalfAdderTest {
             inB.setSignal(Signal.of(false));
         }
         when: {
-            time.tick();
+            tickCompositeHalfAdder();
         }
         then: {
             assertThat(carry.getSignal()).isEqualTo(Signal.of(false));
@@ -109,7 +117,7 @@ public class LeafHalfAdderTest {
             inB.setSignal(Signal.of(true));
         }
         when: {
-            time.tick();
+            tickCompositeHalfAdder();
         }
         then: {
             assertThat(carry.getSignal()).isEqualTo(Signal.of(true));
@@ -123,7 +131,7 @@ public class LeafHalfAdderTest {
             inB.setSignal(Signal.of(true));
         }
         when: {
-            time.tick();
+            tickCompositeHalfAdder();
         }
         then: {
             assertThat(carry.getSignal()).isEqualTo(Signal.of(false));
@@ -137,7 +145,7 @@ public class LeafHalfAdderTest {
             inB.setSignal(Signal.of(false));
         }
         when: {
-            time.tick();
+            tickCompositeHalfAdder();
         }
         then: {
             assertThat(carry.getSignal()).isEqualTo(Signal.of(false));

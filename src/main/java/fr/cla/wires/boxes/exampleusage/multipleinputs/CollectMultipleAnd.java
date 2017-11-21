@@ -39,7 +39,7 @@ extends CollectHomogeneousInputsToOutputOfSameType<Boolean> {
      * to not let "this" escape through the method ref,
      * so that the Box is "properly constructed".
      *
-     * @implNote The contract of overriders is to call super.startup(), return this:
+     * @implNote The contract for overriders is to call super.startup(), return this:
      * This method is only not marked final as a convenience to allow covariant return.
      *
      * @return this Box, started.

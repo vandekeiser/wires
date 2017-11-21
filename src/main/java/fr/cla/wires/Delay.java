@@ -32,7 +32,7 @@ public final class Delay extends AbstractValueObject<Delay> {
      * @return the >0 duration
      */
     public long duration() {
-        if(duration <= 0) throw new AssertionError("Duration managed to get <0! Was: " + duration);
+        if(duration <= 0) throw new AssertionError("duration managed to get <0! Was: " + duration);
         return duration;
     }
 }

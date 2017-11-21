@@ -14,6 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * An example of the expected behaviour of Boxes, and of how to tick the clock.
  * @see fr.cla.wires.boxes.exampleusage
+ * See the expected "truth table" at https://en.wikipedia.org/wiki/Adder_(electronics)
  */
 public class CompositeHalfAdderTest {
 
