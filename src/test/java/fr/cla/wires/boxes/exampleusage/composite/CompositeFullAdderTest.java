@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class CompositeFullAdderTest {
 
-    //The max number of DELAY=1 boxes the Signal takes through a CompositeHalfAdder
+    //The max number of DELAY=1 boxes the Signal takes through a CompositeFullAdder
     private static final int COMPOSITE_FULL_ADDER_LONGEST_PATH = COMPOSITE_HALF_ADDER_LONGEST_PATH * 2;
 
     private Wire<Boolean> inA, inB, inCarry, sum, carry;
