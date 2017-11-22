@@ -1,8 +1,8 @@
 package fr.cla.wires.boxes;
 
 import fr.cla.wires.Box;
+import fr.cla.wires.Clock;
 import fr.cla.wires.Delay;
-import fr.cla.wires.Time;
 import fr.cla.wires.Wire;
 
 import java.util.Set;
@@ -23,12 +23,12 @@ extends Box {
     private final Set<Wire<O>> ins;
     private final Wire<T> out;
 
-    protected ReduceHomogeneousInputs(Set<Wire<O>> ins, Wire<T> out, Time time) {
-        this(ins, out, time, DEFAULT_DELAY);
+    protected ReduceHomogeneousInputs(Set<Wire<O>> ins, Wire<T> out, Clock clock) {
+        this(ins, out, clock, DEFAULT_DELAY);
     }
 
-    protected ReduceHomogeneousInputs(Set<Wire<O>> ins, Wire<T> out, Time time, Delay delay) {
-        super(time, delay);
+    protected ReduceHomogeneousInputs(Set<Wire<O>> ins, Wire<T> out, Clock clock, Delay delay) {
+        super(clock, delay);
         this.ins = requireNonNull(ins);
         this.out = requireNonNull(out);
     }

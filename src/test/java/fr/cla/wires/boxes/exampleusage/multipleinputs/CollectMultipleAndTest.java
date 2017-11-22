@@ -1,8 +1,8 @@
 package fr.cla.wires.boxes.exampleusage.multipleinputs;
 
 
+import fr.cla.wires.Clock;
 import fr.cla.wires.Signal;
-import fr.cla.wires.Time;
 import fr.cla.wires.Wire;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +23,7 @@ public class CollectMultipleAndTest {
     private static final int MULTIPLICITY = 100;
     private Set<Wire<Boolean>> ins;
     private Wire<Boolean> out;
-    private Time time;
+    private Clock clock;
 
     @Before
     public void setup() {
@@ -33,8 +33,8 @@ public class CollectMultipleAndTest {
     private void setup(long multiplicity) {
         ins = Stream.generate(() -> Wire.<Boolean>make()).limit(multiplicity).collect(toSet());
         out = Wire.make();
-        time = Time.create();
-        CollectMultipleAnd.ins(ins).out(out).time(time);
+        clock = Clock.create();
+        CollectMultipleAnd.ins(ins).out(out).time(clock);
     }
 
     @Test
@@ -43,7 +43,7 @@ public class CollectMultipleAndTest {
             //Nothing
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.none());
@@ -56,7 +56,7 @@ public class CollectMultipleAndTest {
             setup(0);
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.none());
@@ -76,7 +76,7 @@ public class CollectMultipleAndTest {
             ins.iterator().next().setSignal(signal);
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(signal);
@@ -90,7 +90,7 @@ public class CollectMultipleAndTest {
             ins.iterator().next().setSignal(Signal.of(false));
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.of(false));
@@ -103,7 +103,7 @@ public class CollectMultipleAndTest {
             ins.forEach(i -> i.setSignal(Signal.of(true)));
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.of(true));
@@ -117,7 +117,7 @@ public class CollectMultipleAndTest {
             ins.iterator().next().setSignal(Signal.none());
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.none());
@@ -131,7 +131,7 @@ public class CollectMultipleAndTest {
             ins.iterator().next().setSignal(Signal.none());
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.none());

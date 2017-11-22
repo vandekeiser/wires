@@ -1,8 +1,8 @@
 package fr.cla.wires.boxes.exampleusage.basic;
 
 import fr.cla.wires.Box;
+import fr.cla.wires.Clock;
 import fr.cla.wires.Delay;
-import fr.cla.wires.Time;
 import fr.cla.wires.Wire;
 
 import static java.util.Objects.requireNonNull;
@@ -16,12 +16,12 @@ public final class Or extends Box {
 
     private final Wire<Boolean> in1, in2, out;
 
-    private Or(Wire<Boolean> in1, Wire<Boolean> in2, Wire<Boolean> out, Time time) {
-        this(in1, in2, out, time, DEFAULT_DELAY);
+    private Or(Wire<Boolean> in1, Wire<Boolean> in2, Wire<Boolean> out, Clock clock) {
+        this(in1, in2, out, clock, DEFAULT_DELAY);
     }
 
-    private Or(Wire<Boolean> in1, Wire<Boolean> in2, Wire<Boolean> out, Time time, Delay delay) {
-        super(time, delay);
+    private Or(Wire<Boolean> in1, Wire<Boolean> in2, Wire<Boolean> out, Clock clock, Delay delay) {
+        super(clock, delay);
         this.in1 = requireNonNull(in1);
         this.in2 = requireNonNull(in2);
         this.out = requireNonNull(out);
@@ -91,9 +91,9 @@ public final class Or extends Box {
             return this;
         }
 
-        public Or time(Time time) {
-            Time _time = requireNonNull(time);
-            return new Or(in1, in2, out, _time).startup();
+        public Or time(Clock clock) {
+            Clock _clock = requireNonNull(clock);
+            return new Or(in1, in2, out, _clock).startup();
         }
     }
 

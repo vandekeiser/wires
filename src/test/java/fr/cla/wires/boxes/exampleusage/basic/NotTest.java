@@ -2,7 +2,7 @@ package fr.cla.wires.boxes.exampleusage.basic;
 
 
 import fr.cla.wires.Signal;
-import fr.cla.wires.Time;
+import fr.cla.wires.Clock;
 import fr.cla.wires.Wire;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,14 +17,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class NotTest {
 
     private Wire<Boolean> in, out;
-    private Time time;
+    private Clock clock;
 
     @Before
     public void setup() {
         in = Wire.make();
         out = Wire.make();
-        time = Time.create();
-        Not.in(in).out(out).time(time);
+        clock = Clock.create();
+        Not.in(in).out(out).time(clock);
     }
 
     @Test
@@ -33,7 +33,7 @@ public class NotTest {
             //Nothing
         }
         when: {
-            //No time.tick()
+            //No clock.tick()
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.none());
@@ -46,7 +46,7 @@ public class NotTest {
             in.setSignal(Signal.none());
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.none());
@@ -59,7 +59,7 @@ public class NotTest {
             in.setSignal(Signal.of(true));
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.of(false));
@@ -72,7 +72,7 @@ public class NotTest {
             in.setSignal(Signal.of(false));
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.of(true));
@@ -85,7 +85,7 @@ public class NotTest {
             in.setSignal(Signal.of(true));
         }
         when: {
-            //No time.tick()
+            //No clock.tick()
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.none());
@@ -98,7 +98,7 @@ public class NotTest {
             in.setSignal(Signal.of(false));
         }
         when: {
-            //No time.tick()
+            //No clock.tick()
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.none());

@@ -2,7 +2,7 @@ package fr.cla.wires.boxes.exampleusage.basic;
 
 
 import fr.cla.wires.Signal;
-import fr.cla.wires.Time;
+import fr.cla.wires.Clock;
 import fr.cla.wires.Wire;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,14 +17,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class AndTest {
 
     private Wire<Boolean> in1, in2, out;
-    private Time time;
+    private Clock clock;
 
     @Before public void setup() {
         in1 = Wire.make();
         in2 = Wire.make();
         out = Wire.make();
-        time = Time.create();
-        And.in1(in1).in2(in2).out(out).time(time);
+        clock = Clock.create();
+        And.in1(in1).in2(in2).out(out).time(clock);
     }
 
     @Test
@@ -34,7 +34,7 @@ public class AndTest {
             in2.setSignal(Signal.of(false));
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.of(false));
@@ -48,7 +48,7 @@ public class AndTest {
             in2.setSignal(Signal.of(true));
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.of(false));
@@ -62,7 +62,7 @@ public class AndTest {
             in2.setSignal(Signal.of(true));
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.of(false));
@@ -76,7 +76,7 @@ public class AndTest {
             in2.setSignal(Signal.of(true));
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.of(true));
@@ -97,35 +97,35 @@ public class AndTest {
         in1.setSignal(Signal.of(false));                         //i1
         assertThat(out.getSignal()).isEqualTo(Signal.none());    //o2
 
-        time.tick();                                             //t1
+        clock.tick();                                             //t1
         //Tick 1
         assertThat(out.getSignal()).isEqualTo(Signal.none());    //o3
         in2.setSignal(Signal.of(false));                         //i2
         assertThat(out.getSignal()).isEqualTo(Signal.none());    //o4
 
-        time.tick();                                             //t2
+        clock.tick();                                             //t2
         //Tick 2
         assertThat(out.getSignal()).isEqualTo(Signal.of(false)); //o5
         in1.setSignal(Signal.of(true));                          //i3
         assertThat(out.getSignal()).isEqualTo(Signal.of(false)); //o6
 
-        time.tick();                                             //t3
+        clock.tick();                                             //t3
         //Tick 3
         assertThat(out.getSignal()).isEqualTo(Signal.of(false)); //o7
         in2.setSignal(Signal.of(true));                          //i4
         assertThat(out.getSignal()).isEqualTo(Signal.of(false)); //o8
 
-        time.tick();                                             //t4
+        clock.tick();                                             //t4
         //Tick 4
         assertThat(out.getSignal()).isEqualTo(Signal.of(true));  //o9
 
-        time.tick();                                             //t5
+        clock.tick();                                             //t5
         //Tick 5
         assertThat(out.getSignal()).isEqualTo(Signal.of(true));  //o10
         in1.setSignal(Signal.of(false));                         //i6
         in2.setSignal(Signal.of(false));                         //i7
 
-        time.tick();                                             //t6
+        clock.tick();                                             //t6
         //Tick 6
         assertThat(out.getSignal()).isEqualTo(Signal.of(false)); //o11
     }

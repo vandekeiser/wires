@@ -10,11 +10,11 @@ import static java.util.Objects.requireNonNull;
  * A discretization of time:
  * exposes {@code void tick()} and {@code Tick now()}
  */
-public final class Time {
+public final class Clock {
 
     private final Agenda agenda = new Agenda();
 
-    private Time() {}
+    private Clock() {}
 
     /**
      * @return the non-null Agenda
@@ -24,8 +24,8 @@ public final class Time {
         return agenda;
     }
 
-    public static Time create() {
-        return new Time();
+    public static Clock create() {
+        return new Clock();
     }
 
     public void tick() {

@@ -1,8 +1,8 @@
 package fr.cla.wires.boxes.exampleusage.composite;
 
 
+import fr.cla.wires.Clock;
 import fr.cla.wires.Signal;
-import fr.cla.wires.Time;
 import fr.cla.wires.Wire;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,19 +26,19 @@ public class CompositeHalfAdderTest {
     private static final int COMPOSITE_HALF_ADDER_LONGEST_PATH = 3;
 
     private Wire<Boolean> inA, inB, sum, carry;
-    private Time time;
+    private Clock clock;
 
     @Before public void setup() {
         inA = Wire.make();
         inB = Wire.make();
         sum = Wire.make();
         carry = Wire.make();
-        time = Time.create();
-        CompositeHalfAdder.inA(inA).inB(inB).sum(sum).carry(carry).time(time);
+        clock = Clock.create();
+        CompositeHalfAdder.inA(inA).inB(inB).sum(sum).carry(carry).time(clock);
     }
 
     private void tickCompositeHalfAdder() {
-        range(0, COMPOSITE_HALF_ADDER_LONGEST_PATH).forEach(i -> time.tick());
+        range(0, COMPOSITE_HALF_ADDER_LONGEST_PATH).forEach(i -> clock.tick());
     }
 
     //-------------------Sum-------------------VVVVVVVVVVVVVVVVVVVVVVV

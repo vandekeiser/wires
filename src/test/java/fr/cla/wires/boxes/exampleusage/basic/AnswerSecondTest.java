@@ -1,8 +1,8 @@
 package fr.cla.wires.boxes.exampleusage.basic;
 
 
+import fr.cla.wires.Clock;
 import fr.cla.wires.Signal;
-import fr.cla.wires.Time;
 import fr.cla.wires.Wire;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,15 +17,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class AnswerSecondTest {
 
     private Wire<Boolean> in1, in2, out;
-    private Time time;
+    private Clock clock;
 
     @Before
     public void setup() {
         in1 = Wire.make();
         in2 = Wire.make();
         out = Wire.make();
-        time = Time.create();
-        AnswerSecond.in1(in1).in2(in2).out(out).time(time);
+        clock = Clock.create();
+        AnswerSecond.in1(in1).in2(in2).out(out).time(clock);
     }
 
     @Test
@@ -35,7 +35,7 @@ public class AnswerSecondTest {
             in2.setSignal(Signal.of(false));
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.of(false));
@@ -49,7 +49,7 @@ public class AnswerSecondTest {
             in2.setSignal(Signal.of(true));
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.of(true));
@@ -63,7 +63,7 @@ public class AnswerSecondTest {
             in2.setSignal(Signal.of(false));
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.of(false));
@@ -77,7 +77,7 @@ public class AnswerSecondTest {
             in2.setSignal(Signal.of(true));
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.of(true));

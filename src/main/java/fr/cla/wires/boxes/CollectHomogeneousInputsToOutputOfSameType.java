@@ -1,7 +1,7 @@
 package fr.cla.wires.boxes;
 
+import fr.cla.wires.Clock;
 import fr.cla.wires.Delay;
-import fr.cla.wires.Time;
 import fr.cla.wires.Wire;
 
 import java.util.Set;
@@ -35,15 +35,15 @@ public abstract class CollectHomogeneousInputsToOutputOfSameType<O>
 extends CollectHomogeneousInputs<O, O> {
 
     protected CollectHomogeneousInputsToOutputOfSameType(
-    Set<Wire<O>> ins, Wire<O> out, Time time
+    Set<Wire<O>> ins, Wire<O> out, Clock clock
     ) {
-        this(ins, out, time, DEFAULT_DELAY);
+        this(ins, out, clock, DEFAULT_DELAY);
     }
 
     protected CollectHomogeneousInputsToOutputOfSameType(
-        Set<Wire<O>> ins, Wire<O> out, Time time, Delay delay
+    Set<Wire<O>> ins, Wire<O> out, Clock clock, Delay delay
     ) {
-        super(ins, out, time, delay);
+        super(ins, out, clock, delay);
     }
 
     @Override protected final Function<O, O> accumulationValue() {

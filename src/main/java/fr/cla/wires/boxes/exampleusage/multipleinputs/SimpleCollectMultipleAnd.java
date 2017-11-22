@@ -1,7 +1,7 @@
 package fr.cla.wires.boxes.exampleusage.multipleinputs;
 
+import fr.cla.wires.Clock;
 import fr.cla.wires.Delay;
-import fr.cla.wires.Time;
 import fr.cla.wires.Wire;
 import fr.cla.wires.boxes.CollectHomogeneousInputsToOutputOfSameType;
 
@@ -18,9 +18,9 @@ import java.util.function.BinaryOperator;
  * It takes the other design trade-off compared to CollectMultipleAnd:
  *  -It is shorter and has a better "Payload / Builder code ratio"
  *  -On the other hand it does not expose a DSL to instantiate it like this:
- *      CollectMultipleAnd.ins(ins).out(out).time(time);
+ *      CollectMultipleAnd.ins(ins).out(out).clock(clock);
  *   So clients of this API need to do this:
- *      SimpleCollectMultipleAnd.create(ins, out, time);
+ *      SimpleCollectMultipleAnd.create(ins, out, clock);
  *
  * 2. It could thus be considered a less expressive API,
  *  and makes it more likely that the client of this API will
@@ -64,15 +64,15 @@ extends CollectHomogeneousInputsToOutputOfSameType<Boolean> {
      * @return a started Box.
      */
     public static SimpleCollectMultipleAnd create(
-        Set<Wire<Boolean>> ins, Wire<Boolean> out, Time time
+        Set<Wire<Boolean>> ins, Wire<Boolean> out, Clock clock
     ) {
-        SimpleCollectMultipleAnd gate = new SimpleCollectMultipleAnd(ins, out, time, DEFAULT_DELAY);
+        SimpleCollectMultipleAnd gate = new SimpleCollectMultipleAnd(ins, out, clock, DEFAULT_DELAY);
         gate.startup();
         return gate;
     }
 
-    private SimpleCollectMultipleAnd(Set<Wire<Boolean>> ins, Wire<Boolean> out, Time time, Delay delay) {
-        super(ins, out, time, delay);
+    private SimpleCollectMultipleAnd(Set<Wire<Boolean>> ins, Wire<Boolean> out, Clock clock, Delay delay) {
+        super(ins, out, clock, delay);
     }
 //-------------Builder section of the class-------------^^^^^^^^^^^^^^^^^^^
 

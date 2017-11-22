@@ -1,8 +1,8 @@
 package fr.cla.wires.boxes.exampleusage.composite;
 
 import fr.cla.wires.Box;
+import fr.cla.wires.Clock;
 import fr.cla.wires.Delay;
-import fr.cla.wires.Time;
 import fr.cla.wires.Wire;
 import fr.cla.wires.boxes.exampleusage.basic.And;
 import fr.cla.wires.boxes.exampleusage.basic.Not;
@@ -23,17 +23,17 @@ public final class CompositeFullAdder extends Box {
     private CompositeFullAdder(
         Wire<Boolean> inA, Wire<Boolean> inB,
         Wire<Boolean> sum, Wire<Boolean> carry,
-        Time time
+        Clock clock
     ) {
-        this(inA, inB, sum, carry, time, DEFAULT_DELAY);
+        this(inA, inB, sum, carry, clock, DEFAULT_DELAY);
     }
 
     private CompositeFullAdder(
-        Wire<Boolean> inA, Wire<Boolean> inB,
-        Wire<Boolean> sum, Wire<Boolean> carry,
-        Time time, Delay delay
+    Wire<Boolean> inA, Wire<Boolean> inB,
+    Wire<Boolean> sum, Wire<Boolean> carry,
+    Clock clock, Delay delay
     ) {
-        super(time, delay);
+        super(clock, delay);
         this.inA = requireNonNull(inA);
         this.inB = requireNonNull(inB);
         this.sum = requireNonNull(sum);
@@ -45,10 +45,10 @@ public final class CompositeFullAdder extends Box {
     //TODO? abstract startup in Box
     private CompositeFullAdder startup() {
         //SICP p. 274
-        Or.in1(inA).in2(inB).out(d).time(time);
-        And.in1(inA).in2(inB).out(carry).time(time);
-        Not.in(carry).out(e).time(time);
-        And.in1(d).in2(e).out(sum).time(time);
+        Or.in1(inA).in2(inB).out(d).time(clock);
+        And.in1(inA).in2(inB).out(carry).time(clock);
+        Not.in(carry).out(e).time(clock);
+        And.in1(d).in2(e).out(sum).time(clock);
         return this;
     }
 
@@ -81,9 +81,9 @@ public final class CompositeFullAdder extends Box {
             return this;
         }
 
-        public CompositeFullAdder time(Time time) {
-            Time _time = requireNonNull(time);
-            return new CompositeFullAdder(inA, inB, sum, carry, _time).startup();
+        public CompositeFullAdder time(Clock clock) {
+            Clock _clock = requireNonNull(clock);
+            return new CompositeFullAdder(inA, inB, sum, carry, _clock).startup();
         }
     }
 

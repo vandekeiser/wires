@@ -2,7 +2,7 @@ package fr.cla.wires.boxes.exampleusage.basic;
 
 import fr.cla.wires.Box;
 import fr.cla.wires.Delay;
-import fr.cla.wires.Time;
+import fr.cla.wires.Clock;
 import fr.cla.wires.Wire;
 
 import static java.util.Objects.requireNonNull;
@@ -20,17 +20,17 @@ public final class LeafHalfAdder extends Box {
     private LeafHalfAdder(
         Wire<Boolean> inA, Wire<Boolean> inB,
         Wire<Boolean> sum, Wire<Boolean> carry,
-        Time time
+        Clock clock
     ) {
-        this(inA, inB, sum, carry, time, DEFAULT_DELAY);
+        this(inA, inB, sum, carry, clock, DEFAULT_DELAY);
     }
 
     private LeafHalfAdder(
-        Wire<Boolean> inA, Wire<Boolean> inB,
-        Wire<Boolean> sum, Wire<Boolean> carry,
-        Time time, Delay delay
+    Wire<Boolean> inA, Wire<Boolean> inB,
+    Wire<Boolean> sum, Wire<Boolean> carry,
+    Clock clock, Delay delay
     ) {
-        super(time, delay);
+        super(clock, delay);
         this.inA = requireNonNull(inA);
         this.inB = requireNonNull(inB);
         this.sum = requireNonNull(sum);
@@ -98,9 +98,9 @@ public final class LeafHalfAdder extends Box {
             return this;
         }
 
-        public LeafHalfAdder time(Time time) {
-            Time _time = requireNonNull(time);
-            return new LeafHalfAdder(inA, inB, sum, carry, _time).startup();
+        public LeafHalfAdder time(Clock clock) {
+            Clock _clock = requireNonNull(clock);
+            return new LeafHalfAdder(inA, inB, sum, carry, _clock).startup();
         }
     }
 

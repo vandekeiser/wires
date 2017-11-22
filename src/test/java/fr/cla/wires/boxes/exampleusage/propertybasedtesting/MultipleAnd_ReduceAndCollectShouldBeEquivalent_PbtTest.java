@@ -5,8 +5,8 @@ import com.pholser.junit.quickcheck.Property;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
 import fr.cla.support.tests.pbt.RandomBooleanSignals;
 import fr.cla.support.tests.pbt.RandomBooleans;
+import fr.cla.wires.Clock;
 import fr.cla.wires.Signal;
-import fr.cla.wires.Time;
 import fr.cla.wires.Wire;
 import fr.cla.wires.boxes.exampleusage.multipleinputs.CollectMultipleAnd;
 import fr.cla.wires.boxes.exampleusage.multipleinputs.ReduceMultipleAnd;
@@ -36,7 +36,7 @@ public class MultipleAnd_ReduceAndCollectShouldBeEquivalent_PbtTest {
 
     private Set<Wire<Boolean>> ins;
     private Wire<Boolean> collectOut, reduceOut;
-    private Time time;
+    private Clock clock;
 
     @Before public void setup() {
         setup(MULTIPLICITY);
@@ -50,9 +50,9 @@ public class MultipleAnd_ReduceAndCollectShouldBeEquivalent_PbtTest {
         ins = Stream.generate(() -> Wire.<Boolean>make()).limit(multiplicity).collect(toSet());
         collectOut = Wire.make();
         reduceOut = Wire.make();
-        time = Time.create();
-        ReduceMultipleAnd.ins(ins).out(reduceOut).time(time);
-        CollectMultipleAnd.ins(ins).out(collectOut).time(time);
+        clock = Clock.create();
+        ReduceMultipleAnd.ins(ins).out(reduceOut).time(clock);
+        CollectMultipleAnd.ins(ins).out(collectOut).time(clock);
     }
 
     @Property(trials = TRIALS)
@@ -64,7 +64,7 @@ public class MultipleAnd_ReduceAndCollectShouldBeEquivalent_PbtTest {
             ins.forEach(w -> w.setSignal(Signal.of(_signals.next())));
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(collectOut.getSignal()).isEqualTo(reduceOut.getSignal());
@@ -81,7 +81,7 @@ public class MultipleAnd_ReduceAndCollectShouldBeEquivalent_PbtTest {
             ins.forEach(w -> w.setSignal(_signals.next()));
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(collectOut.getSignal()).isEqualTo(reduceOut.getSignal());
@@ -140,7 +140,7 @@ public class MultipleAnd_ReduceAndCollectShouldBeEquivalent_PbtTest {
             ins.forEach(w -> w.setSignal(_signals.next()));
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assumeThat(collectOut.getSignal(), is(assumedResult));

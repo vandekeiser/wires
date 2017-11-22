@@ -1,10 +1,9 @@
 package fr.cla.wires.boxes.exampleusage.basic;
 
 
+import fr.cla.wires.Clock;
 import fr.cla.wires.Signal;
-import fr.cla.wires.Time;
 import fr.cla.wires.Wire;
-import fr.cla.wires.boxes.exampleusage.multipleinputs.CollectMultipleAnd;
 import fr.cla.wires.boxes.exampleusage.multipleinputs.SimpleCollectMultipleAnd;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +24,7 @@ public class SimpleCollectMultipleAndTest {
     private static final int MULTIPLICITY = 100;
     private Set<Wire<Boolean>> ins;
     private Wire<Boolean> out;
-    private Time time;
+    private Clock clock;
 
     @Before
     public void setup() {
@@ -35,8 +34,8 @@ public class SimpleCollectMultipleAndTest {
     private void setup(long multiplicity) {
         ins = Stream.generate(() -> Wire.<Boolean>make()).limit(multiplicity).collect(toSet());
         out = Wire.make();
-        time = Time.create();
-        SimpleCollectMultipleAnd.create(ins, out, time);
+        clock = Clock.create();
+        SimpleCollectMultipleAnd.create(ins, out, clock);
     }
 
     @Test
@@ -45,7 +44,7 @@ public class SimpleCollectMultipleAndTest {
             //Nothing
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.none());
@@ -58,7 +57,7 @@ public class SimpleCollectMultipleAndTest {
             setup(0);
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.none());
@@ -78,7 +77,7 @@ public class SimpleCollectMultipleAndTest {
             ins.iterator().next().setSignal(signal);
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(signal);
@@ -92,7 +91,7 @@ public class SimpleCollectMultipleAndTest {
             ins.iterator().next().setSignal(Signal.of(false));
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.of(false));
@@ -105,7 +104,7 @@ public class SimpleCollectMultipleAndTest {
             ins.forEach(i -> i.setSignal(Signal.of(true)));
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.of(true));
@@ -119,7 +118,7 @@ public class SimpleCollectMultipleAndTest {
             ins.iterator().next().setSignal(Signal.none());
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.none());
@@ -133,7 +132,7 @@ public class SimpleCollectMultipleAndTest {
             ins.iterator().next().setSignal(Signal.none());
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.none());

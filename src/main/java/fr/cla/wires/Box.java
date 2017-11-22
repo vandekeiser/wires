@@ -19,15 +19,15 @@ import static java.util.Objects.requireNonNull;
 public abstract class Box {
 
     protected static final Delay DEFAULT_DELAY = Delay.of(1);
-    protected final Time time;
+    protected final Clock clock;
     protected final Delay delay;
-    private final Time.Agenda agenda;
+    private final Clock.Agenda agenda;
 
-    protected Box(Time time, Delay delay) {
-        this.time = requireNonNull(time);
-        this.agenda = time.agenda();
+    protected Box(Clock clock, Delay delay) {
+        this.clock = requireNonNull(clock);
+        this.agenda = clock.agenda();
         if(agenda == null) throw new AssertionError(
-            "Time::agenda broke its promise not to return null!"
+            "Clock::agenda broke its promise not to return null!"
         );
         this.delay = requireNonNull(delay);
     }

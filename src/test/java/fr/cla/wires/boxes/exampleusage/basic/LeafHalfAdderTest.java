@@ -1,8 +1,8 @@
 package fr.cla.wires.boxes.exampleusage.basic;
 
 
+import fr.cla.wires.Clock;
 import fr.cla.wires.Signal;
-import fr.cla.wires.Time;
 import fr.cla.wires.Wire;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,15 +18,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class LeafHalfAdderTest {
 
     private Wire<Boolean> inA, inB, sum, carry;
-    private Time time;
+    private Clock clock;
 
     @Before public void setup() {
         inA = Wire.make();
         inB = Wire.make();
         sum = Wire.make();
         carry = Wire.make();
-        time = Time.create();
-        LeafHalfAdder.inA(inA).inB(inB).sum(sum).carry(carry).time(time);
+        clock = Clock.create();
+        LeafHalfAdder.inA(inA).inB(inB).sum(sum).carry(carry).time(clock);
     }
 
     //-------------------Sum-------------------VVVVVVVVVVVVVVVVVVVVVVV
@@ -37,7 +37,7 @@ public class LeafHalfAdderTest {
             inB.setSignal(Signal.of(false));
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(sum.getSignal()).isEqualTo(Signal.of(false));
@@ -51,7 +51,7 @@ public class LeafHalfAdderTest {
             inB.setSignal(Signal.of(true));
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(sum.getSignal()).isEqualTo(Signal.of(false));
@@ -65,7 +65,7 @@ public class LeafHalfAdderTest {
             inB.setSignal(Signal.of(true));
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(sum.getSignal()).isEqualTo(Signal.of(true));
@@ -79,7 +79,7 @@ public class LeafHalfAdderTest {
             inB.setSignal(Signal.of(false));
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(sum.getSignal()).isEqualTo(Signal.of(true));
@@ -95,7 +95,7 @@ public class LeafHalfAdderTest {
             inB.setSignal(Signal.of(false));
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(carry.getSignal()).isEqualTo(Signal.of(false));
@@ -109,7 +109,7 @@ public class LeafHalfAdderTest {
             inB.setSignal(Signal.of(true));
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(carry.getSignal()).isEqualTo(Signal.of(true));
@@ -123,7 +123,7 @@ public class LeafHalfAdderTest {
             inB.setSignal(Signal.of(true));
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(carry.getSignal()).isEqualTo(Signal.of(false));
@@ -137,7 +137,7 @@ public class LeafHalfAdderTest {
             inB.setSignal(Signal.of(false));
         }
         when: {
-            time.tick();
+            clock.tick();
         }
         then: {
             assertThat(carry.getSignal()).isEqualTo(Signal.of(false));

@@ -1,7 +1,7 @@
 package fr.cla.wires.boxes.exampleusage.multipleinputs;
 
+import fr.cla.wires.Clock;
 import fr.cla.wires.Delay;
-import fr.cla.wires.Time;
 import fr.cla.wires.Wire;
 import fr.cla.wires.boxes.ReduceHomogeneousInputs;
 
@@ -18,12 +18,12 @@ import static java.util.Objects.requireNonNull;
  */
 public class ReduceMultipleAnd extends ReduceHomogeneousInputs<Boolean, Boolean> {
 
-    private ReduceMultipleAnd(Set<Wire<Boolean>> ins, Wire<Boolean> out, Time time) {
-        this(ins, out, time, DEFAULT_DELAY);
+    private ReduceMultipleAnd(Set<Wire<Boolean>> ins, Wire<Boolean> out, Clock clock) {
+        this(ins, out, clock, DEFAULT_DELAY);
     }
 
-    private ReduceMultipleAnd(Set<Wire<Boolean>> ins, Wire<Boolean> out, Time time, Delay delay) {
-        super(ins, out, time, delay);
+    private ReduceMultipleAnd(Set<Wire<Boolean>> ins, Wire<Boolean> out, Clock clock, Delay delay) {
+        super(ins, out, clock, delay);
     }
 
     @Override protected Function<Boolean, Boolean> accumulationValue() {
@@ -75,9 +75,9 @@ public class ReduceMultipleAnd extends ReduceHomogeneousInputs<Boolean, Boolean>
             return this;
         }
 
-        public ReduceMultipleAnd time(Time time) {
-            Time _time = requireNonNull(time);
-            return new ReduceMultipleAnd(ins, out, _time).startup();
+        public ReduceMultipleAnd time(Clock clock) {
+            Clock _clock = requireNonNull(clock);
+            return new ReduceMultipleAnd(ins, out, _clock).startup();
         }
     }
 
