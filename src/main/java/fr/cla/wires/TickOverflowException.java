@@ -6,7 +6,6 @@ package fr.cla.wires;
  */
 public final class TickOverflowException extends RuntimeException {
 
-    //Unused fields, but useful for debug
     private final long currentTick;
     private final Delay attemptedDelay;
     private final ArithmeticException overflow;
@@ -27,6 +26,16 @@ public final class TickOverflowException extends RuntimeException {
             "Tick overflow! currentTick: %d, attemptedDelay: %s",
             currentTick, attemptedDelay
         );
+    }
+
+    public long getCurrentTick() {
+        return currentTick;
+    }
+    public Delay getAttemptedDelay() {
+        return attemptedDelay;
+    }
+    public ArithmeticException getOverflow() {
+        return overflow;
     }
 
 }
