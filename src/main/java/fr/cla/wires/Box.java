@@ -48,7 +48,7 @@ public abstract class Box {
     protected abstract Box startup();
 
     protected static <O> Set<Wire<O>> checkNoNulls(Set<Wire<O>> ins) {
-        ins = new HashSet<>(ins);
+        ins = new HashSet<>(requireNonNull(ins));
         if(ins.stream().anyMatch(Objects::isNull)) {
             throw new NullPointerException("Detected null wires in " + ins);
         }

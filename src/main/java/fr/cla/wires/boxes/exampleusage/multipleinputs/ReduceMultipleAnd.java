@@ -67,7 +67,7 @@ public class ReduceMultipleAnd extends ReduceHomogeneousInputs<Boolean, Boolean>
         private Wire<Boolean> out;
 
         private Builder(Set<Wire<Boolean>> ins) {
-            this.ins = requireNonNull(ins);
+            this.ins = checkNoNulls(ins);
         }
 
         public Builder out(Wire<Boolean> out) {

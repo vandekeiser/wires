@@ -39,7 +39,7 @@ extends Box {
 
     protected CollectHomogeneousInputs(Set<Wire<O>> ins, Wire<T> out, Clock clock, Delay delay) {
         super(clock, delay);
-        this.ins = requireNonNull(ins);
+        this.ins = checkNoNulls(ins);
         this.out = requireNonNull(out);
     }
 
