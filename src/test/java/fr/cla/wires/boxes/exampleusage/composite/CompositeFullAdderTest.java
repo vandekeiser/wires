@@ -7,6 +7,7 @@ import fr.cla.wires.Wire;
 import org.junit.Before;
 import org.junit.Test;
 
+import static fr.cla.wires.boxes.exampleusage.composite.CompositeHalfAdderTest.COMPOSITE_HALF_ADDER_LONGEST_PATH;
 import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,33 +20,35 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CompositeFullAdderTest {
 
     //The max number of DELAY=1 boxes the Signal takes through a CompositeHalfAdder
-    private static final int COMPOSITE_HALF_ADDER_LONGEST_PATH = 3;
+    private static final int COMPOSITE_FULL_ADDER_LONGEST_PATH = COMPOSITE_HALF_ADDER_LONGEST_PATH * 2;
 
-    private Wire<Boolean> inA, inB, sum, carry;
+    private Wire<Boolean> inA, inB, inCarry, sum, carry;
     private Clock clock;
 
     @Before public void setup() {
         inA = Wire.make();
         inB = Wire.make();
+        inCarry = Wire.make();
         sum = Wire.make();
         carry = Wire.make();
         clock = Clock.createTime();
-        CompositeFullAdder.inA(inA).inB(inB).sum(sum).carry(carry).time(clock);
+        CompositeFullAdder.inA(inA).inB(inB).inCarry(inCarry).sum(sum).carry(carry).time(clock);
     }
 
-    private void tickCompositeHalfAdder() {
-        range(0, COMPOSITE_HALF_ADDER_LONGEST_PATH).forEach(i -> clock.tick());
+    private void tickCompositeFullAdder() {
+        range(0, COMPOSITE_FULL_ADDER_LONGEST_PATH).forEach(i -> clock.tick());
     }
 
     //-------------------Sum-------------------VVVVVVVVVVVVVVVVVVVVVVV
     @Test
-    public void sum_should_be_false_when_A_and_B_are_false() {
+    public void sum_should_be_false_when_A_B_and_inCarry_are_false() {
         given: {
             inA.setSignal(Signal.of(false));
             inB.setSignal(Signal.of(false));
+            inCarry.setSignal(Signal.of(false));
         }
         when: {
-            tickCompositeHalfAdder();
+            tickCompositeFullAdder();
         }
         then: {
             assertThat(sum.getSignal()).isEqualTo(Signal.of(false));
@@ -53,27 +56,14 @@ public class CompositeFullAdderTest {
     }
 
     @Test
-    public void sum_should_be_false_when_A_and_B_are_true() {
-        given: {
-            inA.setSignal(Signal.of(true));
-            inB.setSignal(Signal.of(true));
-        }
-        when: {
-            tickCompositeHalfAdder();
-        }
-        then: {
-            assertThat(sum.getSignal()).isEqualTo(Signal.of(false));
-        }
-    }
-
-    @Test
-    public void sum_should_be_true_when_A_is_false_and_B_is_true() {
+    public void sum_should_be_true_when_A_B_are_false_but_inCarry_is_true() {
         given: {
             inA.setSignal(Signal.of(false));
-            inB.setSignal(Signal.of(true));
+            inB.setSignal(Signal.of(false));
+            inCarry.setSignal(Signal.of(true));
         }
         when: {
-            tickCompositeHalfAdder();
+            tickCompositeFullAdder();
         }
         then: {
             assertThat(sum.getSignal()).isEqualTo(Signal.of(true));
@@ -81,13 +71,89 @@ public class CompositeFullAdderTest {
     }
 
     @Test
-    public void sum_should_be_true_when_A_is_true_and_B_is_false() {
+    public void sum_should_be_true_when_A_and_inCarry_are_false_but_B_is_true() {
+        given: {
+            inA.setSignal(Signal.of(false));
+            inB.setSignal(Signal.of(true));
+            inCarry.setSignal(Signal.of(false));
+        }
+        when: {
+            tickCompositeFullAdder();
+        }
+        then: {
+            assertThat(sum.getSignal()).isEqualTo(Signal.of(true));
+        }
+    }
+
+    @Test
+    public void sum_should_be_false_when_B_and_inCarry_are_true_but_A_is_false() {
+        given: {
+            inA.setSignal(Signal.of(false));
+            inB.setSignal(Signal.of(true));
+            inCarry.setSignal(Signal.of(true));
+        }
+        when: {
+            tickCompositeFullAdder();
+        }
+        then: {
+            assertThat(sum.getSignal()).isEqualTo(Signal.of(false));
+        }
+    }
+
+    @Test
+    public void sum_should_be_true_when_B_and_inCarry_are_false_but_A_is_true() {
         given: {
             inA.setSignal(Signal.of(true));
             inB.setSignal(Signal.of(false));
+            inCarry.setSignal(Signal.of(false));
         }
         when: {
-            tickCompositeHalfAdder();
+            tickCompositeFullAdder();
+        }
+        then: {
+            assertThat(sum.getSignal()).isEqualTo(Signal.of(true));
+        }
+    }
+
+    @Test
+    public void sum_should_be_false_when_A_and_inCarry_are_true_but_B_is_false() {
+        given: {
+            inA.setSignal(Signal.of(true));
+            inB.setSignal(Signal.of(false));
+            inCarry.setSignal(Signal.of(true));
+        }
+        when: {
+            tickCompositeFullAdder();
+        }
+        then: {
+            assertThat(sum.getSignal()).isEqualTo(Signal.of(false));
+        }
+    }
+
+    @Test
+    public void sum_should_be_false_when_A_and_B_are_true_but_inCarry_is_false() {
+        given: {
+            inA.setSignal(Signal.of(true));
+            inB.setSignal(Signal.of(true));
+            inCarry.setSignal(Signal.of(false));
+        }
+        when: {
+            tickCompositeFullAdder();
+        }
+        then: {
+            assertThat(sum.getSignal()).isEqualTo(Signal.of(false));
+        }
+    }
+
+    @Test
+    public void sum_should_be_true_when_A_B_and_inCarry_are_true() {
+        given: {
+            inA.setSignal(Signal.of(true));
+            inB.setSignal(Signal.of(true));
+            inCarry.setSignal(Signal.of(true));
+        }
+        when: {
+            tickCompositeFullAdder();
         }
         then: {
             assertThat(sum.getSignal()).isEqualTo(Signal.of(true));
@@ -97,13 +163,14 @@ public class CompositeFullAdderTest {
 
     //-------------------Carry-----------------VVVVVVVVVVVVVVVVVVVVVVV
     @Test
-    public void carry_should_be_false_when_A_and_B_are_false() {
+    public void carry_should_be_false_when_A_B_and_inCarry_are_false() {
         given: {
             inA.setSignal(Signal.of(false));
             inB.setSignal(Signal.of(false));
+            inCarry.setSignal(Signal.of(false));
         }
         when: {
-            tickCompositeHalfAdder();
+            tickCompositeFullAdder();
         }
         then: {
             assertThat(carry.getSignal()).isEqualTo(Signal.of(false));
@@ -111,13 +178,44 @@ public class CompositeFullAdderTest {
     }
 
     @Test
-    public void carry_should_be_true_when_A_and_B_are_true() {
+    public void carry_should_be_false_when_A_B_are_false_but_inCarry_is_true() {
         given: {
-            inA.setSignal(Signal.of(true));
-            inB.setSignal(Signal.of(true));
+            inA.setSignal(Signal.of(false));
+            inB.setSignal(Signal.of(false));
+            inCarry.setSignal(Signal.of(true));
         }
         when: {
-            tickCompositeHalfAdder();
+            tickCompositeFullAdder();
+        }
+        then: {
+            assertThat(carry.getSignal()).isEqualTo(Signal.of(false));
+        }
+    }
+
+    @Test
+    public void carry_should_be_false_when_A_and_inCarry_are_false_but_B_is_true() {
+        given: {
+            inA.setSignal(Signal.of(false));
+            inB.setSignal(Signal.of(true));
+            inCarry.setSignal(Signal.of(false));
+        }
+        when: {
+            tickCompositeFullAdder();
+        }
+        then: {
+            assertThat(carry.getSignal()).isEqualTo(Signal.of(false));
+        }
+    }
+
+    @Test
+    public void carry_should_be_true_when_B_and_inCarry_are_true_but_A_is_false() {
+        given: {
+            inA.setSignal(Signal.of(false));
+            inB.setSignal(Signal.of(true));
+            inCarry.setSignal(Signal.of(true));
+        }
+        when: {
+            tickCompositeFullAdder();
         }
         then: {
             assertThat(carry.getSignal()).isEqualTo(Signal.of(true));
@@ -125,13 +223,14 @@ public class CompositeFullAdderTest {
     }
 
     @Test
-    public void carry_should_be_false_when_A_is_false_and_B_is_true() {
+    public void carry_should_be_false_when_B_and_inCarry_are_false_but_A_is_true() {
         given: {
-            inA.setSignal(Signal.of(false));
-            inB.setSignal(Signal.of(true));
+            inA.setSignal(Signal.of(true));
+            inB.setSignal(Signal.of(false));
+            inCarry.setSignal(Signal.of(false));
         }
         when: {
-            tickCompositeHalfAdder();
+            tickCompositeFullAdder();
         }
         then: {
             assertThat(carry.getSignal()).isEqualTo(Signal.of(false));
@@ -139,16 +238,47 @@ public class CompositeFullAdderTest {
     }
 
     @Test
-    public void carry_should_be_false_when_A_is_true_and_B_is_false() {
+    public void carry_should_be_true_when_A_and_inCarry_are_true_but_B_is_false() {
         given: {
             inA.setSignal(Signal.of(true));
             inB.setSignal(Signal.of(false));
+            inCarry.setSignal(Signal.of(true));
         }
         when: {
-            tickCompositeHalfAdder();
+            tickCompositeFullAdder();
         }
         then: {
-            assertThat(carry.getSignal()).isEqualTo(Signal.of(false));
+            assertThat(carry.getSignal()).isEqualTo(Signal.of(true));
+        }
+    }
+
+    @Test
+    public void carry_should_be_true_when_A_and_B_are_true_but_inCarry_is_false() {
+        given: {
+            inA.setSignal(Signal.of(true));
+            inB.setSignal(Signal.of(true));
+            inCarry.setSignal(Signal.of(false));
+        }
+        when: {
+            tickCompositeFullAdder();
+        }
+        then: {
+            assertThat(carry.getSignal()).isEqualTo(Signal.of(true));
+        }
+    }
+
+    @Test
+    public void carry_should_be_true_when_A_B_and_inCarry_are_true() {
+        given: {
+            inA.setSignal(Signal.of(true));
+            inB.setSignal(Signal.of(true));
+            inCarry.setSignal(Signal.of(true));
+        }
+        when: {
+            tickCompositeFullAdder();
+        }
+        then: {
+            assertThat(carry.getSignal()).isEqualTo(Signal.of(true));
         }
     }
     //-------------------Carry-----------------^^^^^^^^^^^^^^^^^^^^^^^

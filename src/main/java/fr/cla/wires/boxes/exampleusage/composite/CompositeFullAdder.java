@@ -17,38 +17,39 @@ import static java.util.Objects.requireNonNull;
  */
 public final class CompositeFullAdder extends Box {
 
-    private final Wire<Boolean> inA, inB, sum, carry; //Externally exposed Wires
-    private final Wire<Boolean> d, e; //Internal wiring between the Or/And/Not gates and from/to the inputs/outputs
+    private final Wire<Boolean> inA, inB, inCarry, sum, carry; //Externally exposed Wires
+    private final Wire<Boolean> s, c1, c2; //Internal wiring between the Or/And/Not gates and from/to the inputs/outputs
 
     private CompositeFullAdder(
-        Wire<Boolean> inA, Wire<Boolean> inB,
+        Wire<Boolean> inA, Wire<Boolean> inB, Wire<Boolean> inCarry,
         Wire<Boolean> sum, Wire<Boolean> carry,
         Clock clock
     ) {
-        this(inA, inB, sum, carry, clock, DEFAULT_DELAY);
+        this(inA, inB, inCarry, sum, carry, clock, DEFAULT_DELAY);
     }
 
     private CompositeFullAdder(
-    Wire<Boolean> inA, Wire<Boolean> inB,
-    Wire<Boolean> sum, Wire<Boolean> carry,
-    Clock clock, Delay delay
+        Wire<Boolean> inA, Wire<Boolean> inB, Wire<Boolean> inCarry,
+        Wire<Boolean> sum, Wire<Boolean> carry,
+        Clock clock, Delay delay
     ) {
         super(clock, delay);
         this.inA = requireNonNull(inA);
         this.inB = requireNonNull(inB);
+        this.inCarry = requireNonNull(inCarry);
         this.sum = requireNonNull(sum);
         this.carry = requireNonNull(carry);
-        this.d = Wire.make();
-        this.e = Wire.make();
+        this.s = Wire.make();
+        this.c1 = Wire.make();
+        this.c2 = Wire.make();
     }
 
     //TODO? abstract startup in Box
     private CompositeFullAdder startup() {
-        //SICP p. 274
-        Or.in1(inA).in2(inB).out(d).time(clock);
-        And.in1(inA).in2(inB).out(carry).time(clock);
-        Not.in(carry).out(e).time(clock);
-        And.in1(d).in2(e).out(sum).time(clock);
+        //SICP p. 276
+        CompositeHalfAdder.inA(inB).inB(inCarry).sum(s).carry(c1).time(clock);
+        CompositeHalfAdder.inA(inA).inB(s).sum(sum).carry(c2).time(clock);
+        Or.in1(c1).in2(c2).out(carry).time(clock);
         return this;
     }
 
@@ -60,7 +61,7 @@ public final class CompositeFullAdder extends Box {
 
 
     public static class Builder {
-        private Wire<Boolean> inA, inB, sum, carry;
+        private Wire<Boolean> inA, inB, inCarry, sum, carry;
 
         private Builder(Wire<Boolean> in) {
             this.inA = requireNonNull(in);
@@ -68,6 +69,11 @@ public final class CompositeFullAdder extends Box {
 
         public Builder inB(Wire<Boolean> inB) {
             this.inB = requireNonNull(inB);
+            return this;
+        }
+
+        public Builder inCarry(Wire<Boolean> inCarry) {
+            this.inCarry = requireNonNull(inCarry);
             return this;
         }
 
@@ -83,7 +89,7 @@ public final class CompositeFullAdder extends Box {
 
         public CompositeFullAdder time(Clock clock) {
             Clock _clock = requireNonNull(clock);
-            return new CompositeFullAdder(inA, inB, sum, carry, _clock).startup();
+            return new CompositeFullAdder(inA, inB, inCarry, sum, carry, _clock).startup();
         }
     }
 

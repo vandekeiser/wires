@@ -23,7 +23,7 @@ public class CompositeHalfAdderTest {
     //TODO 2: PBT test that CompositeHalfAdder gives the same result as LeafHalfAdder,
     // after enough ticks, but not before.
     //TODO? 3: add box Box::tickToQuiescence, but account for infinite loops in recurring boxes
-    private static final int COMPOSITE_HALF_ADDER_LONGEST_PATH = 3;
+    static final int COMPOSITE_HALF_ADDER_LONGEST_PATH = 3;
 
     private Wire<Boolean> inA, inB, sum, carry;
     private Clock clock;
