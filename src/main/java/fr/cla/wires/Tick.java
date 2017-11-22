@@ -28,9 +28,14 @@ public final class Tick extends AbstractValueObject<Tick> {
         return singletonList(tick);
     }
 
+    /**
+     * @throws ArithmeticException if the addition overflows long
+     */
     public Tick plus(Delay delay) {
-        //Don't need to do any checks here, since Delay::duration guarantees duration is >0 and Delay is final
-        return new Tick(tick + delay.duration());
+        //Don't need to do any checks other than overflow here,
+        // since Delay::duration guarantees duration is >0 and Delay is final
+        long newTick = Math.addExact(tick, delay.duration()); //throws ArithmeticException if overflows long
+        return new Tick(newTick);
     }
 
     public static Tick number(long number) {
