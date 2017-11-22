@@ -19,6 +19,7 @@ import static java.util.Objects.requireNonNull;
 public abstract class Box {
 
     protected static final Delay DEFAULT_DELAY = Delay.of(1);
+
     protected final Clock clock;
     protected final Delay delay;
     private final Clock.Agenda agenda;
