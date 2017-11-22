@@ -33,7 +33,7 @@ public class CollectMultipleAndTest {
     private void setup(long multiplicity) {
         ins = Stream.generate(() -> Wire.<Boolean>make()).limit(multiplicity).collect(toSet());
         out = Wire.make();
-        clock = Clock.create();
+        clock = Clock.createTime();
         CollectMultipleAnd.ins(ins).out(out).time(clock);
     }
 

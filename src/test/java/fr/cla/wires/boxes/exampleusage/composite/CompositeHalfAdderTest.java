@@ -33,7 +33,7 @@ public class CompositeHalfAdderTest {
         inB = Wire.make();
         sum = Wire.make();
         carry = Wire.make();
-        clock = Clock.create();
+        clock = Clock.createTime();
         CompositeHalfAdder.inA(inA).inB(inB).sum(sum).carry(carry).time(clock);
     }
 

@@ -29,7 +29,7 @@ public class CompositeFullAdderTest {
         inB = Wire.make();
         sum = Wire.make();
         carry = Wire.make();
-        clock = Clock.create();
+        clock = Clock.createTime();
         CompositeFullAdder.inA(inA).inB(inB).sum(sum).carry(carry).time(clock);
     }
 

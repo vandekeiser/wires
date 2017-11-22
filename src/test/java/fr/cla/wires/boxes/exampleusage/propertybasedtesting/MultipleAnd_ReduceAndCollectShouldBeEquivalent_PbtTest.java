@@ -50,7 +50,7 @@ public class MultipleAnd_ReduceAndCollectShouldBeEquivalent_PbtTest {
         ins = Stream.generate(() -> Wire.<Boolean>make()).limit(multiplicity).collect(toSet());
         collectOut = Wire.make();
         reduceOut = Wire.make();
-        clock = Clock.create();
+        clock = Clock.createTime();
         ReduceMultipleAnd.ins(ins).out(reduceOut).time(clock);
         CollectMultipleAnd.ins(ins).out(collectOut).time(clock);
     }

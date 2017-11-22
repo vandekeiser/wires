@@ -24,7 +24,7 @@ public class AnswerSecondTest {
         in1 = Wire.make();
         in2 = Wire.make();
         out = Wire.make();
-        clock = Clock.create();
+        clock = Clock.createTime();
         AnswerSecond.in1(in1).in2(in2).out(out).time(clock);
     }
 

@@ -8,7 +8,8 @@ import static java.util.Objects.requireNonNull;
 //@formatter:off
 /**
  * A discretization of time:
- * exposes {@code void tick()} and {@code Tick now()}
+ * exposes {@code void tick()} and {@code Tick now()}.
+ * The same Clock instance must be shared between all Boxes of a circuit.
  */
 public final class Clock {
 
@@ -24,7 +25,7 @@ public final class Clock {
         return agenda;
     }
 
-    public static Clock create() {
+    public static Clock createTime() {
         return new Clock();
     }
 

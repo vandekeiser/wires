@@ -23,7 +23,7 @@ public class NotTest {
     public void setup() {
         in = Wire.make();
         out = Wire.make();
-        clock = Clock.create();
+        clock = Clock.createTime();
         Not.in(in).out(out).time(clock);
     }
 

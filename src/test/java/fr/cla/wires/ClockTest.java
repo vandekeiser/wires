@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 //@formatter:off
 public class ClockTest {
 
-    private final Clock clock = Clock.create();
+    private final Clock clock = Clock.createTime();
 
     @Test
     public void tick_number_should_initially_be_0() {
