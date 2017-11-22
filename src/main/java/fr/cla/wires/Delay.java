@@ -11,6 +11,7 @@ import static java.util.Collections.singletonList;
  * A discrete Delay; each Box has a delay.
  */
 public final class Delay extends AbstractValueObject<Delay> {
+
     private final int duration;
 
     private Delay(int duration) {
@@ -35,5 +36,6 @@ public final class Delay extends AbstractValueObject<Delay> {
         if(duration <= 0) throw new AssertionError("duration managed to get <0! Was: " + duration);
         return duration;
     }
+
 }
 //@formatter:on

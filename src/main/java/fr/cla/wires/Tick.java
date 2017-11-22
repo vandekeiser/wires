@@ -19,7 +19,7 @@ public final class Tick extends AbstractValueObject<Tick> {
 
     private Tick(long tick) {
         super(Tick.class);
-        if(tick < 0) throw new IllegalArgumentException("tick must be >= 0, was: " + tick);
+        if(tick < 0) throw new AssertionError("tick must be >= 0, was: " + tick);
         this.tick = tick;
     }
 
@@ -29,10 +29,12 @@ public final class Tick extends AbstractValueObject<Tick> {
     }
 
     public Tick plus(Delay delay) {
+        //Don't need to do any checks here, since Delay::duration guarantees duration is >0 and Delay is final
         return new Tick(tick + delay.duration());
     }
 
     public static Tick number(long number) {
+        if(number < 0) throw new IllegalArgumentException("Tick number must be >= 0, was: " + number);
         return new Tick(number);
     }
 

@@ -3,8 +3,8 @@ package fr.cla.wires.boxes;
 import fr.cla.support.oo.Accumulable;
 import fr.cla.support.oo.Mutable;
 import fr.cla.wires.Box;
-import fr.cla.wires.Delay;
 import fr.cla.wires.Clock;
+import fr.cla.wires.Delay;
 import fr.cla.wires.Wire;
 
 import java.util.EnumSet;

@@ -1,8 +1,8 @@
 package fr.cla.wires.boxes.exampleusage.basic;
 
 
-import fr.cla.wires.Signal;
 import fr.cla.wires.Clock;
+import fr.cla.wires.Signal;
 import fr.cla.wires.Wire;
 import org.junit.Before;
 import org.junit.Test;

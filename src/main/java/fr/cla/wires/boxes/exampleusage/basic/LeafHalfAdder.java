@@ -1,8 +1,8 @@
 package fr.cla.wires.boxes.exampleusage.basic;
 
 import fr.cla.wires.Box;
-import fr.cla.wires.Delay;
 import fr.cla.wires.Clock;
+import fr.cla.wires.Delay;
 import fr.cla.wires.Wire;
 
 import static java.util.Objects.requireNonNull;
