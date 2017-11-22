@@ -292,7 +292,7 @@ public abstract class Box {
         }
 
         /**
-         * Stage 4.2.1.later: Apply the accumulationValue and reducer to changed inputs.
+         * Stage 4.2.1.later: Apply the accumulationValue and reducer to inputs.
          */
         private Signal<T> mapAndReduce(
             Collection<Wire<O>> allInputs,
