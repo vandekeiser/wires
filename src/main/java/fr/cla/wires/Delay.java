@@ -16,7 +16,7 @@ public final class Delay extends AbstractValueObject<Delay> {
 
     private Delay(int duration) {
         super(Delay.class);
-        if(duration <= 0) throw new IllegalArgumentException("duration must be > 0, was: " + duration);
+        if(duration <= 0) throw new AssertionError("duration must be > 0, was: " + duration);
         this.duration = duration;
     }
 
@@ -33,7 +33,7 @@ public final class Delay extends AbstractValueObject<Delay> {
      * @return the >0 duration
      */
     public long duration() {
-        if(duration <= 0) throw new AssertionError("duration managed to get <0! Was: " + duration);
+        if(duration <= 0) throw new IllegalArgumentException("duration managed to get <0! Was: " + duration);
         return duration;
     }
 
