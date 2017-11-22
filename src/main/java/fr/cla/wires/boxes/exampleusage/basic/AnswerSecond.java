@@ -49,7 +49,7 @@ public final class AnswerSecond extends Box {
      *      );
      * }
      */
-    private AnswerSecond startup() {
+    @Override protected AnswerSecond startup() {
         this.<Boolean, Boolean>onSignalChanged(in1)
             .set(out)
             .toResultOfApplying()

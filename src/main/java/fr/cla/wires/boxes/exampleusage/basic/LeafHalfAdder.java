@@ -37,7 +37,7 @@ public final class LeafHalfAdder extends Box {
         this.carry = requireNonNull(carry);
     }
 
-    private LeafHalfAdder startup() {
+    @Override protected LeafHalfAdder startup() {
         this.<Boolean, Boolean>onSignalChanged(inA)
             .set(sum)
             .toResultOfApplying()

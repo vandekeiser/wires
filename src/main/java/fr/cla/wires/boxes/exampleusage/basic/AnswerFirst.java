@@ -49,7 +49,7 @@ public final class AnswerFirst extends Box {
      *      );
      * }
      */
-    private AnswerFirst startup() {
+    @Override protected AnswerFirst startup() {
         this.<Boolean, Boolean>onSignalChanged(in1)
             .set(out)
             .toResultOfApplying()

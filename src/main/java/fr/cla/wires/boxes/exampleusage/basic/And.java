@@ -49,7 +49,7 @@ public final class And extends Box {
      *      );
      * }
      */
-    private And startup() {
+    @Override protected And startup() {
         this.<Boolean, Boolean>onSignalChanged(in1)
             .set(out)
             .toResultOfApplying()

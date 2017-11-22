@@ -49,7 +49,7 @@ public final class Or extends Box {
      *      );
      * }
      */
-    private Or startup() {
+    @Override protected Or startup() {
         this.<Boolean, Boolean>onSignalChanged(in1)
             .set(out)
             .toResultOfApplying()

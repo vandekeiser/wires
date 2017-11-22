@@ -42,6 +42,11 @@ public abstract class Box {
         );
     }
 
+    /**
+     * Abstract method, so don't call from the constructor (see Effective Java).
+     */
+    protected abstract Box startup();
+
     protected static <O> Set<Wire<O>> checkNoNulls(Set<Wire<O>> ins) {
         ins = new HashSet<>(ins);
         if(ins.stream().anyMatch(Objects::isNull)) {

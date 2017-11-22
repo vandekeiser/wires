@@ -48,7 +48,7 @@ public final class Not extends Box {
      *      );
      * }
      */
-    private Not startup() {
+    @Override protected Not startup() {
         this.<Boolean, Boolean>onSignalChanged(in)
             .set(out)
             .toResultOfApplying()
