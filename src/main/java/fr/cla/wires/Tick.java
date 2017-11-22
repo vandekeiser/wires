@@ -5,6 +5,7 @@ import fr.cla.support.oo.ddd.AbstractValueObject;
 import java.util.ArrayDeque;
 import java.util.List;
 
+import static java.lang.String.*;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
 
@@ -29,12 +30,24 @@ public final class Tick extends AbstractValueObject<Tick> {
     }
 
     /**
-     * @throws ArithmeticException if the addition overflows long
+     * @throws IllegalArgumentException if the addition overflows long //TODO test
      */
     public Tick plus(Delay delay) {
         //Don't need to do any checks other than overflow here,
         // since Delay::duration guarantees duration is >0 and Delay is final
-        long newTick = Math.addExact(tick, delay.duration()); //throws ArithmeticException if overflows long
+
+        long newTick, currentTick = this.tick;
+        try {
+            newTick = Math.addExact(tick, delay.duration()); //throws ArithmeticException if overflows long
+        } catch(ArithmeticException overflow) {
+            throw new IllegalArgumentException(
+                format(
+                    "Tick overflow! currentTick: %d, delay: %s",
+                    currentTick, delay
+                ),
+                overflow //Do propagate as "Caused by: " in the stacktrace!
+            );
+        }
         return new Tick(newTick);
     }
 
