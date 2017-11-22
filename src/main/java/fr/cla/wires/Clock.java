@@ -9,7 +9,7 @@ import static java.util.Objects.requireNonNull;
 /**
  * A discretization of time:
  * exposes {@code void tick()} and {@code Tick now()}.
- * The same Clock instance must be shared between all Boxes of a circuit.
+ * The same Clock instance is to be shared between all Boxes of a circuit.
  */
 public final class Clock {
 
