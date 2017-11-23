@@ -21,8 +21,7 @@ public class Mutable<T> {
 
     private T maybe;
 
-    //TODO make private
-    protected Mutable(T maybe) {
+    Mutable(T maybe) {
         this.maybe = maybe;
     }
 
