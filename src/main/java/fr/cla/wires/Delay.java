@@ -32,7 +32,8 @@ public final class Delay extends AbstractValueObject<Delay> {
     /**
      * @return the >0 duration
      */
-    public long duration() {
+    long duration() {
+        //Checked >0 in the constructor, so OK as long as this stays immutable.
         return duration;
     }
 

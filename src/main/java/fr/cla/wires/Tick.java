@@ -36,10 +36,10 @@ public final class Tick extends AbstractValueObject<Tick> {
         //Don't need to do any checks other than overflow here,
         // since Delay::duration guarantees duration is >0 and Delay is final
 
-        long newTick, currentTick = this.tick;
+        long newTick, currentTick = tick;
 
         try {
-            newTick = Math.addExact(tick, delay.duration()); //throws ArithmeticException if overflows long
+            newTick = Math.addExact(currentTick, delay.duration()); //throws ArithmeticException if overflows long
         } catch(ArithmeticException overflow) {
             throw new Tick.OverflowException(currentTick, delay, overflow);
         }
