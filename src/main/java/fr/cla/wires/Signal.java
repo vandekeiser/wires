@@ -68,20 +68,24 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
     }
 
     /**
-     * @param allInputs
-     * @param accumulationValue
-     * @param reducer
-     * @param neutralElement
-     * @param <T>
-     * @param <O>
-     * @return
+     * Collect an aggregate result from the inputs of N Wires, using Stream::reduce.
+     * Can do less than this::collect but less complex.
+     * @param allInputs The in Wires.
+     * @param accumulationValue Maps in signals to values which are then accumulated during the reduction.
+     * @param reducer This accumulation function (technically a java.util.function.BinaryOperator) must be associative, per Stream::reduce.
+     * @param neutralElement This must be the neutral element of the group associated with the reducer (ex: 0 for +, 1 for *).
+     * @param <T> The type of Signal that transits on the target Wire
+     * @param <O> The type of Signal that transits on the observed Wire
+     * @return If if any input is none then Signal.none(), else the result of applying the reducer to the "accumulation value" of all inputs.
      */
-    static <T, O> Signal<T> mapAndReduce(
+    static <O, T> Signal<T> mapAndReduce(
         Collection<Wire<O>> allInputs,
         Function<O, T> accumulationValue,
         BinaryOperator<T> reducer,
         T neutralElement
     ) {
+        if(anyInputIsNone(allInputs)) return Signal.none();
+
         return allInputs.stream()
             .map(Wire::getSignal)
             .map(Signal::getValue)
@@ -95,17 +99,24 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
     }
 
     /**
-     *
-     * @param allInputs
-     * @param collector
-     * @param <T>
-     * @param <O>
-     * @return
+     * Collect an aggregate result from the inputs of N Wires, using a java.util.stream.Collector.
+     * Can do more than this::mapAndReduce but more complex.
+     * @param allInputs The in Wires.
+     * @param collector This accumulator is more general (but complex) than mapAndReduce()'s one, since:
+     *  -The value to accumulate doesn't have to be of the same type as the input Signal.
+     *  -The accumulation doesn't have to use a BinaryOperator (it is implemented by the Collector itself).
+     * On the other hand, the same precondition are demanded from this parameter as in mapAndReduce():
+     *  -The collector::accumulator and collector::combiner implementations must be associative, per Stream::collect.
+     * @param <T> The type of Signal that transits on the target Wire
+     * @param <O> The type of Signal that transits on the observed Wire
+     * @return If if any input is none then Signal.none(), else the result of applying the collector to all inputs.
      */
-    static <T, O> Signal<T>  collect(
+    static <O, T> Signal<T> collect(
         Collection<Wire<O>> allInputs,
         Collector<Optional<O>, ?, Optional<T>> collector
     ) {
+        if(anyInputIsNone(allInputs)) return Signal.none();
+
         return allInputs.stream()
             .map(Wire::getSignal)
             .map(Signal::getValue)
@@ -113,6 +124,10 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
             .map(Signal::of)
             .orElse(Signal.none())
         ;
+    }
+
+    private static <O> boolean anyInputIsNone(Collection<Wire<O>> allInputs) {
+        return allInputs.stream().map(Wire::getSignal).anyMatch(Signal.none()::equals);
     }
 
 }
