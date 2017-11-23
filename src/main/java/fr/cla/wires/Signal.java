@@ -59,47 +59,47 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
     }
 
     //----------Functional methods to transform and/or aggregate Signals//----------VVVVVVVVVV
-    <W> Signal<W> map(Function<V, W> mapping) {
-        return getValue().map(mapping).map(Signal::of).orElse(Signal.none());
+    <W> Signal<W> map(Function<V, W> mapper) {
+        return getValue().map(mapper).map(Signal::of).orElse(Signal.none());
     }
 
-    static <V1, V2, W> Signal<W> map(Signal<V1> s1, Signal<V2> s2, BiFunction<V1, V2, W> mapping) {
-        return map(s1.getValue(), s2.getValue(), mapping);
+    static <V1, V2, W> Signal<W> map(Signal<V1> s1, Signal<V2> s2, BiFunction<V1, V2, W> mapper) {
+        return map(s1.getValue(), s2.getValue(), mapper);
     }
-    private static <V1, V2, W> Signal<W> map(Optional<V1> v1, Optional<V2> v2, BiFunction<V1, V2, W> mapping) {
+    private static <V1, V2, W> Signal<W> map(Optional<V1> v1, Optional<V2> v2, BiFunction<V1, V2, W> mapper) {
         if(!v1.isPresent() ||!v2.isPresent()) return Signal.none();
-        return Signal.of(mapping.apply(v1.get(), v2.get()));
+        return Signal.of(mapper.apply(v1.get(), v2.get()));
     }
 
     /**
      * Collect an aggregate result from the inputs of N Wires, using Stream::reduce.
      * Can do less than this::collect but less complex.
-     * @param allInputs The in Signals. No Signal is allowed to be Signal.none(), since that was already check by Wire::mapAndReduce.
+     * @param inputs The in Signals. No Signal is allowed to be Signal.none(), since that was already check by Wire::mapAndReduce.
      * @param accumulationValue Maps in signals to values which are then accumulated during the reduction.
-     * @param reducer This accumulation function (technically a java.util.function.BinaryOperator) must be associative, per Stream::reduce.
-     * @param neutralElement This must be the neutral element of the group associated with the reducer (ex: 0 for +, 1 for *).
+     * @param accumulator This accumulation function (technically a java.util.function.BinaryOperator) must be associative, per Stream::reduce.
+     * @param identity This must be the neutral element of the group associated with the reducer (ex: 0 for +, 1 for *).
      * @param <T> The type of Signal that transits on the target Wire
      * @param <O> The type of Signal that transits on the observed Wire
      * @return If if any input is none then Signal.none(), else the result of applying the reducer to the "accumulation value" of all inputs.
      */
     static <O, T> Signal<T> mapAndReduce(
-        Stream<Signal<O>> allInputs,
+        Stream<Signal<O>> inputs,
         Function<O, T> accumulationValue,
-        BinaryOperator<T> reducer,
-        T neutralElement
+        BinaryOperator<T> accumulator,
+        T identity
     ) {
-        return Signal.of(allInputs
+        return Signal.of(inputs
             .map(Signal::getValue)
             .map(Optional::get)
             .map(accumulationValue)
-            .reduce(neutralElement, reducer)
+            .reduce(identity, accumulator)
         );
     }
 
     /**
      * Collect an aggregate result from the inputs of N Wires, using a java.util.stream.Collector.
      * Can do more than this::mapAndReduce but more complex.
-     * @param allInputs The in Signals. No Signal is allowed to be Signal.none(), since that was already check by Wire::collect.
+     * @param inputs The in Signals. No Signal is allowed to be Signal.none(), since that was already check by Wire::collect.
      * @param collector This accumulator is more general (but complex) than mapAndReduce()'s one, since:
      *  -The value to accumulate doesn't have to be of the same type as the input Signal.
      *  -The accumulation doesn't have to use a BinaryOperator (it is implemented by the Collector itself).
@@ -110,10 +110,10 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
      * @return If if any input is none then Signal.none(), else the result of applying the collector to all inputs.
      */
     static <O, T> Signal<T> collect(
-        Stream<Signal<O>> allInputs,
+        Stream<Signal<O>> inputs,
         Collector<O, ?, T> collector
     ) {
-        return Signal.of(allInputs
+        return Signal.of(inputs
             .map(Signal::getValue)
             .map(Optional::get)
             .collect(collector)
