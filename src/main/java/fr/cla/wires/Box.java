@@ -225,7 +225,7 @@ public abstract class Box {
 
             onSignalChanged(observedWire,
                 newIn -> targetWire.setSignal(
-                Signal.collect(allInputs, _collector)
+                Wire.collect(allInputs, _collector)
             ));
         }
 
@@ -274,7 +274,7 @@ public abstract class Box {
 
             onSignalChanged(observedWire,
                 newIn -> targetWire.setSignal(
-                    Signal.mapAndReduce(allInputs, accumulationValue, _reducer, _neutralElement)
+                    Wire.mapAndReduce(allInputs, accumulationValue, _reducer, _neutralElement)
                 )
             );
         }

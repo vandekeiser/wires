@@ -10,6 +10,7 @@ import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collector;
+import java.util.stream.Stream;
 
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
@@ -79,15 +80,12 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
      * @return If if any input is none then Signal.none(), else the result of applying the reducer to the "accumulation value" of all inputs.
      */
     static <O, T> Signal<T> mapAndReduce(
-        Collection<Wire<O>> allInputs,
+        Stream<Signal<O>> allInputs,
         Function<O, T> accumulationValue,
         BinaryOperator<T> reducer,
         T neutralElement
     ) {
-        if(anyInputIsNone(allInputs)) return Signal.none();
-
-        return allInputs.stream()
-            .map(Wire::getSignal)
+        return allInputs
             .map(Signal::getValue)
             .map(Monads.liftOptional(accumulationValue))
             .reduce(
@@ -112,22 +110,15 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
      * @return If if any input is none then Signal.none(), else the result of applying the collector to all inputs.
      */
     static <O, T> Signal<T> collect(
-        Collection<Wire<O>> allInputs,
+        Stream<Signal<O>> allInputs,
         Collector<Optional<O>, ?, Optional<T>> collector
     ) {
-        if(anyInputIsNone(allInputs)) return Signal.none();
-
-        return allInputs.stream()
-            .map(Wire::getSignal)
+        return allInputs
             .map(Signal::getValue)
             .collect(collector)
             .map(Signal::of)
             .orElse(Signal.none())
         ;
-    }
-
-    private static <O> boolean anyInputIsNone(Collection<Wire<O>> allInputs) {
-        return allInputs.stream().map(Wire::getSignal).anyMatch(Signal.none()::equals);
     }
 
 }
