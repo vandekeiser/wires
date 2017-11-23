@@ -117,7 +117,7 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
             .collect(collector)
         );
     }
-    //----------Functional methods to transform or aggregate Signals//----------^^^^^^^^^^
+    //----------Functional methods to transform and/or aggregate Signals//----------^^^^^^^^^^
 
 }
 //@formatter:on
