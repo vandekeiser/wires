@@ -30,7 +30,7 @@ public final class Tick extends AbstractValueObject<Tick> {
     }
 
     /**
-     * @throws TickOverflowException if the addition overflows long //TODO test
+     * @throws Tick.OverflowException if the addition overflows long //TODO test
      */
     public Tick plus(Delay delay) {
         //Don't need to do any checks other than overflow here,
@@ -41,7 +41,7 @@ public final class Tick extends AbstractValueObject<Tick> {
         try {
             newTick = Math.addExact(tick, delay.duration()); //throws ArithmeticException if overflows long
         } catch(ArithmeticException overflow) {
-            throw new TickOverflowException(currentTick, delay, overflow);
+            throw new Tick.OverflowException(currentTick, delay, overflow);
         }
 
         return new Tick(newTick);
@@ -50,6 +50,48 @@ public final class Tick extends AbstractValueObject<Tick> {
     public static Tick number(long number) {
         if(number < 0) throw new IllegalArgumentException("Tick number must be >= 0, was: " + number);
         return new Tick(number);
+    }
+
+
+
+
+    /**
+     * This should not happen under normal circumstances, since Tick and Delay use long.
+     * (Long.MAX_VALUE == 2^63-1 == 9_223_372_036_854_775_807)
+     */
+    public static final class OverflowException extends RuntimeException {
+
+        private final long currentTick;
+        private final Delay attemptedDelay;
+        private final ArithmeticException overflow;
+
+        OverflowException(long currentTick, Delay attemptedDelay, ArithmeticException overflow) {
+            super(
+                formatMessage(currentTick, attemptedDelay),
+                overflow //Do propagate as "Caused by: " in the stacktrace!
+            );
+            //Don't validate since this is an exception constructor! Propagate whatever context is known as is.
+            this.currentTick = currentTick;
+            this.attemptedDelay = attemptedDelay;
+            this.overflow = overflow;
+        }
+
+        private static String formatMessage(long currentTick, Delay attemptedDelay) {
+            return String.format(
+            "Tick overflow! currentTick: %d, attemptedDelay: %s",
+            currentTick, attemptedDelay
+            );
+        }
+
+        public long getCurrentTick() {
+            return currentTick;
+        }
+        public Delay getAttemptedDelay() {
+            return attemptedDelay;
+        }
+        public ArithmeticException getOverflow() {
+            return overflow;
+        }
     }
 
 
