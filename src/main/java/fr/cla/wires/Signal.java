@@ -64,8 +64,7 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
     }
 
     static <V1, V2, W> Signal<W> map(Signal<V1> s1, Signal<V2> s2, BiFunction<V1, V2, W> mapping) {
-        if(!s1.getValue().isPresent()) return Signal.none();
-        if(!s2.getValue().isPresent()) return Signal.none();
+        if(!s1.getValue().isPresent() ||!s2.getValue().isPresent()) return Signal.none();
         return Signal.of(mapping.apply(s1.getValue().get(), s2.getValue().get()));
     }
 
