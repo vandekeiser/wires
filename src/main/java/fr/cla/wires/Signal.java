@@ -1,9 +1,7 @@
 package fr.cla.wires;
 
-import fr.cla.support.functional.Monads;
 import fr.cla.support.oo.ddd.AbstractValueObject;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -40,7 +38,7 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         return singletonList(value);
     }
 
-    public Optional<V> getValue() {
+    public Optional<V> value() {
         return Optional.ofNullable(value);
     }
 
@@ -60,11 +58,11 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
 
     //----------Functional methods to transform and/or aggregate Signals//----------VVVVVVVVVV
     <W> Signal<W> map(Function<V, W> mapper) {
-        return getValue().map(mapper).map(Signal::of).orElse(Signal.none());
+        return value().map(mapper).map(Signal::of).orElse(Signal.none());
     }
 
     static <V1, V2, W> Signal<W> map(Signal<V1> s1, Signal<V2> s2, BiFunction<V1, V2, W> mapper) {
-        return map(s1.getValue(), s2.getValue(), mapper);
+        return map(s1.value(), s2.value(), mapper);
     }
     private static <V1, V2, W> Signal<W> map(Optional<V1> v1, Optional<V2> v2, BiFunction<V1, V2, W> mapper) {
         if(!v1.isPresent() ||!v2.isPresent()) return Signal.none();
@@ -89,7 +87,7 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         T identity
     ) {
         return Signal.of(inputs
-            .map(Signal::getValue)
+            .map(Signal::value)
             .map(Optional::get)
             .map(accumulationValue)
             .reduce(identity, accumulator)
@@ -114,7 +112,7 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         Collector<O, ?, T> collector
     ) {
         return Signal.of(inputs
-            .map(Signal::getValue)
+            .map(Signal::value)
             .map(Optional::get)
             .collect(collector)
         );
