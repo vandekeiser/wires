@@ -4,8 +4,6 @@ import fr.cla.wires.Box;
 import fr.cla.wires.Clock;
 import fr.cla.wires.Delay;
 import fr.cla.wires.Wire;
-import fr.cla.wires.boxes.exampleusage.basic.And;
-import fr.cla.wires.boxes.exampleusage.basic.Not;
 import fr.cla.wires.boxes.exampleusage.basic.Or;
 
 import static java.util.Objects.requireNonNull;

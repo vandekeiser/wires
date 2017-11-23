@@ -5,7 +5,6 @@ import fr.cla.support.oo.ddd.AbstractValueObject;
 import java.util.ArrayDeque;
 import java.util.List;
 
-import static java.lang.String.*;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
 

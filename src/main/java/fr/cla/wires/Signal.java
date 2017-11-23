@@ -1,11 +1,15 @@
 package fr.cla.wires;
 
+import fr.cla.support.functional.Monads;
 import fr.cla.support.oo.ddd.AbstractValueObject;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
 import java.util.function.Function;
+import java.util.stream.Collector;
 
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
@@ -61,6 +65,54 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         Class<Signal<V>> signalOfV = (Class<Signal<V>>) unbounded;
 
         return signalOfV;
+    }
+
+    /**
+     * @param allInputs
+     * @param accumulationValue
+     * @param reducer
+     * @param neutralElement
+     * @param <T>
+     * @param <O>
+     * @return
+     */
+    static <T, O> Signal<T> mapAndReduce(
+        Collection<Wire<O>> allInputs,
+        Function<O, T> accumulationValue,
+        BinaryOperator<T> reducer,
+        T neutralElement
+    ) {
+        return allInputs.stream()
+            .map(Wire::getSignal)
+            .map(Signal::getValue)
+            .map(Monads.liftOptional(accumulationValue))
+            .reduce(
+                Optional.of(neutralElement),
+                Monads.liftOptional(reducer)
+            ).map(Signal::of)
+            .orElse(Signal.none())
+        ;
+    }
+
+    /**
+     *
+     * @param allInputs
+     * @param collector
+     * @param <T>
+     * @param <O>
+     * @return
+     */
+    static <T, O> Signal<T>  collect(
+        Collection<Wire<O>> allInputs,
+        Collector<Optional<O>, ?, Optional<T>> collector
+    ) {
+        return allInputs.stream()
+            .map(Wire::getSignal)
+            .map(Signal::getValue)
+            .collect(collector)
+            .map(Signal::of)
+            .orElse(Signal.none())
+        ;
     }
 
 }

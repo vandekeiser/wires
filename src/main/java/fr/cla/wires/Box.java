@@ -1,7 +1,5 @@
 package fr.cla.wires;
 
-import fr.cla.support.functional.Monads;
-
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
@@ -227,24 +225,8 @@ public abstract class Box {
 
             onSignalChanged(observedWire,
                 newIn -> targetWire.setSignal(
-                collect(allInputs, _collector)
+                Signal.collect(allInputs, _collector)
             ));
-        }
-
-        /**
-         * Stage 4.1.later: Apply the collector.
-         */
-        private Signal<T> collect(
-            Collection<Wire<O>> allInputs,
-            Collector<Optional<O>, ?, Optional<T>> collector
-        ) {
-            return allInputs.stream()
-                .map(Wire::getSignal)
-                .map(Signal::getValue)
-                .collect(collector)
-                .map(Signal::of)
-                .orElse(Signal.none())
-            ;
         }
 
         /**
@@ -292,30 +274,9 @@ public abstract class Box {
 
             onSignalChanged(observedWire,
                 newIn -> targetWire.setSignal(
-                    mapAndReduce(allInputs, accumulationValue, _reducer, _neutralElement)
+                    Signal.mapAndReduce(allInputs, accumulationValue, _reducer, _neutralElement)
                 )
             );
-        }
-
-        /**
-         * Stage 4.2.1.later: Apply the accumulationValue and reducer to inputs.
-         */
-        private Signal<T> mapAndReduce(
-            Collection<Wire<O>> allInputs,
-            Function<O, T> accumulationValue,
-            BinaryOperator<T> reducer,
-            T neutralElement
-        ) {
-            return allInputs.stream()
-                .map(Wire::getSignal)
-                .map(Signal::getValue)
-                .map(Monads.liftOptional(accumulationValue))
-                .reduce(
-                    Optional.of(neutralElement),
-                    Monads.liftOptional(reducer)
-                ).map(Signal::of)
-                .orElse(Signal.none())
-            ;
         }
     }
     //----------Convenience shortcuts for Boxes that have 1 or 2 inputs, or N homogeneous inputs--------------^^^^^^^^^^^^^^^^
