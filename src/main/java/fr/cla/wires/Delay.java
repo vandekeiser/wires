@@ -14,6 +14,7 @@ public final class Delay extends AbstractValueObject<Delay> {
 
     private final int duration;
 
+    //long would be too long a Delay.. But since Tick.tick is long, Achtung of "mixed-type computations"
     private Delay(int duration) {
         super(Delay.class);
         if(duration <= 0) throw new AssertionError("duration must be > 0, was: " + duration);
@@ -32,7 +33,7 @@ public final class Delay extends AbstractValueObject<Delay> {
     /**
      * @return the >0 duration
      */
-    long duration() {
+    int duration() {
         //Checked >0 in the constructor, so OK as long as this stays immutable.
         return duration;
     }

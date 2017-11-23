@@ -38,7 +38,7 @@ public final class Tick extends AbstractValueObject<Tick> {
         long newTick, currentTick = tick;
 
         try {
-            newTick = Math.addExact(currentTick, delay.duration()); //throws ArithmeticException if overflows long
+            newTick = Math.addExact(currentTick, (long)delay.duration()); //throws ArithmeticException if overflows long
         } catch(ArithmeticException overflow) {
             throw new Tick.OverflowException(currentTick, delay, overflow);
         }
