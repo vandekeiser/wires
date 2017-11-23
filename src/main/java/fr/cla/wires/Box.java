@@ -60,7 +60,7 @@ public abstract class Box {
     //This follows the "Staged Builder" pattern:
     //    -Every instance of the following protected inner classes is a Builder of some OnSignalChanged callback.
     //    -Each successive Builder has a constructor that captures 1 more intermediary Wire assembly state element than the previous one...
-    //    -...except for the terminal Builder method, which has the full picture, and calls this::onSignalChanged
+    //    -...except for the terminal void methods, which have the full picture, and call this::onSignalChanged.
     protected final <O, T> ObservedWireCaptured<O, T> onSignalChanged(Wire<O> observedWire) {
         return new ObservedWireCaptured<>(observedWire);
     }
