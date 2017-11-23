@@ -177,8 +177,9 @@ public abstract class Box {
 
             onSignalChanged(observedWire,
                 newIn -> targetWire.setSignal(
-                Wire.collect(allInputs, _collector)
-            ));
+                    Wire.collect(allInputs, _collector)
+                )
+            );
         }
 
         public final Reducing<O, T> map(Function<O, T> accumulationValue) {
