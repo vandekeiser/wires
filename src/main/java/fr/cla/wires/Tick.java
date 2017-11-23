@@ -55,8 +55,8 @@ public final class Tick extends AbstractValueObject<Tick> {
 
 
     /**
-     * This should not happen under normal circumstances, since Tick and Delay use long.
-     * (Long.MAX_VALUE == 2^63-1 == 9_223_372_036_854_775_807)
+     * This should not happen under normal circumstances, since Tick.tick is long:
+     * Long.MAX_VALUE == 2^63-1 == 9_223_372_036_854_775_807
      */
     public static final class OverflowException extends RuntimeException {
         private final long currentTick;
