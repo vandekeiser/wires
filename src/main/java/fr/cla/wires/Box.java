@@ -129,28 +129,28 @@ public abstract class Box {
 
         public final <P> void transformation(
             BiFunction<O, P, T> transformation,
-            Wire<P> unchangedSecondWire
+            Wire<P> unchangedSecond
         ) {
             BiFunction<O, P, T> _transformation= requireNonNull(transformation);
-            Wire<P> _unchangedSecondWire = requireNonNull(unchangedSecondWire);
+            Wire<P> _unchangedSecond = requireNonNull(unchangedSecond);
 
             onSignalChanged(observed,
                 newIn1 -> target.setSignal(
-                    Signal.map(newIn1, _unchangedSecondWire.getSignal(), _transformation)
+                    Signal.map(newIn1, _unchangedSecond.getSignal(), _transformation)
                 )
             );
         }
 
         public final <P> void transformation(
-            Wire<P> unchangedFirstWire,
+            Wire<P> unchangedFirst,
             BiFunction<P, O, T> transformation
         ) {
-            Wire<P> _unchangedFirstWire = requireNonNull(unchangedFirstWire);
+            Wire<P> _unchangedFirst = requireNonNull(unchangedFirst);
             BiFunction<P, O, T> _transformation= requireNonNull(transformation);
 
             onSignalChanged(observed,
                 newIn2 -> target.setSignal(
-                    Signal.map(_unchangedFirstWire.getSignal(), newIn2, _transformation)
+                    Signal.map(_unchangedFirst.getSignal(), newIn2, _transformation)
                 )
             );
         }
