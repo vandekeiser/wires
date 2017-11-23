@@ -55,10 +55,14 @@ public abstract class Box {
 
 
 
-    //----------Convenience shortcuts for Boxes that have 1 or 2 inputs, or N homogeneous inputs--------------VVVVVVVVVVVVVVVV
-    //----------(this follows the "Staged Builder" pattern)-------------
-    protected final <O, T> OnSignalChangedBuilder_ObservedWireCaptured<O, T> onSignalChanged(Wire<O> observedWire) {
-        return new OnSignalChangedBuilder_ObservedWireCaptured<>(observedWire);
+    //Convenience shortcuts for Boxes that have 1 or 2 inputs, or N homogeneous inputs--------------VVVVVVVVVVVVVVVV
+    //
+    //This follows the "Staged Builder" pattern:
+    //    -Every instance of the following protected inner classes is a Builder of some OnSignalChanged callback.
+    //    -Each successive Builder has a constructor that captures 1 more intermediary Wire assembly state element than the previous one...
+    //    -...except for the terminal Builder method, which has the full picture, and calls this::onSignalChanged
+    protected final <O, T> ObservedWireCaptured<O, T> onSignalChanged(Wire<O> observedWire) {
+        return new ObservedWireCaptured<>(observedWire);
     }
 
 
@@ -67,18 +71,18 @@ public abstract class Box {
     /**
     * Stage 1: Capture the input wire to observe.
     */
-    protected class OnSignalChangedBuilder_ObservedWireCaptured<O, T> {
+    protected class ObservedWireCaptured<O, T> {
         final Wire<O> observedWire;
 
-        private OnSignalChangedBuilder_ObservedWireCaptured(Wire<O> observedWire) {
+        private ObservedWireCaptured(Wire<O> observedWire) {
             this.observedWire = requireNonNull(observedWire);
         }
 
         /**
          * @return goto Stage 2: next, capture the input wire to observe.
          */
-        public final OnSignalChangedBuilder_ObservedAndTargetWiresCaptured<O, T> set(Wire<T> targetWire) {
-            return new OnSignalChangedBuilder_ObservedAndTargetWiresCaptured<>(
+        public final ObservedAndTargetWiresCaptured<O, T> set(Wire<T> targetWire) {
+            return new ObservedAndTargetWiresCaptured<>(
                 observedWire,
                 requireNonNull(targetWire)
             );
@@ -91,11 +95,11 @@ public abstract class Box {
     /**
      * Stage 2: Captures the input wire to observe, and the output wire to set.
      */
-    protected class OnSignalChangedBuilder_ObservedAndTargetWiresCaptured<O, T>
-    extends OnSignalChangedBuilder_ObservedWireCaptured<O, T> {
+    protected class ObservedAndTargetWiresCaptured<O, T>
+    extends ObservedWireCaptured<O, T> {
         final Wire<T> targetWire;
 
-        private OnSignalChangedBuilder_ObservedAndTargetWiresCaptured(
+        private ObservedAndTargetWiresCaptured(
             Wire<O> observedWire,
             Wire<T> targetWire
         ) {
@@ -108,8 +112,8 @@ public abstract class Box {
          *  maybe (depending on what is called next)
          *  taking into account a 2nd Wire depending on whether this Box has 1 or 2 input wires.
          */
-        public final OnSignalChangedBuilder_Applying<O, T> toResultOfApplying() {
-            return new OnSignalChangedBuilder_Applying<>(
+        public final Applying<O, T> toResultOfApplying() {
+            return new Applying<>(
                 observedWire, targetWire
             );
         }
@@ -118,8 +122,8 @@ public abstract class Box {
          * @return goto Stage 3.2: next, capture N homogeneous input Wires
          *  to apply a transformation (reduce / collect) to.
          */
-        public final OnSignalChangedBuilder_InputsAndOutputCaptured<O, T> from(Collection<Wire<O>> inputs) {
-            return new OnSignalChangedBuilder_InputsAndOutputCaptured<>(
+        public final InputsAndOutputCaptured<O, T> from(Collection<Wire<O>> inputs) {
+            return new InputsAndOutputCaptured<>(
                 observedWire, targetWire, requireNonNull(inputs)
             );
         }
@@ -131,9 +135,9 @@ public abstract class Box {
     /**
      * Stage 3.1: Enables applying a transformation to 1 or 2 inputs.
      */
-    protected class OnSignalChangedBuilder_Applying<O, T>
-    extends OnSignalChangedBuilder_ObservedAndTargetWiresCaptured<O, T> {
-        private OnSignalChangedBuilder_Applying(Wire<O> observedWire, Wire<T> targetWire) {
+    protected class Applying<O, T>
+    extends ObservedAndTargetWiresCaptured<O, T> {
+        private Applying(Wire<O> observedWire, Wire<T> targetWire) {
             super(observedWire, targetWire);
         }
 
@@ -204,11 +208,11 @@ public abstract class Box {
      * Stage 3.2: Captures N homogeneous inputs.
      *  Next, apply a transformation (reduce / collect) to the N input Wires
      */
-    protected class OnSignalChangedBuilder_InputsAndOutputCaptured<O, T>
-    extends OnSignalChangedBuilder_ObservedAndTargetWiresCaptured<O, T> {
+    protected class InputsAndOutputCaptured<O, T>
+    extends ObservedAndTargetWiresCaptured<O, T> {
         final Collection<Wire<O>> allInputs;
 
-        private OnSignalChangedBuilder_InputsAndOutputCaptured(
+        private InputsAndOutputCaptured(
             Wire<O> observedWire,
             Wire<T> targetWire,
             Collection<Wire<O>> allInputs
@@ -233,8 +237,8 @@ public abstract class Box {
          * Specify the accumulationValue to apply to inputs for reduction.
          * @return goto Stage 4.2: next, specify the reducer to apply.
          */
-        public final OnSignalChangedBuilder_Reducing<O, T> map(Function<O, T> accumulationValue) {
-            return new OnSignalChangedBuilder_Reducing<>(
+        public final Reducing<O, T> map(Function<O, T> accumulationValue) {
+            return new Reducing<>(
                 observedWire,
                 targetWire,
                 allInputs,
@@ -250,11 +254,11 @@ public abstract class Box {
      * Stage 4.2: Specify the accumulationValue to apply to inputs for reduction.
      *  That function will be mapped to inputs before reduce.
      */
-    protected class OnSignalChangedBuilder_Reducing<O, T>
-    extends OnSignalChangedBuilder_InputsAndOutputCaptured<O, T> {
+    protected class Reducing<O, T>
+    extends InputsAndOutputCaptured<O, T> {
         private final Function<O, T> accumulationValue;
 
-        private OnSignalChangedBuilder_Reducing(
+        private Reducing(
             Wire<O> observedWire,
             Wire<T> targetWire,
             Collection<Wire<O>> allInputs,
