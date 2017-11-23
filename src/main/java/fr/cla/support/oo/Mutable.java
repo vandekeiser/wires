@@ -19,38 +19,39 @@ import static java.util.Objects.requireNonNull;
  */
 public class Mutable<T> {
 
-    private Optional<T> maybe;
+    private T maybe;
 
-    protected Mutable(Optional<T> maybe) {
-        this.maybe = requireNonNull(maybe);
+    //TODO make private
+    protected Mutable(T maybe) {
+        this.maybe = maybe;
     }
 
-    public static <T> Mutable<T> initially(Optional<T> initialVal) {
+    public static <T> Mutable<T> initially(T initialVal) {
         return new Mutable<>(initialVal);
     }
 
     public static <T> Mutable<T> initiallyEmpty() {
-        return new Mutable<>(Optional.empty());
+        return new Mutable<>(null);
     }
 
-    public final Optional<T> current() {
+    public final T current() {
         if(maybe == null) throw new AssertionError();
         return maybe;
     }
 
     public final boolean isPresent() {
-        return maybe.isPresent();
+        return maybe != null;
     }
 
     /**
      * @throws java.util.NoSuchElementException if !isPresent
      */
     public final T get() {
-        return maybe.get();
+        return maybe;
     }
 
     public final void set(T t) {
-        maybe = Optional.of(t);
+        maybe = t;
     }
 
     //----------Equality based solely on current()----------VVVVVVVVVVVVVVV

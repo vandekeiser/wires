@@ -71,7 +71,7 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
     /**
      * Collect an aggregate result from the inputs of N Wires, using Stream::reduce.
      * Can do less than this::collect but less complex.
-     * @param allInputs The in Wires.
+     * @param allInputs The in Signals. No Signal is allowed to be Signal.none(), since that was already check by Wire::mapAndReduce.
      * @param accumulationValue Maps in signals to values which are then accumulated during the reduction.
      * @param reducer This accumulation function (technically a java.util.function.BinaryOperator) must be associative, per Stream::reduce.
      * @param neutralElement This must be the neutral element of the group associated with the reducer (ex: 0 for +, 1 for *).
@@ -85,21 +85,18 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         BinaryOperator<T> reducer,
         T neutralElement
     ) {
-        return allInputs
+        return Signal.of(allInputs
             .map(Signal::getValue)
-            .map(Monads.liftOptional(accumulationValue))
-            .reduce(
-                Optional.of(neutralElement),
-                Monads.liftOptional(reducer)
-            ).map(Signal::of)
-            .orElse(Signal.none())
-        ;
+            .map(Optional::get)
+            .map(accumulationValue)
+            .reduce(neutralElement, reducer)
+        );
     }
 
     /**
      * Collect an aggregate result from the inputs of N Wires, using a java.util.stream.Collector.
      * Can do more than this::mapAndReduce but more complex.
-     * @param allInputs The in Wires.
+     * @param allInputs The in Signals. No Signal is allowed to be Signal.none(), since that was already check by Wire::collect.
      * @param collector This accumulator is more general (but complex) than mapAndReduce()'s one, since:
      *  -The value to accumulate doesn't have to be of the same type as the input Signal.
      *  -The accumulation doesn't have to use a BinaryOperator (it is implemented by the Collector itself).
@@ -111,14 +108,13 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
      */
     static <O, T> Signal<T> collect(
         Stream<Signal<O>> allInputs,
-        Collector<Optional<O>, ?, Optional<T>> collector
+        Collector<O, ?, T> collector
     ) {
-        return allInputs
+        return Signal.of(allInputs
             .map(Signal::getValue)
+            .map(Optional::get)
             .collect(collector)
-            .map(Signal::of)
-            .orElse(Signal.none())
-        ;
+        );
     }
 
 }

@@ -101,7 +101,7 @@ public final class Wire<T> {
      */
     static <O, T> Signal<T> collect(
         Collection<Wire<O>> allInputs,
-        Collector<Optional<O>, ?, Optional<T>> collector
+        Collector<O, ?, T> collector
     ) {
         if(anyWireIsFloating(allInputs)) return Signal.none();
 

@@ -84,7 +84,7 @@ extends Box {
         ;
     }
 
-    private Collector<Optional<O>, ?, Optional<T>> collector() {
+    private Collector<O, ?, T> collector() {
         return collector(accumulationValue(), accumulator(), combiner());
     }
 
@@ -95,12 +95,12 @@ extends Box {
 
 
 
-    private Collector<Optional<O>, ?, Optional<T>> collector(
+    private Collector<O, ?, T> collector(
         Function<O, T> accumulationValue,
         BiFunction<T, O, T> accumulator,
         BinaryOperator<T> combiner
     ) {
-        return new Collector<Optional<O>, Accumulable<T, O>, Optional<T>>() {
+        return new Collector<O, Accumulable<T, O>, T>() {
             @Override public Supplier<Accumulable<T, O>> supplier() {
                 Function<O, T> _accumulationValue = requireNonNull(accumulationValue);
                 BiFunction<T, O, T> _accumulator = requireNonNull(accumulator);
@@ -111,7 +111,7 @@ extends Box {
                 );
             }
 
-            @Override public BiConsumer<Accumulable<T, O>, Optional<O>> accumulator() {
+            @Override public BiConsumer<Accumulable<T, O>, O> accumulator() {
                 return Accumulable::accumulate;
             }
 
@@ -119,7 +119,7 @@ extends Box {
                 return Accumulable::combine;
             }
 
-            @Override public Function<Accumulable<T, O>, Optional<T>> finisher() {
+            @Override public Function<Accumulable<T, O>, T> finisher() {
                 return Mutable::current;
             }
 

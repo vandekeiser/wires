@@ -12,7 +12,7 @@ import java.util.function.Function;
 public class SelfAccumulable<A> extends Accumulable<A, A> {
 
     protected SelfAccumulable(
-        Optional<A> initialValue,
+        A initialValue,
         BinaryOperator<A> combiner
     ) {
         super(initialValue, Function.identity(), combiner, combiner );
@@ -21,14 +21,14 @@ public class SelfAccumulable<A> extends Accumulable<A, A> {
     public static <A> SelfAccumulable<A> initiallyEmpty(
         BinaryOperator<A> combiner
     ) {
-        return new SelfAccumulable<>(Optional.empty(), combiner);
+        return new SelfAccumulable<>(null, combiner);
     }
 
     public static <A> SelfAccumulable<A> initially(
         A initialValue,
         BinaryOperator<A> combiner
     ) {
-        return new SelfAccumulable<>(Optional.of(initialValue), combiner);
+        return new SelfAccumulable<>(initialValue, combiner);
     }
 
 }

@@ -220,8 +220,8 @@ public abstract class Box {
         /**
          * Stage 4.1: Collection inputs->output is now fully specified, register it.
          */
-        public final void collect(Collector<Optional<O>, ?, Optional<T>> collector) {
-            Collector<Optional<O>, ?, Optional<T>> _collector = requireNonNull(collector);
+        public final void collect(Collector<O, ?, T> collector) {
+            Collector<O, ?, T> _collector = requireNonNull(collector);
 
             onSignalChanged(observedWire,
                 newIn -> targetWire.setSignal(
