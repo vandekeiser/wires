@@ -54,15 +54,17 @@ public final class Clock {
 
         void tick() {
             now = now.plus(Delay.of(1));
-
-            Tick.Queue todo = appointments.get(now);
-            if(todo == null) return;
-
             try {
-                todo.runAll();
+                runAppointedTodos();
             } finally {
                 appointments.remove(now);
             }
+        }
+
+        private void runAppointedTodos() {
+            Tick.Queue todo = appointments.get(now);
+            if(todo == null) return;
+            todo.runAll();
         }
 
         Tick now() {
