@@ -41,8 +41,8 @@ public final class Not extends Box {
      * }
      * to the less linear:
      * {@code
-     *      onSignalChanged(observedWire,
-     *          newIn -> targetWire.setSignal(
+     *      onSignalChanged(observed,
+     *          newIn -> target.setSignal(
      *              newIn.map(this::not)
      *          )
      *      );

@@ -32,10 +32,10 @@ public abstract class Box {
     }
 
     //Don't make package-private as this is the only alternative to the "Staged Builder"
-    protected final <O> void onSignalChanged(Wire<O> observedWire, OnSignalChanged<O> callback) {
+    protected final <O> void onSignalChanged(Wire<O> observed, OnSignalChanged<O> callback) {
         OnSignalChanged<O> _callback = requireNonNull(callback);
 
-        observedWire.onSignalChanged(
+        observed.onSignalChanged(
             agenda.afterDelay(delay, _callback)
         );
     }
@@ -45,12 +45,12 @@ public abstract class Box {
      */
     protected abstract Box startup();
 
-    protected static <O> Set<Wire<O>> checkNoNulls(Set<Wire<O>> ins) {
-        ins = new HashSet<>(requireNonNull(ins));
-        if(ins.stream().anyMatch(Objects::isNull)) {
-            throw new NullPointerException("Detected null wires in " + ins);
+    protected static <O> Set<Wire<O>> checkNoNulls(Set<Wire<O>> inputs) {
+        inputs = new HashSet<>(requireNonNull(inputs));
+        if(inputs.stream().anyMatch(Objects::isNull)) {
+            throw new NullPointerException("Detected null wires in " + inputs);
         }
-        return ins;
+        return inputs;
     }
 
 
@@ -61,24 +61,24 @@ public abstract class Box {
     //    -Every instance of the following protected inner classes is a Builder of some OnSignalChanged callback.
     //    -Each successive Builder has a constructor that captures 1 more intermediary Wire assembly state element than the previous one...
     //    -...except for the terminal void methods, which have the full picture, and call this::onSignalChanged.
-    protected final <O, T> ObservedWireCaptured<O, T> onSignalChanged(Wire<O> observedWire) {
-        return new ObservedWireCaptured<>(observedWire);
+    protected final <O, T> ObservedWireCaptured<O, T> onSignalChanged(Wire<O> observed) {
+        return new ObservedWireCaptured<>(observed);
     }
 
 
 
 
     protected class ObservedWireCaptured<O, T> {
-        final Wire<O> observedWire;
+        final Wire<O> observed;
 
-        private ObservedWireCaptured(Wire<O> observedWire) {
-            this.observedWire = requireNonNull(observedWire);
+        private ObservedWireCaptured(Wire<O> observed) {
+            this.observed = requireNonNull(observed);
         }
 
-        public final ObservedAndTargetWiresCaptured<O, T> set(Wire<T> targetWire) {
+        public final ObservedAndTargetWiresCaptured<O, T> set(Wire<T> target) {
             return new ObservedAndTargetWiresCaptured<>(
-                observedWire,
-                requireNonNull(targetWire)
+                observed,
+                requireNonNull(target)
             );
         }
     }
@@ -88,22 +88,22 @@ public abstract class Box {
 
     protected class ObservedAndTargetWiresCaptured<O, T>
     extends ObservedWireCaptured<O, T> {
-        final Wire<T> targetWire;
+        final Wire<T> target;
 
-        private ObservedAndTargetWiresCaptured(Wire<O> observedWire,Wire<T> targetWire) {
-            super(observedWire);
-            this.targetWire = requireNonNull(targetWire);
+        private ObservedAndTargetWiresCaptured(Wire<O> observed,Wire<T> target) {
+            super(observed);
+            this.target = requireNonNull(target);
         }
 
         public final Applying<O, T> toResultOfApplying() {
             return new Applying<>(
-                observedWire, targetWire
+                observed, target
             );
         }
 
         public final InputsAndOutputCaptured<O, T> from(Collection<Wire<O>> inputs) {
             return new InputsAndOutputCaptured<>(
-                observedWire, targetWire, requireNonNull(inputs)
+                observed, target, requireNonNull(inputs)
             );
         }
     }
@@ -113,15 +113,15 @@ public abstract class Box {
 
     protected class Applying<O, T>
     extends ObservedAndTargetWiresCaptured<O, T> {
-        private Applying(Wire<O> observedWire, Wire<T> targetWire) {
-            super(observedWire, targetWire);
+        private Applying(Wire<O> observed, Wire<T> target) {
+            super(observed, target);
         }
 
         public final void transformation(Function<O, T> transformation) {
             Function<O, T> _transformation = requireNonNull(transformation);
 
-            onSignalChanged(observedWire,
-                newIn -> targetWire.setSignal(
+            onSignalChanged(observed,
+                newIn -> target.setSignal(
                     newIn.map(_transformation)
                 )
             );
@@ -134,8 +134,8 @@ public abstract class Box {
             BiFunction<O, P, T> _transformation= requireNonNull(transformation);
             Wire<P> _unchangedSecondWire = requireNonNull(unchangedSecondWire);
 
-            onSignalChanged(observedWire,
-                newIn1 -> targetWire.setSignal(
+            onSignalChanged(observed,
+                newIn1 -> target.setSignal(
                     Signal.map(newIn1, _unchangedSecondWire.getSignal(), _transformation)
                 )
             );
@@ -148,8 +148,8 @@ public abstract class Box {
             Wire<P> _unchangedFirstWire = requireNonNull(unchangedFirstWire);
             BiFunction<P, O, T> _transformation= requireNonNull(transformation);
 
-            onSignalChanged(observedWire,
-                newIn2 -> targetWire.setSignal(
+            onSignalChanged(observed,
+                newIn2 -> target.setSignal(
                     Signal.map(_unchangedFirstWire.getSignal(), newIn2, _transformation)
                 )
             );
@@ -161,32 +161,32 @@ public abstract class Box {
 
     protected class InputsAndOutputCaptured<O, T>
     extends ObservedAndTargetWiresCaptured<O, T> {
-        final Collection<Wire<O>> allInputs;
+        final Collection<Wire<O>> inputs;
 
         private InputsAndOutputCaptured(
-            Wire<O> observedWire,
-            Wire<T> targetWire,
-            Collection<Wire<O>> allInputs
+            Wire<O> observed,
+            Wire<T> target,
+            Collection<Wire<O>> inputs
         ) {
-            super(observedWire, targetWire);
-            this.allInputs = new HashSet<>(allInputs);
+            super(observed, target);
+            this.inputs = new HashSet<>(inputs);
         }
 
         public final void collect(Collector<O, ?, T> collector) {
             Collector<O, ?, T> _collector = requireNonNull(collector);
 
-            onSignalChanged(observedWire,
-                newIn -> targetWire.setSignal(
-                    Wire.collect(allInputs, _collector)
+            onSignalChanged(observed,
+                newIn -> target.setSignal(
+                    Wire.collect(inputs, _collector)
                 )
             );
         }
 
         public final Reducing<O, T> map(Function<O, T> accumulationValue) {
             return new Reducing<>(
-                observedWire,
-                targetWire,
-                allInputs,
+                observed,
+                target,
+                inputs,
                 requireNonNull(accumulationValue)
             );
         }
@@ -200,22 +200,22 @@ public abstract class Box {
         private final Function<O, T> accumulationValue;
 
         private Reducing(
-            Wire<O> observedWire,
-            Wire<T> targetWire,
-            Collection<Wire<O>> allInputs,
+            Wire<O> observed,
+            Wire<T> target,
+            Collection<Wire<O>> inputs,
             Function<O, T> accumulationValue
         ) {
-            super(observedWire, targetWire, allInputs);
+            super(observed, target, inputs);
             this.accumulationValue = requireNonNull(accumulationValue);
         }
 
-        public final void reduce(BinaryOperator<T> reducer, T neutralElement) {
-            BinaryOperator<T> _reducer = requireNonNull(reducer);
-            T _neutralElement = requireNonNull(neutralElement);
+        public final void reduce(BinaryOperator<T> accumulator, T identity) {
+            BinaryOperator<T> _accumulator = requireNonNull(accumulator);
+            T _identity = requireNonNull(identity);
 
-            onSignalChanged(observedWire,
-                newIn -> targetWire.setSignal(
-                    Wire.mapAndReduce(allInputs, accumulationValue, _reducer, _neutralElement)
+            onSignalChanged(observed,
+                newIn -> target.setSignal(
+                    Wire.mapAndReduce(inputs, accumulationValue, _accumulator, _identity)
                 )
             );
         }

@@ -43,7 +43,7 @@ public final class AnswerSecond extends Box {
      * to the less linear:
      * {@code
      *      onSignalChanged(in1,
-     *          newIn1 -> targetWire.setSignal(
+     *          newIn1 -> target.setSignal(
      *              Signal.map(newIn1, in2.getSignal(), this::answerSecond)
      *          )
      *      );
