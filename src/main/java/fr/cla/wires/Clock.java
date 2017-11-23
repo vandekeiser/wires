@@ -58,8 +58,11 @@ public final class Clock {
             Tick.Queue todo = appointments.get(now);
             if(todo == null) return;
 
-            todo.runAll();
-            appointments.remove(now);
+            try {
+                todo.runAll();
+            } finally {
+                appointments.remove(now);
+            }
         }
 
         Tick now() {
