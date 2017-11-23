@@ -63,8 +63,7 @@ public final class Clock {
 
         private void runAppointedTodos() {
             Tick.Queue todo = appointments.get(now);
-            if(todo == null) return;
-            todo.runAll();
+            if(todo != null) todo.runAll();
         }
 
         Tick now() {
