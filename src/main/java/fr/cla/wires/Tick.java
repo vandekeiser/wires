@@ -60,7 +60,6 @@ public final class Tick extends AbstractValueObject<Tick> {
      * (Long.MAX_VALUE == 2^63-1 == 9_223_372_036_854_775_807)
      */
     public static final class OverflowException extends RuntimeException {
-
         private final long currentTick;
         private final Delay attemptedDelay;
         private final ArithmeticException overflow;
@@ -78,8 +77,8 @@ public final class Tick extends AbstractValueObject<Tick> {
 
         private static String formatMessage(long currentTick, Delay attemptedDelay) {
             return String.format(
-            "Tick overflow! currentTick: %d, attemptedDelay: %s",
-            currentTick, attemptedDelay
+                "Tick overflow! currentTick: %d, attemptedDelay: %s",
+                currentTick, attemptedDelay
             );
         }
 
