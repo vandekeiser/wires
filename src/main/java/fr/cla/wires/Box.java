@@ -68,9 +68,6 @@ public abstract class Box {
 
 
 
-    /**
-    * Stage 1: Capture the input wire to observe.
-    */
     protected class ObservedWireCaptured<O, T> {
         final Wire<O> observedWire;
 
@@ -78,9 +75,6 @@ public abstract class Box {
             this.observedWire = requireNonNull(observedWire);
         }
 
-        /**
-         * @return goto Stage 2: next, capture the input wire to observe.
-         */
         public final ObservedAndTargetWiresCaptured<O, T> set(Wire<T> targetWire) {
             return new ObservedAndTargetWiresCaptured<>(
                 observedWire,
@@ -92,36 +86,21 @@ public abstract class Box {
 
 
 
-    /**
-     * Stage 2: Captures the input wire to observe, and the output wire to set.
-     */
     protected class ObservedAndTargetWiresCaptured<O, T>
     extends ObservedWireCaptured<O, T> {
         final Wire<T> targetWire;
 
-        private ObservedAndTargetWiresCaptured(
-            Wire<O> observedWire,
-            Wire<T> targetWire
-        ) {
+        private ObservedAndTargetWiresCaptured(Wire<O> observedWire,Wire<T> targetWire) {
             super(observedWire);
             this.targetWire = requireNonNull(targetWire);
         }
 
-        /**
-         * @return goto Stage 3.1: next, apply a transformation to the 1 Wire,
-         *  maybe (depending on what is called next)
-         *  taking into account a 2nd Wire depending on whether this Box has 1 or 2 input wires.
-         */
         public final Applying<O, T> toResultOfApplying() {
             return new Applying<>(
                 observedWire, targetWire
             );
         }
 
-        /**
-         * @return goto Stage 3.2: next, capture N homogeneous input Wires
-         *  to apply a transformation (reduce / collect) to.
-         */
         public final InputsAndOutputCaptured<O, T> from(Collection<Wire<O>> inputs) {
             return new InputsAndOutputCaptured<>(
                 observedWire, targetWire, requireNonNull(inputs)
@@ -132,18 +111,12 @@ public abstract class Box {
 
 
 
-    /**
-     * Stage 3.1: Enables applying a transformation to 1 or 2 inputs.
-     */
     protected class Applying<O, T>
     extends ObservedAndTargetWiresCaptured<O, T> {
         private Applying(Wire<O> observedWire, Wire<T> targetWire) {
             super(observedWire, targetWire);
         }
 
-        /**
-        * Stage 3.1.1: Apply the transformation to just the changed input.
-        */
         public final void transformation(Function<O, T> transformation) {
             Function<O, T> _transformation = requireNonNull(transformation);
 
@@ -154,15 +127,6 @@ public abstract class Box {
             );
         }
 
-        /**
-         * Stage 3.1.2: Apply the transformation to (the changed input, the other input).
-         *
-         * Applies {@code transformation} to (changed Signal, unchanged Signal).
-         * Of course calling this method or the other BiFunction one
-         *  only has an impact if {@code transformation} is not symmetrical.
-         * @param transformation The function to apply to (changed Wire, unchanged Wire)
-         * @param unchangedSecondWire The unchanged Wire, used as the 2nd parameter of {@code transformation}
-         */
         public final <P> void transformation(
             BiFunction<O, P, T> transformation,
             Wire<P> unchangedSecondWire
@@ -177,15 +141,6 @@ public abstract class Box {
             );
         }
 
-        /**
-         * Stage 3.1.3: Apply the transformation to (the other input, the changed input).
-         *
-         * Applies {@code transformation} to (unchanged Signal, changed Signal).
-         * Of course calling this method or the other BiFunction one
-         *  only has an impact if {@code transformation} is not symmetrical.
-         * @param unchangedFirstWire The unchanged Wire, used as the 1st parameter of {@code transformation}
-         * @param transformation The function to apply to (unchanged Wire, changed Wire)
-         */
         public final <P> void transformation(
             Wire<P> unchangedFirstWire,
             BiFunction<P, O, T> transformation
@@ -204,10 +159,6 @@ public abstract class Box {
 
 
 
-    /**
-     * Stage 3.2: Captures N homogeneous inputs.
-     *  Next, apply a transformation (reduce / collect) to the N input Wires
-     */
     protected class InputsAndOutputCaptured<O, T>
     extends ObservedAndTargetWiresCaptured<O, T> {
         final Collection<Wire<O>> allInputs;
@@ -221,9 +172,6 @@ public abstract class Box {
             this.allInputs = new HashSet<>(allInputs);
         }
 
-        /**
-         * Stage 4.1: Collection inputs->output is now fully specified, register it.
-         */
         public final void collect(Collector<O, ?, T> collector) {
             Collector<O, ?, T> _collector = requireNonNull(collector);
 
@@ -233,10 +181,6 @@ public abstract class Box {
             ));
         }
 
-        /**
-         * Specify the accumulationValue to apply to inputs for reduction.
-         * @return goto Stage 4.2: next, specify the reducer to apply.
-         */
         public final Reducing<O, T> map(Function<O, T> accumulationValue) {
             return new Reducing<>(
                 observedWire,
@@ -250,10 +194,6 @@ public abstract class Box {
 
 
 
-    /**
-     * Stage 4.2: Specify the accumulationValue to apply to inputs for reduction.
-     *  That function will be mapped to inputs before reduce.
-     */
     protected class Reducing<O, T>
     extends InputsAndOutputCaptured<O, T> {
         private final Function<O, T> accumulationValue;
@@ -268,10 +208,6 @@ public abstract class Box {
             this.accumulationValue = requireNonNull(accumulationValue);
         }
 
-        /**
-         * Stage 4.2.1: Now that the reduction itself is known,
-         *  reduction inputs->output is now fully specified, register it.
-         */
         public final void reduce(BinaryOperator<T> reducer, T neutralElement) {
             BinaryOperator<T> _reducer = requireNonNull(reducer);
             T _neutralElement = requireNonNull(neutralElement);
