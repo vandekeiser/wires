@@ -82,15 +82,9 @@ public final class Tick extends AbstractValueObject<Tick> {
             );
         }
 
-        public long getCurrentTick() {
-            return currentTick;
-        }
-        public Delay getAttemptedDelay() {
-            return attemptedDelay;
-        }
-        public ArithmeticException getOverflow() {
-            return overflow;
-        }
+        public long getCurrentTick() { return currentTick; }
+        public Delay getAttemptedDelay() { return attemptedDelay; }
+        public ArithmeticException getOverflow() { return overflow; }
     }
 
 
