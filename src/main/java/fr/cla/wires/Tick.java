@@ -31,18 +31,15 @@ public final class Tick extends AbstractValueObject<Tick> {
     /**
      * @throws Tick.OverflowException if the addition overflows long //TODO test
      */
+    //Don't need to do any checks other than overflow here,
+    // since Delay::duration guarantees duration is >0 and Delay is final
     public Tick plus(Delay delay) {
-        //Don't need to do any checks other than overflow here,
-        // since Delay::duration guarantees duration is >0 and Delay is final
-
-        long newTick, currentTick = tick;
-
+        long newTick;
         try {
-            newTick = Math.addExact(currentTick, (long)delay.duration()); //throws ArithmeticException if overflows long
+            newTick = Math.addExact(tick, (long)delay.duration()); //throws ArithmeticException if overflows long
         } catch(ArithmeticException overflow) {
-            throw new Tick.OverflowException(currentTick, delay, overflow);
+            throw new Tick.OverflowException(this, delay, overflow);
         }
-
         return new Tick(newTick);
     }
 
@@ -63,11 +60,11 @@ public final class Tick extends AbstractValueObject<Tick> {
      *  and I don't want to write/depend-on checked @FunctionalInterfaces for just that.
      */
     public static final class OverflowException extends RuntimeException {
-        private final long currentTick;
+        private final Tick currentTick;
         private final Delay attemptedDelay;
         private final ArithmeticException overflow;
 
-        OverflowException(long currentTick, Delay attemptedDelay, ArithmeticException overflow) {
+        OverflowException(Tick currentTick, Delay attemptedDelay, ArithmeticException overflow) {
             super(
                 formatMessage(currentTick, attemptedDelay),
                 overflow //Do propagate as "Caused by: " in the stacktrace!
@@ -78,14 +75,14 @@ public final class Tick extends AbstractValueObject<Tick> {
             this.overflow = overflow;
         }
 
-        private static String formatMessage(long currentTick, Delay attemptedDelay) {
+        private static String formatMessage(Tick currentTick, Delay attemptedDelay) {
             return String.format(
-                "Tick overflow! currentTick: %d, attemptedDelay: %s",
+                "Tick overflow! currentTick: %s, attemptedDelay: %s",
                 currentTick, attemptedDelay
             );
         }
 
-        public long getCurrentTick() { return currentTick; }
+        public Tick getCurrentTick() { return currentTick; }
         public Delay getAttemptedDelay() { return attemptedDelay; }
         public ArithmeticException getOverflow() { return overflow; }
     }
