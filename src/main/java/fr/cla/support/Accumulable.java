@@ -51,13 +51,6 @@ public class Accumulable<A, T> extends Mutable<A> {
     }
 
     public final Accumulable<A, T> combine(Accumulable<A, T> that) {
-        //TODO
-//        if(this.accumulationValue != that.accumulationValue) {
-//            throw new UnsupportedOperationException(format(
-//                ""
-//            ));
-//        }
-//        ...
         return
             this.isPresent() && that.isPresent() ?
             initially(
