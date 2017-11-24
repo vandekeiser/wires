@@ -1,6 +1,5 @@
 package fr.cla.support.oo;
 
-import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
@@ -43,11 +42,11 @@ public class Accumulable<A, T> extends Mutable<A> {
         return new Accumulable<>(initialValue, accumulationValue, accumulator, combiner);
     }
 
-    public final void accumulate(T current) {
+    public final void accumulate(T elt) {
         if(this.isPresent() ) {
-            set(accumulator.apply(this.get(), current));
+            set(accumulator.apply(this.get(), elt));
         } else {
-            set(accumulationValue.apply(current));
+            set(accumulationValue.apply(elt));
         }
     }
 

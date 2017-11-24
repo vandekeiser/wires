@@ -1,59 +1,37 @@
 package fr.cla.support.oo;
 
 import java.util.Objects;
-import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off
 /**
- * This doesn't follow the generally heard advice to not use Optional as field or parameter.
- * But that advice sounds (from what Brian Goetz says in his "the good, the bad, and the ugly" talk)
- *  like a limitation of how Optional is not Serializable because that's too much JDK maintenance work,
- *  and thus not a prime Entity property, not as an absolute prohibition.
- * -->As long as that Optional is not used as an "Entity property" (persistence/serialization/...)
- *  it should be OK.
- *  Maybe I should rename this to "TransientMutable"?
- *  That sounds good since instances of this class are intended to be used are intermediary accumulators.
- * @param <T> type of value held
+ * @param <T> The type of value held
  */
 public class Mutable<T> {
 
-    private T maybe;
+    private T current;
 
-    Mutable(T maybe) {
-        this.maybe = maybe;
-    }
-
-    public static <T> Mutable<T> initially(T initialVal) {
-        return new Mutable<>(initialVal);
-    }
-
-    public static <T> Mutable<T> initiallyEmpty() {
-        return new Mutable<>(null);
-    }
-
-    public final T current() {
-        if(maybe == null) throw new AssertionError();
-        return maybe;
+    /**
+     * @param initial The initial value is nullable 
+     */
+    Mutable(T initial) {
+        this.current = initial;
     }
 
     public final boolean isPresent() {
-        return maybe != null;
+        return current != null;
     }
 
-    /**
-     * @throws java.util.NoSuchElementException if !isPresent
-     */
     public final T get() {
-        return maybe;
+        return current;
     }
 
     public final void set(T t) {
-        maybe = t;
+        this.current = requireNonNull(t);
     }
 
-    //----------Equality based solely on current()----------VVVVVVVVVVVVVVV
+    //----------Equality based solely on get()----------VVVVVVVVVVVVVVV
     @Override public final boolean equals(Object obj) {
         //An optimization, but also avoids StackOverflows on cyclic object graphs.
         if(obj == this) return true;
@@ -62,13 +40,13 @@ public class Mutable<T> {
         Mutable<?> that = (Mutable<?>) obj;
 
         return Objects.equals(
-            this.current(),
-            that.current()
+            this.get(),
+            that.get()
         );
     }
 
     @Override public final int hashCode() {
-        return Objects.hash(current());
+        return Objects.hash(get());
     }
 
     @Override public String toString() {
@@ -76,10 +54,10 @@ public class Mutable<T> {
             "%s@%s%s",
             getClass().getSimpleName(),
             Integer.toHexString(System.identityHashCode(this)),
-            current()
+            get()
         );
     }
-    //----------Equality based solely on current()----------^^^^^^^^^^^^^^^
+    //----------Equality based solely on get()----------^^^^^^^^^^^^^^^
 
 }
 //@formatter:on

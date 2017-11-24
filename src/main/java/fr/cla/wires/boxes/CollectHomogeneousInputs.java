@@ -8,7 +8,6 @@ import fr.cla.wires.Delay;
 import fr.cla.wires.Wire;
 
 import java.util.EnumSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.*;
 import java.util.stream.Collector;
@@ -128,7 +127,7 @@ extends Box {
         }
 
         @Override public Function<Accumulable<T, O>, T> finisher() {
-            return Mutable::current;
+            return Mutable::get;
         }
 
         @Override public Set<Characteristics> characteristics() {
