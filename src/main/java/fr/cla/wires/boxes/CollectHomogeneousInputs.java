@@ -85,7 +85,9 @@ extends Box {
     }
 
     private Collector<O, ?, T> collector() {
-        return collector(accumulationValue(), accumulator(), combiner());
+        return new AccumulableCollector<>(
+            accumulationValue(), accumulator(), combiner()
+        );
     }
 
     protected abstract Function<O, T> accumulationValue();
@@ -95,39 +97,44 @@ extends Box {
 
 
 
-    private Collector<O, ?, T> collector(
-        Function<O, T> accumulationValue,
-        BiFunction<T, O, T> accumulator,
-        BinaryOperator<T> combiner
-    ) {
-        return new Collector<O, Accumulable<T, O>, T>() {
-            @Override public Supplier<Accumulable<T, O>> supplier() {
-                Function<O, T> _accumulationValue = requireNonNull(accumulationValue);
-                BiFunction<T, O, T> _accumulator = requireNonNull(accumulator);
-                BinaryOperator<T> _combiner = requireNonNull(combiner);
+    private static class AccumulableCollector<O, T>
+    implements Collector<O, Accumulable<T, O>, T> {
+        private final Function<O, T> accumulationValue;
+        private final BiFunction<T, O, T> accumulator;
+        private final BinaryOperator<T> combiner;
 
-                return () -> Accumulable.initiallyEmpty(
-                    _accumulationValue, _accumulator, _combiner
-                );
-            }
+        private AccumulableCollector(
+            Function<O, T> accumulationValue,
+            BiFunction<T, O, T> accumulator,
+            BinaryOperator<T> combiner
+        )  {
+            this.accumulationValue = requireNonNull(accumulationValue);
+            this.accumulator = requireNonNull(accumulator);
+            this.combiner = requireNonNull(combiner);
+        }
 
-            @Override public BiConsumer<Accumulable<T, O>, O> accumulator() {
-                return Accumulable::accumulate;
-            }
+        @Override public Supplier<Accumulable<T, O>> supplier() {
+            return () -> Accumulable.initiallyEmpty(
+                accumulationValue, accumulator, combiner
+            );
+        }
 
-            @Override public BinaryOperator<Accumulable<T, O>> combiner() {
-                return Accumulable::combine;
-            }
+        @Override public BiConsumer<Accumulable<T, O>, O> accumulator() {
+            return Accumulable::accumulate;
+        }
 
-            @Override public Function<Accumulable<T, O>, T> finisher() {
-                return Mutable::current;
-            }
+        @Override public BinaryOperator<Accumulable<T, O>> combiner() {
+            return Accumulable::combine;
+        }
 
-            @Override public Set<Characteristics> characteristics() {
-                //TODO some collectors might not be UNORDERED
-                return EnumSet.of(UNORDERED);
-            }
-        };
+        @Override public Function<Accumulable<T, O>, T> finisher() {
+            return Mutable::current;
+        }
+
+        @Override public Set<Characteristics> characteristics() {
+            //TODO some collectors might not be UNORDERED
+            return EnumSet.of(UNORDERED);
+        }
     }
 
 }
