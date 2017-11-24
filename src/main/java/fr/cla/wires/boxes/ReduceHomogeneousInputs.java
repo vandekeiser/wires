@@ -11,7 +11,7 @@ import java.util.function.Function;
 
 import static java.util.Objects.requireNonNull;
 
-//TODO: refact as extending CollectHomogeneousInputs (reduction->collector)
+//TODO: refact as extending CollectHomogeneousInputs (accumulator->collector)
 
 /**
  * TODO javadoc in same style as CollectHomogeneousInputsToOutputOfSameType
@@ -55,14 +55,14 @@ extends Box {
      *          .set(out)
      *          .from(ins)
      *          .map(accumulationValue())
-     *          .reduce(reduction(), neutralElement()
+     *          .reduce(accumulator(), identity()
      *      ;
      * }
      * to the less linear:
      * {@code
      *      onSignalChanged(in,
      *          newIn -> out.setSignal(
-     *              mapAndReduce(ins, accumulationValue(), reduction(), neutralElement())
+     *              mapAndReduce(ins, accumulationValue(), accumulator(), identity())
      *          )
      *      )
      * }
@@ -72,13 +72,13 @@ extends Box {
             .set(out)
             .from(ins)
             .map(accumulationValue())
-            .reduce(reduction(), neutralElement())
+            .reduce(accumulator(), identity())
         ;
     }
 
     protected abstract Function<O,T> accumulationValue();
-    protected abstract T neutralElement();
-    protected abstract BinaryOperator<T> reduction();
+    protected abstract BinaryOperator<T> accumulator();
+    protected abstract T identity();
 
 }
 //@formatter:on

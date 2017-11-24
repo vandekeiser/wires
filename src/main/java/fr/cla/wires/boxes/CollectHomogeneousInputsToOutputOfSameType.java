@@ -42,9 +42,11 @@ extends CollectHomogeneousInputs<O, O> {
         super(ins, out, clock, delay);
     }
 
-    @Override protected final Function<O, O> accumulationValue() {
+    //Not final intentionally
+    @Override protected Function<O, O> accumulationValue() {
         return Function.identity();
     }
+
     @Override protected final BiFunction<O, O, O> accumulator() {
         return combiner();
     }
