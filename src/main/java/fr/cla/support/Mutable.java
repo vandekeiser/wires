@@ -1,4 +1,4 @@
-package fr.cla.support.oo;
+package fr.cla.support;
 
 import static java.util.Objects.requireNonNull;
 

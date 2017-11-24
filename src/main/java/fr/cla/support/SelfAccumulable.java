@@ -1,6 +1,5 @@
-package fr.cla.support.oo;
+package fr.cla.support;
 
-import java.util.Optional;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 
