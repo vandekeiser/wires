@@ -21,7 +21,7 @@ public final class Wire<T> {
     //In the publish-subscribe pattern, the order in which listeners are notified should not matter.
     //-->change from Set to something else _iff_ we should not exactly use the publish-subscribe pattern (maybe re-read SICP).
     //At least for now I don't see why listeners should be notified in the order they were registered or any other specific order.
-    //But at least they should be uniquely registered, so in that case the new Collection type used should preserve unicity.
+    //But at least they should be uniquely registered, so in the order matters, the new Collection type used should preserve unicity.
     //
     //This also means that the unicity of listeners should be well-defined.
     // For now they are all instances of Wire, thus (since Wire is mutable) it must either:
