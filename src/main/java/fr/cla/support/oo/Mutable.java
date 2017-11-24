@@ -11,7 +11,7 @@ public class Mutable<T> {
     private T current;
 
     /**
-     * @param initial The initial value is nullable 
+     * @param initial Only the initial value is nullable 
      */
     Mutable(T initial) {
         this.current = initial;
