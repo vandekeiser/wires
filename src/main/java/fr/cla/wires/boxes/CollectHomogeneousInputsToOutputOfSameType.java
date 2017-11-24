@@ -34,15 +34,11 @@ import java.util.function.Function;
 public abstract class CollectHomogeneousInputsToOutputOfSameType<O>
 extends CollectHomogeneousInputs<O, O> {
 
-    protected CollectHomogeneousInputsToOutputOfSameType(
-    Set<Wire<O>> ins, Wire<O> out, Clock clock
-    ) {
+    protected CollectHomogeneousInputsToOutputOfSameType(Set<Wire<O>> ins, Wire<O> out, Clock clock) {
         this(ins, out, clock, DEFAULT_DELAY);
     }
 
-    protected CollectHomogeneousInputsToOutputOfSameType(
-    Set<Wire<O>> ins, Wire<O> out, Clock clock, Delay delay
-    ) {
+    protected CollectHomogeneousInputsToOutputOfSameType(Set<Wire<O>> ins, Wire<O> out, Clock clock, Delay delay) {
         super(ins, out, clock, delay);
     }
 
