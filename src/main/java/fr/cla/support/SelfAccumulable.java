@@ -12,22 +12,26 @@ public class SelfAccumulable<A> extends Accumulable<A, A> {
 
     protected SelfAccumulable(
         A initialValue,
+        boolean acceptNull,
+        Function<A, A> accumulationValue,
         BinaryOperator<A> combiner
     ) {
-        super(initialValue, Function.identity(), combiner, combiner );
+        super(initialValue, acceptNull, accumulationValue, combiner, combiner );
     }
 
     public static <A> SelfAccumulable<A> initiallyEmpty(
+        Function<A, A> accumulationValue,    
         BinaryOperator<A> combiner
     ) {
-        return new SelfAccumulable<>(null, combiner);
+        return new SelfAccumulable<>(null, true, accumulationValue, combiner);
     }
 
     public static <A> SelfAccumulable<A> initially(
         A initialValue,
+        Function<A, A> accumulationValue,
         BinaryOperator<A> combiner
     ) {
-        return new SelfAccumulable<>(initialValue, combiner);
+        return new SelfAccumulable<>(initialValue, false, accumulationValue, combiner);
     }
 
 }

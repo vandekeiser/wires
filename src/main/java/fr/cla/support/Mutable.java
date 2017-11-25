@@ -10,11 +10,8 @@ public class Mutable<T> {
 
     private T current;
 
-    /**
-     * @param initial Only the initial value is nullable 
-     */
-    Mutable(T initial) {
-        this.current = initial;
+    Mutable(T initial, boolean acceptNull) {
+        this.current = acceptNull ? initial : requireNonNull(initial);
     }
 
     public final boolean isPresent() {

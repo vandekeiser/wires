@@ -15,11 +15,12 @@ public class Accumulable<A, T> extends Mutable<A> {
 
     protected Accumulable(
         A initialValue,
+        boolean acceptNull, 
         Function<T, A> accumulationValue,
         BiFunction<A, T, A> accumulator,
         BinaryOperator<A> combiner
     ) {
-        super(initialValue);
+        super(initialValue, acceptNull);
         this.accumulationValue = requireNonNull(accumulationValue);
         this.accumulator = requireNonNull(accumulator);
         this.combiner = requireNonNull(combiner);
@@ -30,7 +31,7 @@ public class Accumulable<A, T> extends Mutable<A> {
         BiFunction<A, T, A> accumulator,
         BinaryOperator<A> combiner
     ) {
-        return new Accumulable<>(null, accumulationValue, accumulator, combiner);
+        return new Accumulable<>(null, true, accumulationValue, accumulator, combiner);
     }
 
     public static <T, A> Accumulable<A, T> initially(
@@ -39,7 +40,7 @@ public class Accumulable<A, T> extends Mutable<A> {
         BiFunction<A, T, A> accumulator,
         BinaryOperator<A> combiner
     ) {
-        return new Accumulable<>(initialValue, accumulationValue, accumulator, combiner);
+        return new Accumulable<>(initialValue, false, accumulationValue, accumulator, combiner);
     }
 
     public final void accumulate(T elt) {
