@@ -75,12 +75,13 @@ public final class Wire<T> {
         BinaryOperator<T> accumulator,
         T identity
     ) {
-        if(anyWireIsFloating(inputs)) return Signal.none();
-
-        return Signal.mapAndReduce(
-            inputs.stream().map(Wire::getSignal),
-            accumulationValue, accumulator, identity
-        );
+        return anyWireIsFloating(inputs) ?
+            Signal.none() :
+            Signal.mapAndReduce(
+                inputs.stream().map(Wire::getSignal),
+                accumulationValue, accumulator, identity
+            )
+        ;
     }
 
     /**
@@ -100,12 +101,13 @@ public final class Wire<T> {
         Collection<Wire<O>> inputs,
         Collector<O, ?, T> collector
     ) {
-        if(anyWireIsFloating(inputs)) return Signal.none();
-
-        return Signal.collect(
-            inputs.stream().map(Wire::getSignal),
-            collector
-        );
+        return anyWireIsFloating(inputs) ? 
+            Signal.none() :
+            Signal.collect(
+                inputs.stream().map(Wire::getSignal),
+                collector
+            )
+        ;
     }
 
     private static <O> boolean anyWireIsFloating(Collection<Wire<O>> inputs) {
