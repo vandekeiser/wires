@@ -79,10 +79,7 @@ public abstract class Box {
         }
 
         public final ObservedAndTargetWiresCaptured<O, T> set(Wire<T> target) {
-            return new ObservedAndTargetWiresCaptured<>(
-                observed,
-                requireNonNull(target)
-            );
+            return new ObservedAndTargetWiresCaptured<>(observed, requireNonNull(target));
         }
     }
 
@@ -98,9 +95,7 @@ public abstract class Box {
         }
 
         public final Applying<O, T> toResultOfApplying() {
-            return new Applying<>(
-                observed, target
-            );
+            return new Applying<>(observed, target);
         }
 
         public final InputsAndOutputCaptured<O, T> from(Collection<Wire<O>> inputs) {
@@ -184,9 +179,7 @@ public abstract class Box {
 
         public final Reducing<O, T> map(Function<O, T> accumulationValue) {
             return new Reducing<>(
-                observed,
-                target,
-                inputs,
+                observed, target, inputs,
                 requireNonNull(accumulationValue)
             );
         }
