@@ -1,5 +1,7 @@
 # Java port of the "Simulator for digital circuits" from SICP
 A Java port of the "Simulator for digital circuits" from SICP (Structure and Interpretation of Computer Programs).
+The full book is available online! https://mitpress.mit.edu/sicp/full-text/book/book.html
+Relevant chapter: https://mitpress.mit.edu/sicp/full-text/book/book-Z-H-22.html#%_sec_3.3.4
 
  
 See:
