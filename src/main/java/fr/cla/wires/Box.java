@@ -89,8 +89,7 @@ public abstract class Box {
 
 
 
-    protected class ObservedAndTargetWiresCaptured<O, T>
-    extends ObservedWireCaptured<O, T> {
+    protected class ObservedAndTargetWiresCaptured<O, T> extends ObservedWireCaptured<O, T> {
         final Wire<T> target;
 
         private ObservedAndTargetWiresCaptured(Wire<O> observed,Wire<T> target) {
@@ -114,8 +113,7 @@ public abstract class Box {
 
 
 
-    protected class Applying<O, T>
-    extends ObservedAndTargetWiresCaptured<O, T> {
+    protected class Applying<O, T> extends ObservedAndTargetWiresCaptured<O, T> {
         private Applying(Wire<O> observed, Wire<T> target) {
             super(observed, target);
         }
@@ -162,8 +160,7 @@ public abstract class Box {
 
 
 
-    protected class InputsAndOutputCaptured<O, T>
-    extends ObservedAndTargetWiresCaptured<O, T> {
+    protected class InputsAndOutputCaptured<O, T> extends ObservedAndTargetWiresCaptured<O, T> {
         final Collection<Wire<O>> inputs;
 
         private InputsAndOutputCaptured(
@@ -198,8 +195,7 @@ public abstract class Box {
 
 
 
-    protected class Reducing<O, T>
-    extends InputsAndOutputCaptured<O, T> {
+    protected class Reducing<O, T> extends InputsAndOutputCaptured<O, T> {
         private final Function<O, T> accumulationValue;
 
         private Reducing(
