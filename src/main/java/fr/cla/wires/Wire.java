@@ -79,9 +79,7 @@ public final class Wire<T> {
 
         return Signal.mapAndReduce(
             inputs.stream().map(Wire::getSignal),
-            accumulationValue,
-            accumulator,
-            identity
+            accumulationValue, accumulator, identity
         );
     }
 
