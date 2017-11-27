@@ -22,7 +22,6 @@ public class CounterTest {
     @Before public void setup() {
         out = Wire.make();
         clock = Clock.createTime();
-        //Counter.out(out).step(1L).initial(0L).time(clock);
         Counter.out(out).time(clock);
     }
 
@@ -62,6 +61,23 @@ public class CounterTest {
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.of(2L));
+        }
+    }
+    
+    @Test
+    public void should_not_overflow_silently() {
+        given: {
+            Counter.out(out).initial(Long.MAX_VALUE).step(1L).time(clock);
+        }
+        try {
+            when: {
+                clock.tick();
+            }
+        } catch (Counter.OverflowException expected) {
+            then: {
+                assertThat(expected.getCurrentCounter()).isEqualTo(Long.MAX_VALUE);
+                assertThat(expected.getAttemptedStep()).isEqualTo(1L);
+            }       
         }
     }
 
