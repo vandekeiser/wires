@@ -4,7 +4,6 @@ package fr.cla.wires.boxes.exampleusage.reentrant;
 import fr.cla.wires.Clock;
 import fr.cla.wires.Signal;
 import fr.cla.wires.Wire;
-import fr.cla.wires.boxes.exampleusage.basic.And;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,7 +22,8 @@ public class CounterTest {
     @Before public void setup() {
         out = Wire.make();
         clock = Clock.createTime();
-        Counter.step(1L).out(out).time(clock);
+        //Counter.out(out).step(1L).initial(0L).time(clock);
+        Counter.out(out).time(clock);
     }
 
     @Test
