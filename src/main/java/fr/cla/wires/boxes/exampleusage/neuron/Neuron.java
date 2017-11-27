@@ -1,4 +1,4 @@
-package fr.cla.wires.boxes.exampleusage.multipleinputs;
+package fr.cla.wires.boxes.exampleusage.neuron;
 
 import fr.cla.wires.Clock;
 import fr.cla.wires.Delay;
@@ -14,31 +14,32 @@ import static java.util.Objects.requireNonNull;
 
 //@formatter:off
 /**
- * An example usage of how to connect wires to boxes.
- * @see fr.cla.wires.boxes.exampleusage
+ * Start trying to implement a neural network on top of Boxes and Wires.
+ * (move to a separate Maven module once it reaches a sufficient size)
  */
-public class ReduceMultipleAnd extends ReduceHomogeneousInputs<Boolean, Boolean> {
+public class Neuron extends ReduceHomogeneousInputs<Double, Double> {
 
-    private ReduceMultipleAnd(List<Wire<Boolean>> ins, Wire<Boolean> out, Clock clock) {
+    private Neuron(List<Wire<Double>> ins, Wire<Double> out, Clock clock) {
         this(ins, out, clock, DEFAULT_DELAY);
     }
 
-    private ReduceMultipleAnd(List<Wire<Boolean>> ins, Wire<Boolean> out, Clock clock, Delay delay) {
+    private Neuron(List<Wire<Double>> ins, Wire<Double> out, Clock clock, Delay delay) {
         super(ins, out, clock, delay);
     }
 
-    @Override protected Function<Boolean, Boolean> accumulationValue() {
+    @Override protected Function<Double, Double> accumulationValue() {
+        //TODO use weights
         return Function.identity();
     }
-    @Override protected Boolean identity() {
-        return true;
+    @Override protected Double identity() {
+        return 0.0;
     }
-    @Override protected BinaryOperator<Boolean> accumulator() {
-        return this::and;
+    @Override protected BinaryOperator<Double> accumulator() {
+        return this::plus;
     }
 
-    private boolean and(boolean b1, boolean b2) {
-        return b1 && b2;
+    private double plus(double d1, double d2) {
+        return d1 + d2;
     }
 
     /**
@@ -51,12 +52,12 @@ public class ReduceMultipleAnd extends ReduceHomogeneousInputs<Boolean, Boolean>
      *
      * @return this Box, started.
      */
-    @Override protected ReduceMultipleAnd startup() {
+    @Override protected Neuron startup() {
         super.startup();
         return this;
     }
 
-    public static Builder ins(List<Wire<Boolean>> ins) {
+    public static Builder ins(List<Wire<Double>> ins) {
         return new Builder(checkNoNulls(ins));
     }
 
@@ -64,21 +65,21 @@ public class ReduceMultipleAnd extends ReduceHomogeneousInputs<Boolean, Boolean>
 
 
     public static class Builder {
-        private List<Wire<Boolean>> ins;
-        private Wire<Boolean> out;
+        private List<Wire<Double>> ins;
+        private Wire<Double> out;
 
-        private Builder(List<Wire<Boolean>> ins) {
+        private Builder(List<Wire<Double>> ins) {
             this.ins = checkNoNulls(ins);
         }
 
-        public Builder out(Wire<Boolean> out) {
+        public Builder out(Wire<Double> out) {
             this.out = requireNonNull(out);
             return this;
         }
 
-        public ReduceMultipleAnd time(Clock clock) {
+        public Neuron time(Clock clock) {
             Clock _clock = requireNonNull(clock);
-            return new ReduceMultipleAnd(ins, out, _clock).startup();
+            return new Neuron(ins, out, _clock).startup();
         }
     }
 

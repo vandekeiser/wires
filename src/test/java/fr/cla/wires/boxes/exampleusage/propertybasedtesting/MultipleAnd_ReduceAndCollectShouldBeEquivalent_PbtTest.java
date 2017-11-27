@@ -34,7 +34,7 @@ public class MultipleAnd_ReduceAndCollectShouldBeEquivalent_PbtTest {
 //    private static final int TRIALS = 100_000; //Checked: passes
     private static final int TRIALS = 1_000;
 
-    private Set<Wire<Boolean>> ins;
+    private List<Wire<Boolean>> ins;
     private Wire<Boolean> collectOut, reduceOut;
     private Clock clock;
 
@@ -47,7 +47,7 @@ public class MultipleAnd_ReduceAndCollectShouldBeEquivalent_PbtTest {
             "multiplicity must be <= %d, was %d",
             MULTIPLICITY, multiplicity
         ));
-        ins = Stream.generate(() -> Wire.<Boolean>make()).limit(multiplicity).collect(toSet());
+        ins = Stream.generate(() -> Wire.<Boolean>make()).limit(multiplicity).collect(toList());
         collectOut = Wire.make();
         reduceOut = Wire.make();
         clock = Clock.createTime();

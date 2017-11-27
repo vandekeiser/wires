@@ -5,6 +5,7 @@ import fr.cla.wires.Delay;
 import fr.cla.wires.Wire;
 import fr.cla.wires.boxes.CollectHomogeneousInputsToOutputOfSameType;
 
+import java.util.List;
 import java.util.Set;
 import java.util.function.BinaryOperator;
 
@@ -64,14 +65,14 @@ extends CollectHomogeneousInputsToOutputOfSameType<Boolean> {
      * @return a started Box.
      */
     public static SimpleCollectMultipleAnd create(
-        Set<Wire<Boolean>> ins, Wire<Boolean> out, Clock clock
+        List<Wire<Boolean>> ins, Wire<Boolean> out, Clock clock
     ) {
         SimpleCollectMultipleAnd gate = new SimpleCollectMultipleAnd(ins, out, clock, DEFAULT_DELAY);
         gate.startup();
         return gate;
     }
 
-    private SimpleCollectMultipleAnd(Set<Wire<Boolean>> ins, Wire<Boolean> out, Clock clock, Delay delay) {
+    private SimpleCollectMultipleAnd(List<Wire<Boolean>> ins, Wire<Boolean> out, Clock clock, Delay delay) {
         super(ins, out, clock, delay);
     }
 //-------------Builder section of the class-------------^^^^^^^^^^^^^^^^^^^

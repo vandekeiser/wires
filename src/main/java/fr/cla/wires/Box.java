@@ -1,9 +1,6 @@
 package fr.cla.wires;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
@@ -48,12 +45,11 @@ public abstract class Box {
      */
     protected abstract Box startup();
 
-    protected static <O> Set<Wire<O>> checkNoNulls(Set<Wire<O>> inputs) {
-        inputs = new HashSet<>(requireNonNull(inputs));
+    protected static <O> List<Wire<O>> checkNoNulls(Collection<Wire<O>> inputs) {
         if(inputs.stream().anyMatch(Objects::isNull)) {
             throw new NullPointerException("Detected null wires in " + inputs);
         }
-        return inputs;
+        return new ArrayList<>(requireNonNull(inputs));
     }
 
 

@@ -7,9 +7,11 @@ import fr.cla.wires.Wire;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CollectMultipleAndTest {
 
     private static final int MULTIPLICITY = 100;
-    private Set<Wire<Boolean>> ins;
+    private List<Wire<Boolean>> ins;
     private Wire<Boolean> out;
     private Clock clock;
 
@@ -31,7 +33,7 @@ public class CollectMultipleAndTest {
     }
 
     private void setup(long multiplicity) {
-        ins = Stream.generate(() -> Wire.<Boolean>make()).limit(multiplicity).collect(toSet());
+        ins = Stream.generate(() -> Wire.<Boolean>make()).limit(multiplicity).collect(toList());
         out = Wire.make();
         clock = Clock.createTime();
         CollectMultipleAnd.ins(ins).out(out).time(clock);

@@ -5,6 +5,7 @@ import fr.cla.wires.Delay;
 import fr.cla.wires.Wire;
 import fr.cla.wires.boxes.CollectHomogeneousInputsToOutputOfSameType;
 
+import java.util.List;
 import java.util.Set;
 import java.util.function.BinaryOperator;
 
@@ -18,11 +19,11 @@ import static java.util.Objects.requireNonNull;
 public final class CollectMultipleAnd
 extends CollectHomogeneousInputsToOutputOfSameType<Boolean> {
 
-    private CollectMultipleAnd(Set<Wire<Boolean>> ins, Wire<Boolean> out, Clock clock) {
+    private CollectMultipleAnd(List<Wire<Boolean>> ins, Wire<Boolean> out, Clock clock) {
         this(ins, out, clock, DEFAULT_DELAY);
     }
 
-    private CollectMultipleAnd(Set<Wire<Boolean>> ins, Wire<Boolean> out, Clock clock, Delay delay) {
+    private CollectMultipleAnd(List<Wire<Boolean>> ins, Wire<Boolean> out, Clock clock, Delay delay) {
         super(ins, out, clock, delay);
     }
 
@@ -49,17 +50,17 @@ extends CollectHomogeneousInputsToOutputOfSameType<Boolean> {
         return this;
     }
 
-    public static Builder ins(Set<Wire<Boolean>> ins) {
+    public static Builder ins(List<Wire<Boolean>> ins) {
         return new Builder(checkNoNulls(ins));
     }
 
 
 
     public static class Builder {
-        private Set<Wire<Boolean>> ins;
+        private List<Wire<Boolean>> ins;
         private Wire<Boolean> out;
 
-        private Builder(Set<Wire<Boolean>> ins) {
+        private Builder(List<Wire<Boolean>> ins) {
             this.ins = checkNoNulls(ins);
         }
 

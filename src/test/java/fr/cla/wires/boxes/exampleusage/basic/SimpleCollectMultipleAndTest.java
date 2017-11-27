@@ -8,9 +8,11 @@ import fr.cla.wires.boxes.exampleusage.multipleinputs.SimpleCollectMultipleAnd;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SimpleCollectMultipleAndTest {
 
     private static final int MULTIPLICITY = 100;
-    private Set<Wire<Boolean>> ins;
+    private List<Wire<Boolean>> ins;
     private Wire<Boolean> out;
     private Clock clock;
 
@@ -32,7 +34,7 @@ public class SimpleCollectMultipleAndTest {
     }
 
     private void setup(long multiplicity) {
-        ins = Stream.generate(() -> Wire.<Boolean>make()).limit(multiplicity).collect(toSet());
+        ins = Stream.generate(() -> Wire.<Boolean>make()).limit(multiplicity).collect(toList());
         out = Wire.make();
         clock = Clock.createTime();
         SimpleCollectMultipleAnd.create(ins, out, clock);

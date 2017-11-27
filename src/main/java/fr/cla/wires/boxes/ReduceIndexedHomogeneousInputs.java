@@ -13,22 +13,21 @@ import java.util.function.Function;
 import static java.util.Objects.requireNonNull;
 
 //TODO: refact as extending CollectHomogeneousInputs (accumulator->collector)
-
 /**
  * TODO javadoc in same style as CollectHomogeneousInputsToOutputOfSameType
  */
 //@formatter:off
-public abstract class ReduceHomogeneousInputs<O, T>
+public abstract class ReduceIndexedHomogeneousInputs<O, T>
 extends Box {
 
     private final List<Wire<O>> ins;
     private final Wire<T> out;
 
-    protected ReduceHomogeneousInputs(List<Wire<O>> ins, Wire<T> out, Clock clock) {
+    protected ReduceIndexedHomogeneousInputs(List<Wire<O>> ins, Wire<T> out, Clock clock) {
         this(ins, out, clock, DEFAULT_DELAY);
     }
 
-    protected ReduceHomogeneousInputs(List<Wire<O>> ins, Wire<T> out, Clock clock, Delay delay) {
+    protected ReduceIndexedHomogeneousInputs(List<Wire<O>> ins, Wire<T> out, Clock clock, Delay delay) {
         super(clock, delay);
         this.ins = checkNoNulls(ins);
         this.out = requireNonNull(out);
@@ -44,7 +43,7 @@ extends Box {
      *
      * @return this Box, started.
      */
-    protected ReduceHomogeneousInputs<O, T> startup() {
+    protected ReduceIndexedHomogeneousInputs<O, T> startup() {
         ins.forEach(this::startup);
         return this;
     }
