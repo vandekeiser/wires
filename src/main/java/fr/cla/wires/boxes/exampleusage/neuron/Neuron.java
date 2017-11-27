@@ -4,6 +4,7 @@ import fr.cla.wires.Clock;
 import fr.cla.wires.Delay;
 import fr.cla.wires.Wire;
 import fr.cla.wires.boxes.ReduceHomogeneousInputs;
+import fr.cla.wires.boxes.ReduceIndexedHomogeneousInputs;
 
 import java.util.List;
 import java.util.Set;
@@ -13,11 +14,12 @@ import java.util.function.Function;
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off
+//WIP
 /**
  * Start trying to implement a neural network on top of Boxes and Wires.
  * (move to a separate Maven module once it reaches a sufficient size)
  */
-public class Neuron extends ReduceHomogeneousInputs<Double, Double> {
+public class Neuron extends ReduceIndexedHomogeneousInputs<Double, Double> {
 
     private Neuron(List<Wire<Double>> ins, Wire<Double> out, Clock clock) {
         this(ins, out, clock, DEFAULT_DELAY);

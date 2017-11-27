@@ -12,11 +12,13 @@ import java.util.function.Function;
 
 import static java.util.Objects.requireNonNull;
 
-//TODO: refact as extending CollectHomogeneousInputs (accumulator->collector)
-/**
- * TODO javadoc in same style as CollectHomogeneousInputsToOutputOfSameType
- */
 //@formatter:off
+
+/**
+ * Try this abstraction to take index into account for neural networks (use weigth matrix).
+ * @param <O>
+ * @param <T>
+ */
 public abstract class ReduceIndexedHomogeneousInputs<O, T>
 extends Box {
 
