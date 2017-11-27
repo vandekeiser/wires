@@ -15,6 +15,7 @@ public final class Counter extends Box {
         DEFAULT_INITIAL = 0L,
         DEFAULT_STEP = 1L
     ;
+
     private final long initial;
     private final Wire<Long> step, out;
 
