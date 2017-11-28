@@ -23,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CollectMultipleAndTest {
 
     private static final int MULTIPLICITY = 100;
+
     private List<Wire<Boolean>> ins;
     private Wire<Boolean> out;
     private Clock clock;
