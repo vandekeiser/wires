@@ -1,7 +1,10 @@
 package fr.cla.wires;
 
+import fr.cla.support.functional.Indexed;
+
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
@@ -78,6 +81,21 @@ public final class Wire<T> {
         return anyWireIsFloating(inputs) ?
             Signal.none() :
             Signal.mapAndReduce(
+                inputs.stream().map(Wire::getSignal),
+                accumulationValue, accumulator, identity
+            )
+        ;
+    }
+
+    public static <T, O> Signal<T> mapAndReduceIndexed(
+        List<Wire<O>> inputs,
+        Function<Indexed<O>, T> accumulationValue,
+        BinaryOperator<T> accumulator,
+        T identity
+    ) {
+        return anyWireIsFloating(inputs) ?
+            Signal.none() :
+            Signal.mapAndReduceIndexed(
                 inputs.stream().map(Wire::getSignal),
                 accumulationValue, accumulator, identity
             )

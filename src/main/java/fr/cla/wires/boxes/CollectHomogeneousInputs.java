@@ -1,7 +1,7 @@
 package fr.cla.wires.boxes;
 
-import fr.cla.support.Accumulable;
-import fr.cla.support.Mutable;
+import fr.cla.support.oo.Accumulable;
+import fr.cla.support.oo.Mutable;
 import fr.cla.wires.Box;
 import fr.cla.wires.Clock;
 import fr.cla.wires.Delay;
@@ -39,7 +39,7 @@ extends Box {
 
     protected CollectHomogeneousInputs(List<Wire<O>> ins, Wire<T> out, Clock clock, Delay delay) {
         super(clock, delay);
-        this.ins = checkNoNulls(ins);
+        this.ins = checkedNoNulls(ins);
         this.out = requireNonNull(out);
     }
 

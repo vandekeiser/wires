@@ -6,7 +6,6 @@ import fr.cla.wires.Delay;
 import fr.cla.wires.Wire;
 
 import java.util.List;
-import java.util.Set;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 
@@ -30,7 +29,7 @@ extends Box {
 
     protected ReduceHomogeneousInputs(List<Wire<O>> ins, Wire<T> out, Clock clock, Delay delay) {
         super(clock, delay);
-        this.ins = checkNoNulls(ins);
+        this.ins = checkedNoNulls(ins);
         this.out = requireNonNull(out);
     }
 

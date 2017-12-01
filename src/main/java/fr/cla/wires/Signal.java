@@ -1,6 +1,8 @@
 package fr.cla.wires;
 
-import fr.cla.support.AbstractValueObject;
+import fr.cla.support.oo.AbstractValueObject;
+import fr.cla.support.functional.Indexed;
+import fr.cla.support.functional.Streams;
 
 import java.util.List;
 import java.util.Optional;
@@ -91,6 +93,20 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
             .map(Optional::get)
             .map(accumulationValue)
             .reduce(identity, accumulator)
+        );
+    }
+
+    static <O, T> Signal<T> mapAndReduceIndexed(
+        Stream<Signal<O>> inputs,
+        Function<Indexed<O>, T> accumulationValue,
+        BinaryOperator<T> accumulator,
+        T identity
+    ) {
+        Stream<O> values = inputs.map(Signal::value).map(Optional::get);
+        Stream<Indexed<O>> indexedValues = Streams.index(values);
+        Stream<T> accumulationValues = indexedValues.map(accumulationValue);
+        return Signal.of(
+            accumulationValues.reduce(identity, accumulator)
         );
     }
 

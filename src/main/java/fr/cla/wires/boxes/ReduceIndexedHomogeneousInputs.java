@@ -1,12 +1,12 @@
 package fr.cla.wires.boxes;
 
+import fr.cla.support.functional.Indexed;
 import fr.cla.wires.Box;
 import fr.cla.wires.Clock;
 import fr.cla.wires.Delay;
 import fr.cla.wires.Wire;
 
 import java.util.List;
-import java.util.Set;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 
@@ -16,10 +16,11 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * Try this abstraction to take index into account for neural networks (use weigth matrix).
- * @param <O>
- * @param <T>
+ * @param <O> Same as in Box
+ * @param <T> Same as in Box
+ * @param <I> Same as in Box
  */
-public abstract class ReduceIndexedHomogeneousInputs<O, T>
+public abstract class ReduceIndexedHomogeneousInputs<O, T, I>
 extends Box {
 
     private final List<Wire<O>> ins;
@@ -31,7 +32,7 @@ extends Box {
 
     protected ReduceIndexedHomogeneousInputs(List<Wire<O>> ins, Wire<T> out, Clock clock, Delay delay) {
         super(clock, delay);
-        this.ins = checkNoNulls(ins);
+        this.ins = checkedNoNulls(ins);
         this.out = requireNonNull(out);
     }
 
@@ -45,7 +46,7 @@ extends Box {
      *
      * @return this Box, started.
      */
-    protected ReduceIndexedHomogeneousInputs<O, T> startup() {
+    protected ReduceIndexedHomogeneousInputs<O, T, I> startup() {
         ins.forEach(this::startup);
         return this;
     }
@@ -73,12 +74,12 @@ extends Box {
         this.<O, T>onSignalChanged(in)
             .set(out)
             .from(ins)
-            .map(accumulationValue())
+            .mapAndIndex(accumulationValue())
             .reduce(accumulator(), identity())
         ;
     }
 
-    protected abstract Function<O,T> accumulationValue();
+    protected abstract Function<Indexed<O>, T> accumulationValue();
     protected abstract BinaryOperator<T> accumulator();
     protected abstract T identity();
 

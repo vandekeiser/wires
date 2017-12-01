@@ -1,5 +1,7 @@
 package fr.cla.wires;
 
+import fr.cla.support.functional.Indexed;
+
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
@@ -45,11 +47,15 @@ public abstract class Box {
      */
     protected abstract Box startup();
 
-    protected static <O> List<Wire<O>> checkNoNulls(Collection<Wire<O>> inputs) {
+    /**
+     * @throws NullPointerException if the collection itself or any of its elements are null
+     * @return a defensive copy (to help implementors minimize mutability)
+     */
+    protected static <O> List<Wire<O>> checkedNoNulls(Collection<Wire<O>> inputs) {
         if(inputs.stream().anyMatch(Objects::isNull)) {
             throw new NullPointerException("Detected null wires in " + inputs);
         }
-        return new ArrayList<>(requireNonNull(inputs));
+        return new ArrayList<>(inputs);
     }
 
 
@@ -85,7 +91,7 @@ public abstract class Box {
     protected class ObservedAndTargetWiresCaptured<O, T> extends ObservedWireCaptured<O, T> {
         final Wire<T> target;
 
-        private ObservedAndTargetWiresCaptured(Wire<O> observed,Wire<T> target) {
+        private ObservedAndTargetWiresCaptured(Wire<O> observed, Wire<T> target) {
             super(observed);
             this.target = requireNonNull(target);
         }
@@ -94,7 +100,7 @@ public abstract class Box {
             return new Applying<>(observed, target);
         }
 
-        public final InputsAndOutputCaptured<O, T> from(Collection<Wire<O>> inputs) {
+        public final InputsAndOutputCaptured<O, T> from(List<Wire<O>> inputs) {
             return new InputsAndOutputCaptured<>(
                 observed, target, requireNonNull(inputs)
             );
@@ -152,15 +158,15 @@ public abstract class Box {
 
 
     protected class InputsAndOutputCaptured<O, T> extends ObservedAndTargetWiresCaptured<O, T> {
-        final Collection<Wire<O>> inputs;
+        final List<Wire<O>> inputs;
 
         private InputsAndOutputCaptured(
             Wire<O> observed,
             Wire<T> target,
-            Collection<Wire<O>> inputs
+            List<Wire<O>> inputs
         ) {
             super(observed, target);
-            this.inputs = new HashSet<>(inputs);
+            this.inputs = new ArrayList<>(inputs);
         }
 
         public final void collect(Collector<O, ?, T> collector) {
@@ -179,7 +185,43 @@ public abstract class Box {
                 requireNonNull(accumulationValue)
             );
         }
+
+        public final ReducingIndexed<O, T> mapAndIndex(Function<Indexed<O>, T> indexedAccumulationValue) {
+            return new ReducingIndexed<>(
+                observed, target, inputs,
+                requireNonNull(indexedAccumulationValue)
+            );
+        }
     }
+
+
+
+
+    protected class ReducingIndexed<O, T> extends InputsAndOutputCaptured<O, T> {
+        private final Function<Indexed<O>, T> accumulationValue;
+
+        private ReducingIndexed(
+            Wire<O> observed,
+            Wire<T> target,
+            List<Wire<O>> inputs,
+            Function<Indexed<O>, T> accumulationValue
+        ) {
+            super(observed, target, inputs);
+            this.accumulationValue = requireNonNull(accumulationValue);
+        }
+
+        public final void reduce(BinaryOperator<T> accumulator, T identity) {
+            BinaryOperator<T> _accumulator = requireNonNull(accumulator);
+            T _identity = requireNonNull(identity);
+
+            onSignalChanged(observed,
+                newIn -> target.setSignal(
+                    Wire.mapAndReduceIndexed(inputs, accumulationValue, _accumulator, _identity)
+                )
+            );
+        }
+    }
+
 
 
 
@@ -190,7 +232,7 @@ public abstract class Box {
         private Reducing(
             Wire<O> observed,
             Wire<T> target,
-            Collection<Wire<O>> inputs,
+            List<Wire<O>> inputs,
             Function<O, T> accumulationValue
         ) {
             super(observed, target, inputs);

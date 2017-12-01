@@ -6,7 +6,6 @@ import fr.cla.wires.Wire;
 import fr.cla.wires.boxes.ReduceHomogeneousInputs;
 
 import java.util.List;
-import java.util.Set;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 
@@ -57,7 +56,7 @@ public class ReduceMultipleAnd extends ReduceHomogeneousInputs<Boolean, Boolean>
     }
 
     public static Builder ins(List<Wire<Boolean>> ins) {
-        return new Builder(checkNoNulls(ins));
+        return new Builder(checkedNoNulls(ins));
     }
 
 
@@ -68,7 +67,7 @@ public class ReduceMultipleAnd extends ReduceHomogeneousInputs<Boolean, Boolean>
         private Wire<Boolean> out;
 
         private Builder(List<Wire<Boolean>> ins) {
-            this.ins = checkNoNulls(ins);
+            this.ins = checkedNoNulls(ins);
         }
 
         public Builder out(Wire<Boolean> out) {

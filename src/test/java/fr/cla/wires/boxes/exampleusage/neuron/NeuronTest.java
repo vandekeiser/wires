@@ -32,7 +32,7 @@ public class NeuronTest {
     //Neuronal parameters
     private double threshold;
     private int multiplicity;
-    private List<Signal<Double>> weigths;
+    private List<Double> weigths;
 
     @Before
     public void setup() {
@@ -43,14 +43,14 @@ public class NeuronTest {
         ins = Stream.generate(() -> Wire.<Double>make()).limit(multiplicity).collect(toList());
         out = Wire.make();
         clock = Clock.createTime();
-        Neuron.ins(ins).out(out).threshold(Neuron.DEFAULT_THRESHOLD).time(clock);
 
         //In this basic test, we don't care about big multiplicities.
         weigths = Stream.generate(() -> Synapse.DEFAULT_WEIGTH)
-            .map(Signal::of)
             .limit(multiplicity)
             .collect(toList())
         ;
+
+        Neuron.ins(ins).out(out).threshold(Neuron.DEFAULT_THRESHOLD).weigths(weigths).time(clock);
     }
 
     @Test
@@ -92,8 +92,8 @@ public class NeuronTest {
         ins.get(1).setSignal(Signal.of(0.4));
 
         //Given both weigths are 1.0
-        weigths.set(0, Signal.of(1.0));
-        weigths.set(1, Signal.of(1.0));
+        weigths.set(0, 1.0);
+        weigths.set(1, 1.0);
     }
 
 //    @Test
