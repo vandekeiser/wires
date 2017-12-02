@@ -143,6 +143,23 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
             .collect(collector)
         );
     }
+
+    static <O, T> Signal<T> collectIndexed(
+        Stream<Signal<O>> inputs,
+        Collector<Indexed<O>, ?, T> collector
+    ) {
+        Stream<O> values = inputs.map(Signal::value).map(Optional::get).peek(
+        v -> System.out.println("__________values: " + v)
+        );
+        Stream<Indexed<O>> indexedValues = Streams.index(values).peek(
+        v -> System.out.println("__________indexedValues: " + v)
+        );
+
+        return Signal.of(indexedValues
+            .collect(collector)
+        );
+    }
+
     //----------Functional methods to transform and/or aggregate Signals//----------^^^^^^^^^^
 
 }

@@ -65,31 +65,27 @@ extends Box {
     }
 
     private Collector<Indexed<O>, ?, T> collector() {
-        //TODO
-        /*return new CollectIndexedHomogeneousInputs.AccumulableCollector<>(
+        return new CollectIndexedHomogeneousInputs.AccumulableCollector<>(
            accumulationValue(), accumulator(), combiner()
-        );*/
-        return null;
+        );
     }
 
     protected abstract Function<Indexed<O>, T> accumulationValue();
-    //can this not be BiFunction<T, T, T>???
-    //pr debusquer le pb ecrire une boite Bool->Int
-    protected abstract BiFunction<T, O, T> accumulator();
+    protected abstract BiFunction<T, Indexed<O>, T> accumulator();
     protected abstract BinaryOperator<T> combiner();
 
 
 
 
     private static class AccumulableCollector<O, T>
-    implements Collector<O, Accumulable<T, O>, T> {
-        private final Function<O, T> accumulationValue;
-        private final BiFunction<T, O, T> accumulator;
+    implements Collector<Indexed<O>, Accumulable<T, Indexed<O>>, T> {
+        private final Function<Indexed<O>, T> accumulationValue;
+        private final BiFunction<T, Indexed<O>, T> accumulator;
         private final BinaryOperator<T> combiner;
 
         private AccumulableCollector(
-            Function<O, T> accumulationValue,
-            BiFunction<T, O, T> accumulator,
+            Function<Indexed<O>, T> accumulationValue,
+            BiFunction<T, Indexed<O>, T> accumulator,
             BinaryOperator<T> combiner
         )  {
             this.accumulationValue = requireNonNull(accumulationValue);
@@ -97,21 +93,21 @@ extends Box {
             this.combiner = requireNonNull(combiner);
         }
 
-        @Override public Supplier<Accumulable<T, O>> supplier() {
+        @Override public Supplier<Accumulable<T, Indexed<O>>> supplier() {
             return () -> Accumulable.initiallyEmpty(
                 accumulationValue, accumulator, combiner
             );
         }
 
-        @Override public BiConsumer<Accumulable<T, O>, O> accumulator() {
+        @Override public BiConsumer<Accumulable<T, Indexed<O>>, Indexed<O>> accumulator() {
             return Accumulable::accumulate;
         }
 
-        @Override public BinaryOperator<Accumulable<T, O>> combiner() {
+        @Override public BinaryOperator<Accumulable<T, Indexed<O>>> combiner() {
             return Accumulable::combine;
         }
 
-        @Override public Function<Accumulable<T, O>, T> finisher() {
+        @Override public Function<Accumulable<T, Indexed<O>>, T> finisher() {
             return Mutable::get;
         }
 

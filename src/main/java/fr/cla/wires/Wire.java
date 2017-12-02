@@ -128,6 +128,19 @@ public final class Wire<T> {
         ;
     }
 
+    public static <T, O> Signal<T> collectIndexed(
+        List<Wire<O>> inputs,
+        Collector<Indexed<O>, ?, T> collector
+    ) {
+        return anyWireIsFloating(inputs) ?
+            Signal.none() :
+            Signal.collectIndexed(
+                inputs.stream().map(Wire::getSignal),
+                collector
+            )
+        ;
+    }
+
     private static <O> boolean anyWireIsFloating(Collection<Wire<O>> inputs) {
         return inputs.stream().map(Wire::getSignal).anyMatch(Signal.none()::equals);
     }

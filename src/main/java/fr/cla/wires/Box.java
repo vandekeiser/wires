@@ -193,8 +193,14 @@ public abstract class Box {
             );
         }
 
-        public final CollectingIndexed<O, T> collectIndexed(Collector<Indexed<O>, ?, T> collector) {
-            return null;
+        public final void collectIndexed(Collector<Indexed<O>, ?, T> collector) {
+            Collector<Indexed<O>, ?, T> _collector = requireNonNull(collector);
+
+            onSignalChanged(observed,
+                newIn -> target.setSignal(
+                    Wire.collectIndexed(inputs, _collector)
+                )
+            );
         }
     }
 
@@ -225,35 +231,6 @@ public abstract class Box {
             );
         }
     }
-
-
-
-
-    protected class CollectingIndexed<O, T> extends InputsAndOutputCaptured<O, T> {
-        private final Function<Indexed<O>, T> accumulationValue;
-
-        private CollectingIndexed(
-            Wire<O> observed,
-            Wire<T> target,
-            List<Wire<O>> inputs,
-            Function<Indexed<O>, T> accumulationValue
-        ) {
-            super(observed, target, inputs);
-            this.accumulationValue = requireNonNull(accumulationValue);
-        }
-
-        public final void reduce(BinaryOperator<T> accumulator, T identity) {
-            BinaryOperator<T> _accumulator = requireNonNull(accumulator);
-            T _identity = requireNonNull(identity);
-
-            onSignalChanged(observed,
-                newIn -> target.setSignal(
-                    Wire.mapAndReduceIndexed(inputs, accumulationValue, _accumulator, _identity)
-                )
-            );
-        }
-    }
-
 
 
 
