@@ -74,7 +74,7 @@ extends Box {
         this.<O, T>onSignalChanged(in)
             .set(out)
             .from(ins)
-            .mapAndIndex(accumulationValue())
+            .mapIndexed(accumulationValue())
             .reduce(accumulator(), identity())
         ;
     }

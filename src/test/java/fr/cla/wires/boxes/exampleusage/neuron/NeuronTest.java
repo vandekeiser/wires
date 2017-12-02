@@ -6,6 +6,7 @@ import fr.cla.wires.Signal;
 import fr.cla.wires.Wire;
 import fr.cla.wires.boxes.exampleusage.multipleinputs.ReduceMultipleAnd;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class NeuronTest {
             .collect(toList())
         ;
 
-        Neuron.ins(ins).out(out).threshold(Neuron.DEFAULT_THRESHOLD).weigths(weigths).time(clock);
+        Neuron.ins(ins).out(out).threshold(threshold).weigths(weigths).time(clock);
     }
 
     @Test
@@ -79,6 +80,20 @@ public class NeuronTest {
         }
     }
 
+    @Ignore //TODO
+    @Test
+    public void Given_threshold_is_reached_Then_output_should_be_1() {
+        given: {
+            threshold_is_reached();
+        }
+        when: {
+            clock.tick();
+        }
+        then: {
+            assertThat(out.getSignal()).isEqualTo(Signal.of(1.0));
+        }
+    }
+
     private void threshold_is_not_reached() {
         //Given threshold is 1.0
         threshold = 1.0;
@@ -90,6 +105,23 @@ public class NeuronTest {
         //Given inputs are 0.5 and 0.4
         ins.get(0).setSignal(Signal.of(0.5));
         ins.get(1).setSignal(Signal.of(0.4));
+
+        //Given both weigths are 1.0
+        weigths.set(0, 1.0);
+        weigths.set(1, 1.0);
+    }
+
+    private void threshold_is_reached() {
+        //Given threshold is 1.0
+        threshold = 1.0;
+
+        //Given there are 2 inputs
+        multiplicity = 2;
+        setup(multiplicity);
+
+        //Given inputs are 0.5 and 0.4
+        ins.get(0).setSignal(Signal.of(0.5));
+        ins.get(1).setSignal(Signal.of(0.6));
 
         //Given both weigths are 1.0
         weigths.set(0, 1.0);

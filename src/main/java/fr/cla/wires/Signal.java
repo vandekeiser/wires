@@ -102,9 +102,19 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         BinaryOperator<T> accumulator,
         T identity
     ) {
-        Stream<O> values = inputs.map(Signal::value).map(Optional::get);
-        Stream<Indexed<O>> indexedValues = Streams.index(values);
-        Stream<T> accumulationValues = indexedValues.map(accumulationValue);
+        //TODO remove
+        Stream<O> values = inputs.map(Signal::value).map(Optional::get).peek(
+            v -> System.out.println("__________values: " + v)
+        );
+        Stream<Indexed<O>> indexedValues = Streams.index(values).peek(
+            v -> System.out.println("__________indexedValues: " + v)
+        );
+        Stream<T> accumulationValues = indexedValues.map(accumulationValue).peek(
+            v -> System.out.println("__________accumulationValues: " + v)
+        );
+//        System.out.println("__________reduce: " + Signal.of(
+//            accumulationValues.reduce(identity, accumulator)
+//        ));
         return Signal.of(
             accumulationValues.reduce(identity, accumulator)
         );

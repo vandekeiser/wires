@@ -35,12 +35,12 @@ public class Neuron extends ReduceIndexedHomogeneousInputs<Double, Double, Long>
         this.threshold = threshold;
         this.weigths = new ArrayList<>(weigths);
     }
-//Function<Indexed<O>, T>
+
     @Override protected Function<Indexed<Double>, Double> accumulationValue() {
         return indexed -> {
-            long index = indexed.getIndex();
+            int index = indexed.getIndex();
             double value = indexed.getValue();
-            return value;
+            return value * weigths.get(index);
         };
     }
     @Override protected Double identity() {

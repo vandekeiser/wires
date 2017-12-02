@@ -3,6 +3,7 @@ package fr.cla.support.functional;
 import java.util.Spliterator;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -18,7 +19,7 @@ public class Streams {
      */
     public static <T> Stream<Indexed<T>> index(Stream<T> source) {
         return zip(
-            indices().mapToObj(Long::valueOf),
+            indices().mapToObj(Integer::valueOf),
             source,
             Indexed::index
         ).onClose(source::close);
@@ -29,8 +30,8 @@ public class Streams {
      * for use as indices.
      * @return A stream of longs.
      */
-    private static LongStream indices() {
-        return LongStream.iterate(0L, l -> l + 1);
+    private static IntStream indices() {
+        return IntStream.iterate(0, i -> i + 1);
     }
 
     /**

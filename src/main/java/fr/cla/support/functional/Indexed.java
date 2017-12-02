@@ -17,14 +17,14 @@ public final class Indexed<T> {
      * @param <T> The type of the value.
      * @return The indexed value.
      */
-    public static <T> Indexed<T> index(long index, T value) {
+    public static <T> Indexed<T> index(int index, T value) {
         return new Indexed<>(index, value);
     }
 
-    private final long index;
+    private final int index;
     private final T value;
 
-    private Indexed(long index, T value) {
+    private Indexed(int index, T value) {
         this.index = index;
         this.value = value;
     }
@@ -32,7 +32,7 @@ public final class Indexed<T> {
     /**
      * @return The indexed value.
      */
-    public long getIndex() {
+    public int getIndex() {
         return index;
     }
 
