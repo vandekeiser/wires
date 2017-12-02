@@ -118,9 +118,9 @@ public class NeuronTest {
         multiplicity = 2;
         setup(multiplicity);
 
-        //Given inputs are 0.5 and 0.4
+        //Given inputs are 0.5 and 0.5
         ins.get(0).setSignal(Signal.of(0.5));
-        ins.get(1).setSignal(Signal.of(0.6));
+        ins.get(1).setSignal(Signal.of(0.500000000000001));
 
         //Given both weigths are 1.0
         weigths.set(0, 1.0);
