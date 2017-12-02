@@ -5,7 +5,6 @@ import fr.cla.wires.Clock;
 import fr.cla.wires.Delay;
 import fr.cla.wires.Wire;
 import fr.cla.wires.boxes.CollectIndexedHomogeneousInputs;
-import fr.cla.wires.boxes.ReduceIndexedHomogeneousInputs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,11 +27,11 @@ public class Neuron extends CollectIndexedHomogeneousInputs<Double, Double, Long
     private final double threshold;
     private final List<Double> weigths;
 
-    private Neuron(List<Wire<Double>> ins, Wire<Double> out, double threshold, List<Double> weigths, Clock clock) {
+    protected Neuron(List<Wire<Double>> ins, Wire<Double> out, double threshold, List<Double> weigths, Clock clock) {
         this(ins, out, threshold, weigths, clock, DEFAULT_DELAY);
     }
 
-    private Neuron(List<Wire<Double>> ins, Wire<Double> out, double threshold, List<Double> weigths, Clock clock, Delay delay) {
+    protected Neuron(List<Wire<Double>> ins, Wire<Double> out, double threshold, List<Double> weigths, Clock clock, Delay delay) {
         super(ins, out, clock, delay);
         this.threshold = threshold;
         this.weigths = new ArrayList<>(weigths);
