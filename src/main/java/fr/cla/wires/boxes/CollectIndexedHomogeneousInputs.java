@@ -66,31 +66,36 @@ extends Box {
 
     private Collector<Indexed<O>, ?, T> collector() {
         return new CollectIndexedHomogeneousInputs.AccumulableCollector<>(
-           accumulationValue(), accumulator(), combiner()
+           accumulationValue(), accumulator(), combiner(), finisher()
         );
     }
 
     protected abstract Function<Indexed<O>, T> accumulationValue();
     protected abstract BiFunction<T, Indexed<O>, T> accumulator();
     protected abstract BinaryOperator<T> combiner();
+    protected abstract Function<T, T> finisher();
 
 
 
 
     private static class AccumulableCollector<O, T>
     implements Collector<Indexed<O>, Accumulable<T, Indexed<O>>, T> {
+        private final Function<Accumulable<T, Indexed<O>>, T> getAccumulated = Mutable::get;
         private final Function<Indexed<O>, T> accumulationValue;
         private final BiFunction<T, Indexed<O>, T> accumulator;
         private final BinaryOperator<T> combiner;
+        private final Function<T, T> finisher;
 
         private AccumulableCollector(
             Function<Indexed<O>, T> accumulationValue,
             BiFunction<T, Indexed<O>, T> accumulator,
-            BinaryOperator<T> combiner
+            BinaryOperator<T> combiner,
+            Function<T, T> finisher
         )  {
             this.accumulationValue = requireNonNull(accumulationValue);
             this.accumulator = requireNonNull(accumulator);
             this.combiner = requireNonNull(combiner);
+            this.finisher = requireNonNull(finisher);
         }
 
         @Override public Supplier<Accumulable<T, Indexed<O>>> supplier() {
@@ -108,7 +113,7 @@ extends Box {
         }
 
         @Override public Function<Accumulable<T, Indexed<O>>, T> finisher() {
-            return Mutable::get;
+            return getAccumulated.andThen(finisher);
         }
 
         @Override public Set<Characteristics> characteristics() {

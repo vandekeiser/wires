@@ -80,7 +80,6 @@ public class NeuronTest {
         }
     }
 
-    @Ignore //TODO
     @Test
     public void Given_threshold_is_reached_Then_output_should_be_1() {
         given: {

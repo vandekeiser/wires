@@ -4,10 +4,12 @@ import fr.cla.support.functional.Indexed;
 import fr.cla.wires.Clock;
 import fr.cla.wires.Delay;
 import fr.cla.wires.Wire;
+import fr.cla.wires.boxes.CollectIndexedHomogeneousInputs;
 import fr.cla.wires.boxes.ReduceIndexedHomogeneousInputs;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 
@@ -19,7 +21,7 @@ import static java.util.Objects.requireNonNull;
  * Start trying to implement a neural network on top of Boxes and Wires.
  * (move to a separate Maven module once it reaches a sufficient size)
  */
-public class Neuron extends ReduceIndexedHomogeneousInputs<Double, Double, Long> {
+public class Neuron extends CollectIndexedHomogeneousInputs<Double, Double, Long> {
 
     public static final Double DEFAULT_THRESHOLD = 1.0;
 
@@ -43,16 +45,28 @@ public class Neuron extends ReduceIndexedHomogeneousInputs<Double, Double, Long>
             return value * weigths.get(index);
         };
     }
-    @Override protected Double identity() {
-        return 0.0;
+
+    @Override
+    protected BiFunction<Double, Indexed<Double>, Double> accumulator() {
+        //should be factored into Accumulable
+        return (acc, indexed) -> {
+            double added = accumulationValue().apply(indexed);
+            return combiner().apply(acc , added);
+        };
     }
-    @Override protected BinaryOperator<Double> accumulator() {
+
+    @Override
+    protected BinaryOperator<Double> combiner() {
         return this::plus;
     }
 
+    @Override
+    protected Function<Double, Double> finisher() {
+        return potential -> potential > threshold ? 1.0 : 0.0;
+    }
+
     private double plus(double d1, double d2) {
-        double potential = d1 + d2;
-        return potential > threshold ? 1.0 : 0.0;
+        return d1 + d2;
     }
 
     /**
