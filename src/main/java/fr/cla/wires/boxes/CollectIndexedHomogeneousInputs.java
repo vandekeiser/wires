@@ -41,8 +41,8 @@ extends Box {
 
     protected CollectIndexedHomogeneousInputs(List<Wire<O>> ins, List<Wire<T>> outs, Clock clock, Delay delay) {
         super(clock, delay);
-        this.ins = checkedNoNulls(ins);
-        this.outs = checkedNoNulls(outs);
+        this.ins = checkNoNulls(ins);
+        this.outs = checkNoNulls(outs);
     }
 
 

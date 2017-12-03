@@ -29,7 +29,7 @@ extends Box {
 
     protected ReduceHomogeneousInputs(List<Wire<O>> ins, Wire<T> out, Clock clock, Delay delay) {
         super(clock, delay);
-        this.ins = checkedNoNulls(ins);
+        this.ins = checkNoNulls(ins);
         this.out = requireNonNull(out);
     }
 

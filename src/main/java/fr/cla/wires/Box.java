@@ -51,7 +51,7 @@ public abstract class Box {
      * @throws NullPointerException if the collection itself or any of its elements are null
      * @return a defensive copy (to help implementors minimize mutability)
      */
-    protected static <O> List<Wire<O>> checkedNoNulls(Collection<Wire<O>> inputs) {
+    protected static <X> List<X> checkNoNulls(Collection<X> inputs) {
         if(inputs.stream().anyMatch(Objects::isNull)) {
             throw new NullPointerException("Detected null wires in " + inputs);
         }

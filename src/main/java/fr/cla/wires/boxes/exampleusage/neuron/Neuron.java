@@ -90,7 +90,7 @@ public class Neuron extends CollectIndexedHomogeneousInputs<Double, Double, Long
     }
 
     public static Builder ins(List<Wire<Double>> ins) {
-        return new Builder(checkedNoNulls(ins));
+        return new Builder(checkNoNulls(ins));
     }
 
 
@@ -103,7 +103,7 @@ public class Neuron extends CollectIndexedHomogeneousInputs<Double, Double, Long
         private List<Double> weigths;
 
         private Builder(List<Wire<Double>> ins) {
-            this.ins = checkedNoNulls(ins);
+            this.ins = checkNoNulls(ins);
         }
 
         public Builder out(Wire<Double> out) {
@@ -134,7 +134,7 @@ public class Neuron extends CollectIndexedHomogeneousInputs<Double, Double, Long
 
     private static List<Double> validateWeigths(List<Double> weigths) {
         //TODO
-        return new ArrayList<>(weigths);
+        return checkNoNulls(weigths);
     }
 
 }
