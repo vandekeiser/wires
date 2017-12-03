@@ -37,6 +37,12 @@ public class Neuron extends CollectIndexedHomogeneousInputs<Double, Double, Long
         this.weigths = new ArrayList<>(weigths);
     }
 
+    protected Neuron(List<Wire<Double>> ins, List<Wire<Double>> outs, double threshold, List<Double> weigths, Clock clock, Delay delay) {
+        super(ins, outs, clock, delay);
+        this.threshold = threshold;
+        this.weigths = new ArrayList<>(weigths);
+    }
+
     @Override protected Function<Indexed<Double>, Double> accumulationValue() {
         return indexed -> {
             int index = indexed.getIndex();

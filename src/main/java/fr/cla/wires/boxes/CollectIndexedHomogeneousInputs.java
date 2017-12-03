@@ -14,32 +14,37 @@ import java.util.Set;
 import java.util.function.*;
 import java.util.stream.Collector;
 
+import static java.util.Collections.*;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collector.Characteristics.UNORDERED;
 
 //@formatter:off
-
 /**
- * Try this abstraction to take index into account for neural networks (use weigth matrix).
- * @param <O> Same as in Box
- * @param <T> Same as in Box
- * @param <I> Same as in Box
+ * Take the index of observed Wires into account for neural networks (use a weight matrix).
+ * @param <O> The type of Signal that transits on observed Wires, same as in Box
+ * @param <T> The type of Signal that transits on target Wires, same as in Box
+ * @param <I> The type of index for observed Wires
  */
 public abstract class CollectIndexedHomogeneousInputs<O, T, I>
 extends Box {
 
     private final List<Wire<O>> ins;
-    private final Wire<T> out;
+    private final List<Wire<T>> outs;
 
     protected CollectIndexedHomogeneousInputs(List<Wire<O>> ins, Wire<T> out, Clock clock) {
         this(ins, out, clock, DEFAULT_DELAY);
     }
 
     protected CollectIndexedHomogeneousInputs(List<Wire<O>> ins, Wire<T> out, Clock clock, Delay delay) {
+        this(ins, singletonList(out), clock, delay);
+    }
+
+    protected CollectIndexedHomogeneousInputs(List<Wire<O>> ins, List<Wire<T>> outs, Clock clock, Delay delay) {
         super(clock, delay);
         this.ins = checkedNoNulls(ins);
-        this.out = requireNonNull(out);
+        this.outs = checkedNoNulls(outs);
     }
+
 
     /**
      * This method is used to not do the startup in the constructor,
@@ -56,7 +61,12 @@ extends Box {
         return this;
     }
 
-    private void startup(Wire<O> in) {
+    private CollectIndexedHomogeneousInputs<O, T, I> startup(Wire<O> in) {
+        outs.forEach(out -> startup(in, out));
+        return this;
+    }
+
+    private void startup(Wire<O> in, Wire<T> out) {
         this.<O, T>onSignalChanged(in)
             .set(out)
             .from(ins)
