@@ -11,10 +11,7 @@ import fr.cla.wires.Wire;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.function.*;
 import java.util.stream.Collector;
 
 import static java.util.Collections.singletonList;
@@ -85,7 +82,7 @@ extends Box {
 
     protected abstract Function<Indexed<O>, T> accumulationValue();
     protected abstract BinaryOperator<T> accumulator();
-    protected abstract Function<T, T> finisher();
+    protected abstract UnaryOperator<T> finisher();
 
 
 
@@ -96,12 +93,12 @@ extends Box {
 
         private final Function<Indexed<O>, T> accumulationValue;
         private final BinaryOperator<T> accumulator;
-        private final Function<T, T> finisher;
+        private final UnaryOperator<T> finisher;
 
         private AccumulableCollector(
             Function<Indexed<O>, T> accumulationValue,
             BinaryOperator<T> accumulator,
-            Function<T, T> finisher
+            UnaryOperator<T> finisher
         )  {
             this.accumulationValue = requireNonNull(accumulationValue);
             this.accumulator = requireNonNull(accumulator);

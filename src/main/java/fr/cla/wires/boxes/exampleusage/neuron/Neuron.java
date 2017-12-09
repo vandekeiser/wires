@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import static java.util.Objects.requireNonNull;
 
@@ -57,7 +58,7 @@ public class Neuron extends CollectIndexedHomogeneousInputs<Double, Double, Long
     }
 
     @Override
-    protected Function<Double, Double> finisher() {
+    protected UnaryOperator<Double> finisher() {
         return potential -> potential > threshold ? 1.0 : 0.0;
     }
 
