@@ -1,4 +1,4 @@
 package fr.cla.wires.boxes.exampleusage.neuron;
 
-public class Results implements GroupOfUnits {
+public class Outputs implements GroupOfUnits {
 }

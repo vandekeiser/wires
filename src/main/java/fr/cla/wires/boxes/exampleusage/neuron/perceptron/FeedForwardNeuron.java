@@ -1,4 +1,4 @@
-package fr.cla.wires.boxes.exampleusage.neuron.multilayer.perceptron;
+package fr.cla.wires.boxes.exampleusage.neuron.perceptron;
 
 import fr.cla.wires.Clock;
 import fr.cla.wires.Wire;
