@@ -46,15 +46,21 @@ public class Accumulable<I, A> extends Mutable<A> {
     }
 
     public final Accumulable<I, A> combine(Accumulable<I, A> that) {
-        return this.isPresent() && that.isPresent() ?
-            initially(
-                accumulator.apply(this.get(), that.get()),
-                accumulationValue, accumulator
-            ) :
-            initiallyEmpty(
-                accumulationValue, accumulator
-            )
-        ;
+        if (this.isPresent() && that.isPresent()) return initially(
+            accumulator.apply(this.get(), that.get()),
+            accumulationValue, accumulator
+        );
+        else if (this.isPresent()) return initially(
+            this.get(),
+            accumulationValue, accumulator
+        );
+        else if (that.isPresent()) return initially(
+            that.get(),
+            accumulationValue, accumulator
+        );
+        else return initiallyEmpty(
+            accumulationValue, accumulator
+        );
     }
 
 }
