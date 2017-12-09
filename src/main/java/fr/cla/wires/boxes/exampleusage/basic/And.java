@@ -53,18 +53,14 @@ public final class And extends Box {
         this.<Boolean, Boolean>onSignalChanged(in1)
             .set(out)
             .toResultOfApplying()
-            .transformation(this::and, in2)
+            .transformation(Boolean::logicalAnd, in2)
         ;
         this.<Boolean, Boolean>onSignalChanged(in2)
             .set(out)
             .toResultOfApplying()
-            .transformation(in1, this::and)
+            .transformation(in1, Boolean::logicalAnd)
         ;
         return this;
-    }
-
-    private boolean and(boolean b1, boolean b2) {
-        return b1 && b2;
     }
 
     public static Builder in1(Wire<Boolean> in1) {

@@ -53,18 +53,14 @@ public final class Or extends Box {
         this.<Boolean, Boolean>onSignalChanged(in1)
             .set(out)
             .toResultOfApplying()
-            .transformation(this::or, in2)
+            .transformation(Boolean::logicalOr, in2)
         ;
         this.<Boolean, Boolean>onSignalChanged(in2)
             .set(out)
             .toResultOfApplying()
-            .transformation(in1, this::or)
+            .transformation(in1, Boolean::logicalOr)
         ;
         return this;
-    }
-
-    private boolean or(boolean b1, boolean b2) {
-        return b1 || b2;
     }
 
     public static Builder in1(Wire<Boolean> in1) {

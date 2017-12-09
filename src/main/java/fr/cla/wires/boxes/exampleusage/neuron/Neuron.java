@@ -44,7 +44,8 @@ public class Neuron extends CollectIndexedHomogeneousInputs<Double, Double, Long
         this.weigths = new ArrayList<>(weigths);
     }
 
-    @Override protected Function<Indexed<Double>, Double> accumulationValue() {
+    @Override
+    protected Function<Indexed<Double>, Double> accumulationValue() {
         return indexed -> {
             int index = indexed.getIndex();
             double value = indexed.getValue();
@@ -54,16 +55,12 @@ public class Neuron extends CollectIndexedHomogeneousInputs<Double, Double, Long
 
     @Override
     protected BinaryOperator<Double> accumulator() {
-        return this::plus;
+        return Double::sum;
     }
 
     @Override
     protected UnaryOperator<Double> finisher() {
         return potential -> potential > threshold ? 1.0 : 0.0;
-    }
-
-    private double plus(double d1, double d2) {
-        return d1 + d2;
     }
 
     /**
