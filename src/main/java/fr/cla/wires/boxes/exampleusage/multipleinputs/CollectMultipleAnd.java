@@ -26,7 +26,7 @@ extends CollectHomogeneousInputsToOutputOfSameType<Boolean> {
         super(ins, out, clock, delay);
     }
 
-    @Override protected BinaryOperator<Boolean> combiner() {
+    @Override protected BinaryOperator<Boolean> accumulator() {
         return this::and;
     }
 

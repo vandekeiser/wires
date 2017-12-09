@@ -6,7 +6,6 @@ import fr.cla.wires.Wire;
 import fr.cla.wires.boxes.CollectHomogeneousInputsToOutputOfSameType;
 
 import java.util.List;
-import java.util.Set;
 import java.util.function.BinaryOperator;
 
 //@formatter:off
@@ -43,7 +42,7 @@ extends CollectHomogeneousInputsToOutputOfSameType<Boolean> {
 
 //Do your business-specific magic here:
 //-------------Payload section of the class-------------VVVVVVVVVVVVVVVVVVV
-    @Override protected BinaryOperator<Boolean> combiner() {
+    @Override protected BinaryOperator<Boolean> accumulator() {
         return this::and;
     }
 

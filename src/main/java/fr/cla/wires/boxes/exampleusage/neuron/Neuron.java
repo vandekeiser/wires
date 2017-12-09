@@ -8,7 +8,6 @@ import fr.cla.wires.boxes.CollectIndexedHomogeneousInputs;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 
@@ -16,6 +15,7 @@ import static java.util.Objects.requireNonNull;
 
 //@formatter:off
 //WIP
+//Later use Arrays::parallelPrefix (as a path toward using the GPU)
 /**
  * Start trying to implement a neural network on top of Boxes and Wires.
  * (move to a separate Maven module once it reaches a sufficient size)
@@ -52,16 +52,7 @@ public class Neuron extends CollectIndexedHomogeneousInputs<Double, Double, Long
     }
 
     @Override
-    protected BiFunction<Double, Indexed<Double>, Double> accumulator() {
-        //should be factored into Accumulable
-        return (acc, indexed) -> {
-            double added = accumulationValue().apply(indexed);
-            return combiner().apply(acc , added);
-        };
-    }
-
-    @Override
-    protected BinaryOperator<Double> combiner() {
+    protected BinaryOperator<Double> accumulator() {
         return this::plus;
     }
 

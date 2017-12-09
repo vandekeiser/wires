@@ -1,8 +1,8 @@
 package fr.cla.wires;
 
-import fr.cla.support.oo.AbstractValueObject;
 import fr.cla.support.functional.Indexed;
 import fr.cla.support.functional.Streams;
+import fr.cla.support.oo.AbstractValueObject;
 
 import java.util.List;
 import java.util.Optional;

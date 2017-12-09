@@ -10,7 +10,10 @@ import fr.cla.wires.Wire;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.*;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collector;
 
 import static java.util.Objects.requireNonNull;
@@ -86,48 +89,44 @@ extends Box {
 
     private Collector<O, ?, T> collector() {
         return new AccumulableCollector<>(
-            accumulationValue(), accumulator(), combiner()
+            accumulationValue(), accumulator()
         );
     }
 
     protected abstract Function<O, T> accumulationValue();
-    protected abstract BiFunction<T, O, T> accumulator();
-    protected abstract BinaryOperator<T> combiner();
+    protected abstract BinaryOperator<T> accumulator();
 
 
 
 
     private static class AccumulableCollector<O, T>
-    implements Collector<O, Accumulable<T, O>, T> {
+    implements Collector<O, Accumulable<O, T>, T> {
         private final Function<O, T> accumulationValue;
-        private final BiFunction<T, O, T> accumulator;
-        private final BinaryOperator<T> combiner;
+        private final BinaryOperator<T> accumulator;
 
         private AccumulableCollector(
             Function<O, T> accumulationValue,
-            BiFunction<T, O, T> accumulator,
-            BinaryOperator<T> combiner
+            BinaryOperator<T> accumulator
         )  {
             this.accumulationValue = requireNonNull(accumulationValue);
             this.accumulator = requireNonNull(accumulator);
-            this.combiner = requireNonNull(combiner);
         }
 
-        @Override public Supplier<Accumulable<T, O>> supplier() {
+        @Override public Supplier<Accumulable<O, T>> supplier() {
             return () -> Accumulable.initiallyEmpty(
-                accumulationValue, accumulator, combiner
+                accumulationValue, accumulator
             );
         }
 
-        @Override public BiConsumer<Accumulable<T, O>, O> accumulator() {
+        @Override public BiConsumer<Accumulable<O, T>, O> accumulator() {
             return Accumulable::accumulate;
         }
 
-        @Override public BinaryOperator<Accumulable<T, O>> combiner() {
+        @Override public BinaryOperator<Accumulable<O, T>> combiner() {
             return Accumulable::combine;
         }
 
-        @Override public Function<Accumulable<T, O>, T> finisher() {
+        @Override public Function<Accumulable<O, T>, T> finisher() {
             return Mutable::get;
         }
 

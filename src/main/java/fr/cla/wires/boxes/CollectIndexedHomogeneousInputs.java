@@ -11,10 +11,13 @@ import fr.cla.wires.Wire;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.*;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collector;
 
-import static java.util.Collections.*;
+import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collector.Characteristics.UNORDERED;
 
@@ -76,53 +79,50 @@ extends Box {
 
     private Collector<Indexed<O>, ?, T> collector() {
         return new CollectIndexedHomogeneousInputs.AccumulableCollector<>(
-           accumulationValue(), accumulator(), combiner(), finisher()
+           accumulationValue(), accumulator(), finisher()
         );
     }
 
     protected abstract Function<Indexed<O>, T> accumulationValue();
-    protected abstract BiFunction<T, Indexed<O>, T> accumulator();
-    protected abstract BinaryOperator<T> combiner();
+    protected abstract BinaryOperator<T> accumulator();
     protected abstract Function<T, T> finisher();
 
 
 
 
     private static class AccumulableCollector<O, T>
-    implements Collector<Indexed<O>, Accumulable<T, Indexed<O>>, T> {
-        private final Function<Accumulable<T, Indexed<O>>, T> getAccumulated = Mutable::get;
+    implements Collector<Indexed<O>, Accumulable<Indexed<O>, T>, T> {
+        private final Function<Accumulable<Indexed<O>, T>, T> getAccumulated = Mutable::get;
+
         private final Function<Indexed<O>, T> accumulationValue;
-        private final BiFunction<T, Indexed<O>, T> accumulator;
-        private final BinaryOperator<T> combiner;
+        private final BinaryOperator<T> accumulator;
         private final Function<T, T> finisher;
 
         private AccumulableCollector(
             Function<Indexed<O>, T> accumulationValue,
-            BiFunction<T, Indexed<O>, T> accumulator,
-            BinaryOperator<T> combiner,
+            BinaryOperator<T> accumulator,
             Function<T, T> finisher
         )  {
             this.accumulationValue = requireNonNull(accumulationValue);
             this.accumulator = requireNonNull(accumulator);
-            this.combiner = requireNonNull(combiner);
             this.finisher = requireNonNull(finisher);
         }
 
-        @Override public Supplier<Accumulable<T, Indexed<O>>> supplier() {
+        @Override public Supplier<Accumulable<Indexed<O>, T>> supplier() {
             return () -> Accumulable.initiallyEmpty(
-                accumulationValue, accumulator, combiner
+                accumulationValue, accumulator
             );
         }
 
-        @Override public BiConsumer<Accumulable<T, Indexed<O>>, Indexed<O>> accumulator() {
+        @Override public BiConsumer<Accumulable<Indexed<O>, T>, Indexed<O>> accumulator() {
             return Accumulable::accumulate;
         }
 
-        @Override public BinaryOperator<Accumulable<T, Indexed<O>>> combiner() {
+        @Override public BinaryOperator<Accumulable<Indexed<O>, T>> combiner() {
             return Accumulable::combine;
         }
 
-        @Override public Function<Accumulable<T, Indexed<O>>, T> finisher() {
+        @Override public Function<Accumulable<Indexed<O>, T>, T> finisher() {
             return getAccumulated.andThen(finisher);
         }
 

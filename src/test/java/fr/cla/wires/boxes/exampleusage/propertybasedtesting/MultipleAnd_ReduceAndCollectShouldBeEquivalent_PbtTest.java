@@ -16,13 +16,11 @@ import org.junit.runner.RunWith;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Stream;
 
 import static fr.cla.support.tests.pbt.BooleansGenerator.MULTIPLICITY;
 import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assume.assumeThat;

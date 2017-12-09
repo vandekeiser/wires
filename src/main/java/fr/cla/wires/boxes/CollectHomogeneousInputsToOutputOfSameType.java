@@ -5,8 +5,6 @@ import fr.cla.wires.Delay;
 import fr.cla.wires.Wire;
 
 import java.util.List;
-import java.util.Set;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 //@formatter:off
@@ -46,10 +44,6 @@ extends CollectHomogeneousInputs<O, O> {
     //Not final intentionally
     @Override protected Function<O, O> accumulationValue() {
         return Function.identity();
-    }
-
-    @Override protected final BiFunction<O, O, O> accumulator() {
-        return combiner();
     }
 
 }

@@ -1,64 +1,58 @@
 package fr.cla.support.oo;
 
-import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off
-public class Accumulable<A, T> extends Mutable<A> {
+public class Accumulable<I, A> extends Mutable<A> {
 
-    private final Function<T, A> accumulationValue;
-    private final BiFunction<A, T, A> accumulator;
-    private final BinaryOperator<A> combiner;
+    private final Function<I, A> accumulationValue;
+    private final BinaryOperator<A> accumulator;
 
     protected Accumulable(
         A initialValue,
         boolean acceptNull, 
-        Function<T, A> accumulationValue,
-        BiFunction<A, T, A> accumulator,
-        BinaryOperator<A> combiner
+        Function<I, A> accumulationValue,
+        BinaryOperator<A> accumulator
     ) {
         super(initialValue, acceptNull);
         this.accumulationValue = requireNonNull(accumulationValue);
         this.accumulator = requireNonNull(accumulator);
-        this.combiner = requireNonNull(combiner);
     }
 
-    public static <T, A> Accumulable<A, T> initiallyEmpty(
-        Function<T, A> accumulationValue,
-        BiFunction<A, T, A> accumulator,
-        BinaryOperator<A> combiner
+    public static <I, A> Accumulable<I, A> initiallyEmpty(
+        Function<I, A> accumulationValue,
+        BinaryOperator<A> accumulator
     ) {
-        return new Accumulable<>(null, true, accumulationValue, accumulator, combiner);
+        return new Accumulable<>(null, true, accumulationValue, accumulator);
     }
 
-    public static <T, A> Accumulable<A, T> initially(
+    public static <I, A> Accumulable<I, A> initially(
         A initialValue,
-        Function<T, A> accumulationValue,
-        BiFunction<A, T, A> accumulator,
-        BinaryOperator<A> combiner
+        Function<I, A> accumulationValue,
+        BinaryOperator<A> accumulator
     ) {
-        return new Accumulable<>(initialValue, false, accumulationValue, accumulator, combiner);
+        return new Accumulable<>(initialValue, false, accumulationValue, accumulator);
     }
 
-    public final void accumulate(T elt) {
+    public final void accumulate(I elt) {
         if(this.isPresent() ) {
-            set(accumulator.apply(this.get(), elt));
+            set(accumulator.apply(this.get(), accumulationValue.apply(elt)));
         } else {
             set(accumulationValue.apply(elt));
         }
     }
 
-    public final Accumulable<A, T> combine(Accumulable<A, T> that) {
+    public final Accumulable<I, A> combine(Accumulable<I, A> that) {
         return this.isPresent() && that.isPresent() ?
             initially(
-                combiner.apply(this.get(), that.get()),
-                accumulationValue, accumulator, combiner
+                accumulator.apply(this.get(), that.get()),
+                accumulationValue, accumulator
             ) :
             initiallyEmpty(
-                accumulationValue, accumulator, combiner
+                accumulationValue, accumulator
             )
         ;
     }

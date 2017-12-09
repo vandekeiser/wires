@@ -4,14 +4,10 @@ package fr.cla.wires.boxes.exampleusage.neuron;
 import fr.cla.wires.Clock;
 import fr.cla.wires.Signal;
 import fr.cla.wires.Wire;
-import fr.cla.wires.boxes.exampleusage.multipleinputs.ReduceMultipleAnd;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
