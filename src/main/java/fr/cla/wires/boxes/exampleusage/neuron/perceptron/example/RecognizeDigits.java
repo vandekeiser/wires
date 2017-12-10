@@ -38,7 +38,7 @@ public class RecognizeDigits extends Box {
         this.digits = wires(NB_DIGITS);
         this.hiddens = wires(NB_DIGITS);
         this.segments2Hiddens =  perceptronConnexions(segments, hiddens, this::segments2HiddensWeigths);
-        this.hiddens2Digits =  perceptronConnexions(hiddens, digits, this::segments2HiddensWeigths);
+        this.hiddens2Digits =  perceptronConnexions(hiddens, digits, this::hiddens2DigitsWeigths);
     }
 
     private CompleteConnexions<Double, Double> perceptronConnexions(
