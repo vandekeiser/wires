@@ -75,7 +75,7 @@ extends Box {
     }
 
     private Collector<Indexed<O>, ?, T> collector() {
-        return new CollectIndexedHomogeneousInputs.AccumulableCollector<>(
+        return Accumulable.indexedCollector(
            accumulationValue(), accumulator(), finisher()
         );
     }
@@ -87,47 +87,7 @@ extends Box {
 
 
 
-    private static class AccumulableCollector<O, T>
-    implements Collector<Indexed<O>, Accumulable<Indexed<O>, T>, T> {
-        private final Function<Accumulable<Indexed<O>, T>, T> getAccumulated = Mutable::get;
 
-        private final Function<Indexed<O>, T> accumulationValue;
-        private final BinaryOperator<T> accumulator;
-        private final UnaryOperator<T> finisher;
-
-        private AccumulableCollector(
-            Function<Indexed<O>, T> accumulationValue,
-            BinaryOperator<T> accumulator,
-            UnaryOperator<T> finisher
-        )  {
-            this.accumulationValue = requireNonNull(accumulationValue);
-            this.accumulator = requireNonNull(accumulator);
-            this.finisher = requireNonNull(finisher);
-        }
-
-        @Override public Supplier<Accumulable<Indexed<O>, T>> supplier() {
-            return () -> Accumulable.initiallyEmpty(
-                accumulationValue, accumulator
-            );
-        }
-
-        @Override public BiConsumer<Accumulable<Indexed<O>, T>, Indexed<O>> accumulator() {
-            return Accumulable::accumulate;
-        }
-
-        @Override public BinaryOperator<Accumulable<Indexed<O>, T>> combiner() {
-            return Accumulable::combine;
-        }
-
-        @Override public Function<Accumulable<Indexed<O>, T>, T> finisher() {
-            return getAccumulated.andThen(finisher);
-        }
-
-        @Override public Set<Characteristics> characteristics() {
-            //TODO some collectors might not be UNORDERED
-            return EnumSet.of(UNORDERED);
-        }
-    }
 
 }
 //@formatter:on
