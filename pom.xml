@@ -20,6 +20,7 @@
         <maven-failsafe-surefire-plugin.version>2.20.1</maven-failsafe-surefire-plugin.version>
         <maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
+        <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -81,8 +82,9 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
-                    <!--No warnings for you! _TILT_ This is the PAPA pinball circuit final-->
+                    <!--No warnings for you! _TILT_ This is the PAPA Pinball Circuit Final-->
                     <compilerArguments>
                         <Werror/>
                     </compilerArguments>
@@ -92,8 +94,8 @@
                     <compilerArgument>-Xlint:all,-serial</compilerArgument>
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>9</source>
+                    <target>9</target>
                 </configuration>
             </plugin>
         </plugins>
