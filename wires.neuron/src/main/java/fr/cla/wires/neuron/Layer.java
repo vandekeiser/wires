@@ -1,4 +1,4 @@
-package fr.cla.wires.boxes.exampleusage.neuron;
+package fr.cla.wires.neuron;
 
 import fr.cla.support.functional.Indexed;
 import fr.cla.wires.Clock;
@@ -14,31 +14,26 @@ import java.util.function.UnaryOperator;
 
 import static java.util.Objects.requireNonNull;
 
-//@formatter:off
-//WIP
-//Later use Arrays::parallelPrefix (as a path toward using the GPU)
-/**
- * Start trying to implement a neural network on top of Boxes and Wires.
- * (move to a separate Maven module once it reaches a sufficient size)
- */
-public class Neuron extends CollectIndexedHomogeneousInputs<Double, Double, Long> {
+public abstract class Layer
+extends CollectIndexedHomogeneousInputs<Double, Double, Long>    
+implements GroupOfUnits{
 
     public static final Double DEFAULT_THRESHOLD = 1.0;
 
     private final double threshold;
     private final List<Double> weigths;
 
-    protected Neuron(List<Wire<Double>> ins, Wire<Double> out, double threshold, List<Double> weigths, Clock clock) {
+    protected Layer(List<Wire<Double>> ins, Wire<Double> out, double threshold, List<Double> weigths, Clock clock) {
         this(ins, out, threshold, weigths, clock, DEFAULT_DELAY);
     }
 
-    protected Neuron(List<Wire<Double>> ins, Wire<Double> out, double threshold, List<Double> weigths, Clock clock, Delay delay) {
+    protected Layer(List<Wire<Double>> ins, Wire<Double> out, double threshold, List<Double> weigths, Clock clock, Delay delay) {
         super(ins, out, clock, delay);
         this.threshold = threshold;
         this.weigths = new ArrayList<>(weigths);
     }
 
-    protected Neuron(List<Wire<Double>> ins, List<Wire<Double>> outs, double threshold, List<Double> weigths, Clock clock, Delay delay) {
+    protected Layer(List<Wire<Double>> ins, List<Wire<Double>> outs, double threshold, List<Double> weigths, Clock clock, Delay delay) {
         super(ins, outs, clock, delay);
         this.threshold = threshold;
         this.weigths = new ArrayList<>(weigths);
@@ -63,17 +58,7 @@ public class Neuron extends CollectIndexedHomogeneousInputs<Double, Double, Long
         return potential -> potential > threshold ? 1.0 : 0.0;
     }
 
-    /**
-     * This method is used to not do the startup in the constructor,
-     * to not let "this" escape through the method ref,
-     * so that the Box is "properly constructed".
-     *
-     * @implNote The contract for overriders is to call super.startup(), return this:
-     * This method is only not marked final as a convenience to allow covariant return.
-     *
-     * @return this Box, started.
-     */
-    @Override protected Neuron startup() {
+    @Override protected Layer startup() {
         super.startup();
         return this;
     }
@@ -118,13 +103,12 @@ public class Neuron extends CollectIndexedHomogeneousInputs<Double, Double, Long
 
     private static double validateThreshold(double threshold) {
         //TODO
-         return threshold;
+        return threshold;
     }
 
     private static List<Double> validateWeigths(List<Double> weigths) {
         //TODO
         return checkNoNulls(weigths);
     }
-
+    
 }
-//@formatter:on

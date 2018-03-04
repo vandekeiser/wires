@@ -1,3 +1,5 @@
 module wires.core {
-    requires wires.support;
+    requires transitive wires.support;
+    exports fr.cla.wires;
+    exports fr.cla.wires.boxes;
 }

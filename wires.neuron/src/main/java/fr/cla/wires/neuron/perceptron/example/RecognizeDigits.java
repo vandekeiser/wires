@@ -1,4 +1,4 @@
-package fr.cla.wires.boxes.exampleusage.neuron.perceptron.example;
+package fr.cla.wires.neuron.perceptron.example;
 
 import fr.cla.support.functional.Indexed;
 import fr.cla.wires.Box;

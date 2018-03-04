@@ -14,6 +14,7 @@
     <modules>
         <module>wires.support</module>
         <module>wires.core</module>
+        <module>wires.neuron</module>
     </modules>
 
     <properties>

@@ -1,4 +1,4 @@
-package fr.cla.wires.boxes.exampleusage.neuron;
+package fr.cla.wires.neuron;
 
 import java.util.function.DoubleUnaryOperator;
 

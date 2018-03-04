@@ -1,8 +1,8 @@
-package fr.cla.wires.boxes.exampleusage.neuron.perceptron;
+package fr.cla.wires.neuron.perceptron;
 
 import fr.cla.wires.Clock;
 import fr.cla.wires.Wire;
-import fr.cla.wires.boxes.exampleusage.neuron.Neuron;
+import fr.cla.wires.neuron.Neuron;
 
 import java.util.List;
 

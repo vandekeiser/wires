@@ -1,4 +1,4 @@
-package fr.cla.wires.boxes.exampleusage.neuron.perceptron;
+package fr.cla.wires.neuron.perceptron;
 
 public class BackPropagationNetwork extends FeedForwardNetwork {
 }
