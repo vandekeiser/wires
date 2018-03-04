@@ -5,11 +5,16 @@
     <groupId>fr.cla</groupId>
     <artifactId>wires</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <name>wires</name>
     <description>A Java port of the "Simulator for digital circuits" from SICP (Structure and Interpretation of Computer Programs)</description>
     <url>https://github.com/vandekeiser/wires</url>
+
+    <modules>
+        <module>wires.support</module>
+        <module>wires.core</module>
+    </modules>
 
     <properties>
         <junit.version>4.12</junit.version>
