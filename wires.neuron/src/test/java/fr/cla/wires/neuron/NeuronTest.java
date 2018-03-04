@@ -1,9 +1,9 @@
 package fr.cla.wires.neuron;
 
 
-import fr.cla.wires.Clock;
-import fr.cla.wires.Signal;
-import fr.cla.wires.Wire;
+import fr.cla.wires.core.Clock;
+import fr.cla.wires.core.Signal;
+import fr.cla.wires.core.Wire;
 import org.junit.Before;
 import org.junit.Test;
 

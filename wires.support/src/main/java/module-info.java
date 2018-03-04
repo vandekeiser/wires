@@ -1,4 +1,4 @@
 module wires.support {
-    exports fr.cla.support.functional;
-    exports fr.cla.support.oo;
+    exports fr.cla.wires.support.functional;
+    exports fr.cla.wires.support.oo;
 }

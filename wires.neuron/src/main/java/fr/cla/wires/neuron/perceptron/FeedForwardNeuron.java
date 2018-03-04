@@ -1,7 +1,7 @@
 package fr.cla.wires.neuron.perceptron;
 
-import fr.cla.wires.Clock;
-import fr.cla.wires.Wire;
+import fr.cla.wires.core.Clock;
+import fr.cla.wires.core.Wire;
 import fr.cla.wires.neuron.Neuron;
 
 import java.util.List;

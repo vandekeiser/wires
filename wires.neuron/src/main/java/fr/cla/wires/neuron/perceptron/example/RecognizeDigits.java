@@ -1,10 +1,10 @@
 package fr.cla.wires.neuron.perceptron.example;
 
-import fr.cla.support.functional.Indexed;
-import fr.cla.wires.Box;
-import fr.cla.wires.Clock;
-import fr.cla.wires.Delay;
-import fr.cla.wires.Wire;
+import fr.cla.wires.support.functional.Indexed;
+import fr.cla.wires.core.Box;
+import fr.cla.wires.core.Clock;
+import fr.cla.wires.core.Delay;
+import fr.cla.wires.core.Wire;
 
 import java.util.ArrayList;
 import java.util.List;
