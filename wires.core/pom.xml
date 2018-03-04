@@ -5,6 +5,15 @@
     <groupId>fr.cla</groupId>
     <artifactId>wires.core</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>wires.core</name>
+
+    <parent>
+        <groupId>fr.cla</groupId>
+        <artifactId>wires</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
     <dependencies>
         <dependency>
             <groupId>fr.cla</groupId>
@@ -12,13 +21,5 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
-    <packaging>jar</packaging>
-    <name>wires.core</name>
-    <parent>
-        <groupId>fr.cla</groupId>
-        <artifactId>wires</artifactId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
-
 
 </project>
