@@ -48,8 +48,10 @@ public final class Tick extends AbstractValueObject<Tick> {
         return new Tick(number);
     }
 
-
-
+    @Override
+    public String toString() {
+        return String.valueOf(tick);
+    }
 
     /**
      * This should not happen under normal circumstances, since Tick.tick is long:

@@ -58,6 +58,11 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         return signalOfV;
     }
 
+    @Override
+    public String toString() {
+        return String.valueOf(value);
+    }
+
     //----------Functional methods to transform and/or aggregate Signals//----------VVVVVVVVVV
     <W> Signal<W> map(Function<V, W> mapper) {
         return value().map(mapper).map(Signal::of).orElse(Signal.none());
