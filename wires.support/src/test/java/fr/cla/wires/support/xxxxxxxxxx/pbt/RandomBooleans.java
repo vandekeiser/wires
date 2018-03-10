@@ -1,4 +1,4 @@
-package fr.cla.wires.core.support.tests.pbt;
+package fr.cla.wires.support.xxxxxxxxxx.pbt;
 
 import com.pholser.junit.quickcheck.From;
 

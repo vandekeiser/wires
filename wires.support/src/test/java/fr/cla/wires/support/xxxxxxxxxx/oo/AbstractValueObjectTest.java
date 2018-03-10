@@ -1,12 +1,10 @@
-package fr.cla.wires.support.oo.ddd;
+package fr.cla.wires.support.xxxxxxxxxx.oo;
 
 import fr.cla.wires.support.oo.AbstractValueObject;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 //@formatter:off
 public class AbstractValueObjectTest {

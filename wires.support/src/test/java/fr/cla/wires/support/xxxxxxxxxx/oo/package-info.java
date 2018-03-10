@@ -2,4 +2,4 @@
 /**
  * Contains tests of supporting reifications of OO patterns.
  */
-package fr.cla.wires.support.oo;
+package fr.cla.wires.support.xxxxxxxxxx.oo;
