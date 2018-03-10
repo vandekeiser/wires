@@ -27,16 +27,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>1.6.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                    </execution>
-                </executions>
                 <configuration>
-                    <executable>${JAVA_HOME}/bin/java</executable>
                     <arguments>
                         <argument>--module-path</argument>
                         <module-path/>

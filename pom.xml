@@ -8,7 +8,9 @@
     <packaging>pom</packaging>
 
     <name>wires</name>
-    <description>A Java port of the "Simulator for digital circuits" from SICP (Structure and Interpretation of Computer Programs)</description>
+    <description>A Java port of the "Simulator for digital circuits" from SICP (Structure and Interpretation of Computer
+        Programs)
+    </description>
     <url>https://github.com/vandekeiser/wires</url>
 
     <modules>
@@ -33,6 +35,26 @@
     </properties>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>1.6.0</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>exec</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <executable>${JAVA_HOME}/bin/java</executable>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
         <plugins>
             <!--Both maven-surefire-plugin and maven-failsafe-plugin belong to the Maven Surefire project.-->
             <!--The reason that there are those two different plugins is,
