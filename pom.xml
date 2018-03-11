@@ -17,6 +17,7 @@
         <module>wires.support</module>
         <module>wires.core</module>
         <module>wires.neuron</module>
+        <module>wires.modjlink</module>
     </modules>
 
     <properties>
@@ -30,6 +31,7 @@
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
         <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
         <maven-exec-plugin.version>1.6.0</maven-exec-plugin.version>
+        <maven-jlink-plugin.version>3.0.0-alpha-1</maven-jlink-plugin.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -68,6 +70,16 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-failsafe-surefire-plugin.version}</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jlink-plugin</artifactId>
+                <version>${maven-jlink-plugin.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <!-- configuration elements goes here -->
+                </configuration>
             </plugin>
 
             <!--Runs integration tests and binds to the integration-test and verify phases by default-->
@@ -153,11 +165,13 @@
             <groupId>com.pholser</groupId>
             <artifactId>junit-quickcheck-core</artifactId>
             <version>${quickcheck.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.pholser</groupId>
             <artifactId>junit-quickcheck-generators</artifactId>
             <version>${quickcheck.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
