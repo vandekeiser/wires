@@ -9,7 +9,7 @@ import fr.cla.wires.core.Signal;
 import fr.cla.wires.core.Wire;
 import fr.cla.wires.core.boxes.exampleusage.multipleinputs.CollectMultipleAnd;
 import fr.cla.wires.core.boxes.exampleusage.multipleinputs.ReduceMultipleAnd;
-import fr.cla.wires.core.support.tests.pbt.RandomBooleans;
+import fr.cla.wires.support.pbt.RandomBooleans;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;

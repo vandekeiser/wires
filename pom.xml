@@ -90,8 +90,7 @@
             </plugin>
 
             <!--Create a jar artifact for the tests too.-->
-            <!--This is useful if you want to have a child project where tests reuse test classes-->
-            <!-- of this parent project.-->
+            <!--This is useful if you want to reuse test classes-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>

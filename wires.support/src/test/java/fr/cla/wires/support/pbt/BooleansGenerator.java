@@ -1,4 +1,4 @@
-package fr.cla.wires.core.support.tests.pbt;
+package fr.cla.wires.support.pbt;
 
 import com.pholser.junit.quickcheck.generator.GenerationStatus;
 import com.pholser.junit.quickcheck.generator.Generator;
