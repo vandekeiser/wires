@@ -18,15 +18,7 @@ public class CounterTest {
 
     @Test
     public void out_should_initially_be_0() {
-        given: {
-            //Nothing
-        }
-        when: {
-            //No clock.tick()
-        }
-        then: {
-            assertThat(out.getSignal()).isEqualTo(Signal.of(0L));
-        }
+        assertThat(out.getSignal()).isEqualTo(Signal.of(0L));
     }
     
 }
