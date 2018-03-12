@@ -1,3 +1,3 @@
 module wires.core {
-    requires transitive wires.support;
+    requires wires.support;
 }
