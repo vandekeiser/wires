@@ -1,0 +1,3 @@
+module clientmod {
+    requires apimod;
+}

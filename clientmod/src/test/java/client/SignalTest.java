@@ -1,7 +1,4 @@
-package fr.cla.wires.core.boxes.exampleusage.reentrant;
-
-
-import fr.cla.wires.core.Signal;
+package client;
 
 public class SignalTest {
 
