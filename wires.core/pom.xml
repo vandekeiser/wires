@@ -17,6 +17,8 @@
             <artifactId>wires.support</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <!--Comment the following to make mvn clean install pass:-->
         <dependency>
             <groupId>fr.cla</groupId>
             <artifactId>wires.support</artifactId>
