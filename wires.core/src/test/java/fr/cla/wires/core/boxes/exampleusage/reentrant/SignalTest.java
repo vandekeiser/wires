@@ -2,13 +2,10 @@ package fr.cla.wires.core.boxes.exampleusage.reentrant;
 
 
 import fr.cla.wires.core.Signal;
-import fr.cla.wires.core.Wire;
 
-public class CounterTest {
+public class SignalTest {
 
-    private Wire<Long> out;
-
-    public void out_should_initially_be_0() {
+    public void ff() {
         new Signal().equals(new Signal());
     }
     
