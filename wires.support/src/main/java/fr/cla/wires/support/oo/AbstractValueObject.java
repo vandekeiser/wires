@@ -1,6 +1,5 @@
 package fr.cla.wires.support.oo;
 
-public abstract class AbstractValueObject {
+public class AbstractValueObject {
     
 }
-//@formatter:on
