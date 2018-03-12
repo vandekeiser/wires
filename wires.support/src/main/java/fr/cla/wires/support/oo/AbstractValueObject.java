@@ -1,5 +1,3 @@
 package fr.cla.wires.support.oo;
 
-public class AbstractValueObject {
-    
-}
+public class AbstractValueObject {}

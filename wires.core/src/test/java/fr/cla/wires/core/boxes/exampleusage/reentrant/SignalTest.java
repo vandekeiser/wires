@@ -6,7 +6,7 @@ import fr.cla.wires.core.Signal;
 public class SignalTest {
 
     public void ff() {
-        new Signal().equals(new Signal());
+        new Signal().equals(null);
     }
     
 }
