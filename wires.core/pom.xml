@@ -24,26 +24,8 @@
             <artifactId>wires.support</artifactId>
             <version>${project.version}</version>
             <classifier>tests</classifier>
-            <!--<type>test-jar</type>-->
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <configuration>
-                    <arguments>
-                        <argument>--module-path</argument>
-                        <module-path/>
-                        <argument>--module</argument>
-                        <argument>wires.core/fr.cla.wires.core.boxes.exampleusage.reentrant.CounterApp</argument>
-                    </arguments>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>
