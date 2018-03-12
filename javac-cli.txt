@@ -10,4 +10,6 @@ javac "G:\projets\wires\wires\wires\wires.core\src\test\java\fr\cla\wires\core\b
 -Werror \
 -Xlint:all,-serial \
 --patch-module wires.core="G:\projets\wires\wires\wires\wires.core\target\classes;G:\projets\wires\wires\wires\wires.core\src\test\java;G:\projets\wires\wires\wires\wires.core\target\generated-test-sources\test-annotations;" \
---add-reads wires.core=ALL-UNNAMED
+--add-reads wires.core=ALL-UNNAMED \
+--add-reads wires.support=ALL-UNNAMED
+
