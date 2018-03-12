@@ -2,10 +2,8 @@ package fr.cla.wires.core;
 
 public final class Wire<T> {
 
-    public Signal<T> getSignal() {
+    public Signal getSignal() {
         return null;
     }
-
-    private Wire() {}
 
 }
