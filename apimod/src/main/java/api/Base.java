@@ -1,3 +1,3 @@
 package api;
 
-public class AbstractValueObject {}
+public class Base {}

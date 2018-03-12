@@ -1,9 +1,9 @@
 package client;
 
-public class SignalTest {
+public class DerivedTest {
 
-    public void ff() {
-        new Signal().equals(null);
+    public void foo() {
+        new Derived().equals(null);
     }
     
 }
