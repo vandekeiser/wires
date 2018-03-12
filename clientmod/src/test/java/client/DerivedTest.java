@@ -2,7 +2,7 @@ package client;
 
 public class DerivedTest {
 
-    public void foo() {
+    public void should_foo() {
         new Derived().equals(null);
     }
     
