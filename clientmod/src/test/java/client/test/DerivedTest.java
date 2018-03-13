@@ -1,4 +1,6 @@
-package client;
+package client.test;
+
+import client.Derived;
 
 public class DerivedTest {
 
