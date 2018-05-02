@@ -24,7 +24,21 @@ javac "G:\projets\wires\wires\wires\clientmod\src\test\java\client\test\DerivedT
 --add-exports clientmod/client=ALL-UNNAMED \
 --add-modules apimod
 
-
+////////////////////////////
+javac "G:\projets\wires\wires\wires\clientmod\src\test\java\client\test\DerivedTest.java" \
+-d "G:\projets\wires\wires\wires\clientmod\target\test-classes" \
+-classpath "G:\projets\wires\wires\wires\clientmod\target\test-classes;" \
+--module-path "G:\projets\wires\wires\wires\apimod\target\apimod-1.0-SNAPSHOT-tests.jar;G:\projets\wires\wires\wires\clientmod\target\classes;G:\projets\wires\wires\wires\apimod\target\apimod-1.0-SNAPSHOT.jar;" \
+-sourcepath "G:\projets\wires\wires\wires\clientmod\src\test\java;" \
+--release 9 \
+-Xlint:all \
+--patch-module clientmod="G:\projets\wires\wires\wires\clientmod\target\classes;G:\projets\wires\wires\wires\clientmod\src\test\java;" \
+--upgrade-module clientmod="G:\projets\wires\wires\wires\apimod\target\classes;" \
+--add-reads apimod=ALL-UNNAMED \
+--add-reads clientmod=ALL-UNNAMED \
+--add-exports apimod/api=ALL-UNNAMED \
+--add-exports clientmod/client=ALL-UNNAMED \
+--add-modules apimod
 
 ***not there??
 --illegal-access=warn
