@@ -17,15 +17,6 @@
             <artifactId>apimod</artifactId>
             <version>${project.version}</version>
         </dependency>
-
-        <!--Comment the following to make mvn clean install pass:-->
-        <dependency>
-            <groupId>fr.cla</groupId>
-            <artifactId>apimod</artifactId>
-            <version>${project.version}</version>
-            <classifier>tests</classifier>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
 </project>
