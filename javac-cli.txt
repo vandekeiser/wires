@@ -9,7 +9,7 @@ javac "G:\projets\wires\wires\wires\clientmod\src\test\java\client\test\DerivedT
 --patch-module clientmod="G:\projets\wires\wires\wires\clientmod\target\classes;G:\projets\wires\wires\wires\clientmod\src\test\java;"
 
 
-****************
+****************reproduit le pb:
 javac "G:\projets\wires\wires\wires\clientmod\src\test\java\client\test\DerivedTest.java" \
 -d "G:\projets\wires\wires\wires\clientmod\target\test-classes" \
 -classpath "G:\projets\wires\wires\wires\clientmod\target\test-classes;" \
@@ -24,7 +24,7 @@ javac "G:\projets\wires\wires\wires\clientmod\src\test\java\client\test\DerivedT
 --add-exports clientmod/client=ALL-UNNAMED \
 --add-modules apimod
 
-////////////////////////////
+////////////////////////////tentative --upgrade-module: javac: invalid flag: --upgrade-module
 javac "G:\projets\wires\wires\wires\clientmod\src\test\java\client\test\DerivedTest.java" \
 -d "G:\projets\wires\wires\wires\clientmod\target\test-classes" \
 -classpath "G:\projets\wires\wires\wires\clientmod\target\test-classes;" \
@@ -45,3 +45,68 @@ javac "G:\projets\wires\wires\wires\clientmod\src\test\java\client\test\DerivedT
 --permit-illegal-access
 
 
+*****************analyse reponse user944849*****************
+i already thought about that and renamed all packages so that there are no split packages,
+    so it can't be that
+
+*****************analyse reponse khmarbaise*****************
+"The problem seemed to be that you want to create a test-jar
+    in a module which does not contain code in src/test/java ...
+If you like to have a module which is only a test module
+    than put those code into default directory src/main/java
+    and define a dependency on that module with scope test...
+Furthermore you should not define the execution to create a test jar
+    within the parent which results in execution that in each child
+    which is usually not what you want...
+Created a PR to your project you can take a look."
+-->
+1. ajout classe G:\projets\wires\wires\wires\apimod\src\test\java\api\foo\ff.java
+   qui etait le dernier dir vide:
+   change rien
+2. le reste: sa branche passe uniquement parce qu'il a retiré la dependance de tests clientmod -> apimod
+   on la remet: ca fail
+
+
+*****************analyse reponse Till Brychcy*****************
+It looks like maven doesn't support this use case yet.
+
+-->So let's try to reproduce the issue without maven.
+1. Adapting my former command line which is logged by maven, that is:
+    javac "G:\projets\wires\wires\wires\clientmod\src\test\java\client\test\DerivedTest.java" \
+    -d "G:\projets\wires\wires\wires\clientmod\target\test-classes" \
+    -classpath "G:\projets\wires\wires\wires\clientmod\target\test-classes;" \
+    --module-path "G:\projets\wires\wires\wires\apimod\target\apimod-1.0-SNAPSHOT-tests.jar;G:\projets\wires\wires\wires\clientmod\target\classes;G:\projets\wires\wires\wires\apimod\target\apimod-1.0-SNAPSHOT.jar;" \
+    -sourcepath "G:\projets\wires\wires\wires\clientmod\src\test\java;" \
+    --release 9 \
+    -Xlint:all \
+    --patch-module clientmod="G:\projets\wires\wires\wires\clientmod\target\classes;G:\projets\wires\wires\wires\clientmod\src\test\java;" \
+    --add-reads apimod=ALL-UNNAMED \
+    --add-reads clientmod=ALL-UNNAMED \
+    --add-exports apimod/api=ALL-UNNAMED \
+    --add-exports clientmod/client=ALL-UNNAMED \
+    --add-modules apimod
+
+2. I remove G:\projets\wires\wires\wires\apimod\target\apimod-1.0-SNAPSHOT-tests.jar; from --module-path
+3. I add the same to --patch-module clientmod, giving me:
+    javac "G:\projets\wires\wires\wires\clientmod\src\test\java\client\test\DerivedTest.java" \
+    -d "G:\projets\wires\wires\wires\clientmod\target\test-classes" \
+    -classpath "G:\projets\wires\wires\wires\clientmod\target\test-classes;" \
+    --module-path "G:\projets\wires\wires\wires\clientmod\target\classes;G:\projets\wires\wires\wires\apimod\target\apimod-1.0-SNAPSHOT.jar;" \
+    -sourcepath "G:\projets\wires\wires\wires\clientmod\src\test\java;" \
+    --release 9 \
+    -Xlint:all \
+    --patch-module clientmod="G:\projets\wires\wires\wires\clientmod\target\classes;G:\projets\wires\wires\wires\clientmod\src\test\java;G:\projets\wires\wires\wires\apimod\target\apimod-1.0-SNAPSHOT-tests.jar;" \
+    --add-reads apimod=ALL-UNNAMED \
+    --add-reads clientmod=ALL-UNNAMED \
+    --add-exports apimod/api=ALL-UNNAMED \
+    --add-exports clientmod/client=ALL-UNNAMED \
+    --add-modules apimod
+-->OK!
+
+****essai parametrage explicite maven pr utiliser --patch-module
+-jvm.config: KO car pr java pas javac
+-arg: KO
+
+
+
+javac -d G:\projets\wires\wires\wires\apimod\target\classes -classpath G:\projets\wires\wires\wires\apimod\target\classes; -sourcepath G:\projets\wires\wires\wires\apimod\src\main\java;G:\projets\wires\wires\wires\apimod\target\generated-sources\annotations; -s G:\projets\wires\wires\wires\apimod\target\generated-sources\annotations -g -nowarn -target 9 -source 9 --class-path=/G/projets/wires/wires/wires/clientmod/target/test-classes; --module-path=/G/projets/wires/wires/wires/clientmod/target/classes;/G/projets/wires/wires/wires/apimod/target/apimod-1.0-SNAPSHOT.jar; --source-path=/G/projets/wires/wires/wires/clientmod/src/test/java; -Xlint:all --patch-module=clientmod=/G/projets/wires/wires/wires/clientmod/target/classes;/G/projets/wires/wires/wires/clientmod/src/test/java;/G/projets/wires/wires/wires/apimod/target/apimod-1.0-SNAPSHOT.jar;/G/projets/wires/wires/wires/apimod/target/apimod-1.0-SNAPSHOT-tests.jar; --add-reads=apimod=ALL-UNNAMED --add-reads=clientmod=ALL-UNNAMED --add-exports=apimod/api=ALL-UNNAMED --add-exports=clientmod/client=ALL-UNNAMED --add-modules=apimod
