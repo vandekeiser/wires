@@ -2,9 +2,9 @@ package api.foo;
 
 import org.junit.Test;
 
-public class BaseTestX {
+public class BaseTest {
 
-    //@Test
+    @Test
     public void ff(){
         System.out.println("BaseTest OK");
     }

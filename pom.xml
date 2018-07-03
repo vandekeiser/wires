@@ -14,8 +14,20 @@
 
     <properties>
         <java.version>9</java.version>
+        <junit.version>4.12</junit.version>
+        <assertj.version>3.8.0</assertj.version>
+        <mockito.version>2.8.47</mockito.version>
+        <quickcheck.version>0.7</quickcheck.version>
+
+        <maven-failsafe-surefire-plugin.version>2.20.1</maven-failsafe-surefire-plugin.version>
         <maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
+        <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
         <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
+        <maven-exec-plugin.version>1.6.0</maven-exec-plugin.version>
+        <maven-jlink-plugin.version>3.0.0-alpha-1</maven-jlink-plugin.version>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
     <build>
@@ -40,62 +52,81 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
-                    <!--Syntaxically OK, but:-->
+                    <release>${java.version}</release>
+
+                    <!--1. Syntaxically OK, but:-->
                     <!--[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.7.0:compile (default-compile) on project apimod: Compilation failure: Compilation failure:-->
                     <!--[ERROR] /G:/projets/wires/wires/wires/apimod/src/main/java/api/Base.java:[1,1]-->
                     <!--file should be on source path, or on patch path for module-->
-                    <!--[ERROR] /G:/projets/wires/wires/wires/apimod/src/main/java/module-info.java:[1,1] -->
+                    <!--[ERROR] /G:/projets/wires/wires/wires/apimod/src/main/java/module-info.java:[1,1]-->
                     <!--file should be on source path, or on patch path for module-->
-                    <!--<compilerArgs>-->
-                        <!--<arg>&#45;&#45;class-path=/G/projets/wires/wires/wires/clientmod/target/test-classes;</arg>-->
-                        <!--<arg>&#45;&#45;module-path=/G/projets/wires/wires/wires/clientmod/target/classes;/G/projets/wires/wires/wires/apimod/target/apimod-1.0-SNAPSHOT.jar;</arg>-->
-                        <!--<arg>&#45;&#45;source-path=/G/projets/wires/wires/wires/clientmod/src/test/java;</arg>-->
-                        <!--<arg>-Xlint:all</arg>-->
-                        <!--<arg>&#45;&#45;patch-module=clientmod=/G/projets/wires/wires/wires/clientmod/target/classes;/G/projets/wires/wires/wires/clientmod/src/test/java;/G/projets/wires/wires/wires/apimod/target/apimod-1.0-SNAPSHOT-tests.jar;</arg>-->
-                        <!--<arg>&#45;&#45;add-reads=apimod=ALL-UNNAMED</arg>-->
-                        <!--<arg>&#45;&#45;add-reads=clientmod=ALL-UNNAMED</arg>-->
-                        <!--<arg>&#45;&#45;add-exports=apimod/api=ALL-UNNAMED</arg>-->
-                        <!--<arg>&#45;&#45;add-exports=clientmod/client=ALL-UNNAMED</arg>-->
-                        <!--<arg>&#45;&#45;add-modules=apimod</arg>-->
-                    <!--</compilerArgs>-->
-                    <!--Compiles, but surefire fails in clientmod:-->
-                    <!--<compilerArgs>-->
-                        <!--<arg>&#45;&#45;module-source-path=./*/src/main/java;./*/src/test/java/;</arg>-->
-                        <!--<arg>&#45;&#45;source-path=/G/projets/wires/wires/wires/apimod/src/main/java;/G/projets/wires/wires/wires/apimod/src/test/java;/G/projets/wires/wires/wires/clientmod/src/test/java;/G/projets/wires/wires/wires/clientmod/src/main/java;</arg>-->
-                        <!--<arg>-Xlint:all</arg>-->
-                        <!--<arg>&#45;&#45;patch-module=clientmod=/G/projets/wires/wires/wires/clientmod/target/classes;/G/projets/wires/wires/wires/clientmod/src/test/java;/G/projets/wires/wires/wires/apimod/target/apimod-1.0-SNAPSHOT.jar;/G/projets/wires/wires/wires/apimod/target/apimod-1.0-SNAPSHOT-tests.jar;</arg>-->
-                        <!--<arg>&#45;&#45;add-reads=apimod=ALL-UNNAMED</arg>-->
-                        <!--<arg>&#45;&#45;add-reads=clientmod=ALL-UNNAMED</arg>-->
-                        <!--<arg>&#45;&#45;add-exports=apimod/api=ALL-UNNAMED</arg>-->
-                        <!--<arg>&#45;&#45;add-exports=clientmod/client=ALL-UNNAMED</arg>-->
-                        <!--<arg>&#45;&#45;add-modules=apimod</arg>-->
-                    <!--</compilerArgs>-->
-<!--NoClassDefFoundError: client/test/DerivedTest (wrong name: clientmod/client/test/DerivedTest)-->
-<!--at java.base/java.lang.ClassLoader.defineClass1(Native Method)-->
-<!--at java.base/java.lang.ClassLoader.defineClass(ClassLoader.java:1007)-->
-<!--at java.base/java.security.SecureClassLoader.defineClass(SecureClassLoader.java:174)-->
-<!--at java.base/jdk.internal.loader.BuiltinClassLoader.defineClass(BuiltinClassLoader.java:801)-->
-<!--at java.base/jdk.internal.loader.BuiltinClassLoader.findClassOnClassPathOrNull(BuiltinClassLoader.java:699)-->
-<!--at java.base/jdk.internal.loader.BuiltinClassLoader.loadClassOrNull(BuiltinClassLoader.java:622)-->
-<!--at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:580)-->
-<!--at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:185)-->
-<!--at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:496)-->
-<!--at org.apache.maven.surefire.util.DefaultScanResult.loadClass(DefaultScanResult.java:131)-->
                     <compilerArgs>
-                        <arg>--module-source-path=./*/src/main/java;./*/src/test/java/;</arg>
-                        <arg>--source-path=/G/projets/wires/wires/wires/apimod/src/main/java;/G/projets/wires/wires/wires/apimod/src/test/java;/G/projets/wires/wires/wires/clientmod/src/test/java;/G/projets/wires/wires/wires/clientmod/src/main/java;</arg>
+                        <arg>--class-path=/G/projets/wires/wires/wires/clientmod/target/test-classes;</arg>
+                        <arg>
+                            --module-path=/G/projets/wires/wires/wires/clientmod/target/classes;/G/projets/wires/wires/wires/apimod/target/apimod-1.0-SNAPSHOT.jar;
+                        </arg>
+                        <arg>--source-path=/G/projets/wires/wires/wires/clientmod/src/test/java;</arg>
                         <arg>-Xlint:all</arg>
-                        <arg>--patch-module=clientmod=/G/projets/wires/wires/wires/clientmod/target/classes;/G/projets/wires/wires/wires/clientmod/src/test/java;/G/projets/wires/wires/wires/apimod/target/apimod-1.0-SNAPSHOT.jar;/G/projets/wires/wires/wires/apimod/target/apimod-1.0-SNAPSHOT-tests.jar;</arg>
+                        <arg>
+                            --patch-module=clientmod=/G/projets/wires/wires/wires/clientmod/target/classes;/G/projets/wires/wires/wires/clientmod/src/test/java;/G/projets/wires/wires/wires/apimod/target/apimod-1.0-SNAPSHOT-tests.jar;
+                        </arg>
                         <arg>--add-reads=apimod=ALL-UNNAMED</arg>
                         <arg>--add-reads=clientmod=ALL-UNNAMED</arg>
                         <arg>--add-exports=apimod/api=ALL-UNNAMED</arg>
                         <arg>--add-exports=clientmod/client=ALL-UNNAMED</arg>
                         <arg>--add-modules=apimod</arg>
                     </compilerArgs>
-                    <!--<executable>&lt;!&ndash; path-to-javac &ndash;&gt;</executable>-->
+
+                    <!--2.-->
+                    <!--[ERROR] Please refer to dump files (if any exist) [date]-jvmRun[N].dump, [date].dumpstream and [date]-jvmRun[N].dumpstream.-->
+                    <!--[ERROR] There was an error in the forked process-->
+                    <!--[ERROR] api/foo/BaseTest (wrong name: apimod/api/foo/BaseTest)-->
+                    <!--[ERROR] org.apache.maven.surefire.booter.SurefireBooterForkException: There was an error in the forked process-->
+                    <!--[ERROR] api/foo/BaseTest (wrong name: apimod/api/foo/BaseTest)-->
+                    <!--[ERROR]         at org.apache.maven.plugin.surefire.booterclient.ForkStarter.fork(ForkStarter.java:673)-->
+                    <!--<compilerArgs>-->
+                        <!--<arg>&#45;&#45;module-source-path=./*/src/main/java;./*/src/test/java/;</arg>-->
+                        <!--<arg>-->
+                            <!--&#45;&#45;source-path=/G/projets/wires/wires/wires/apimod/src/main/java;/G/projets/wires/wires/wires/apimod/src/test/java;/G/projets/wires/wires/wires/clientmod/src/test/java;/G/projets/wires/wires/wires/clientmod/src/main/java;-->
+                        <!--</arg>-->
+                        <!--<arg>-Xlint:all</arg>-->
+                        <!--<arg>-->
+                            <!--&#45;&#45;patch-module=clientmod=/G/projets/wires/wires/wires/clientmod/target/classes;/G/projets/wires/wires/wires/clientmod/src/test/java;/G/projets/wires/wires/wires/apimod/target/apimod-1.0-SNAPSHOT.jar;/G/projets/wires/wires/wires/apimod/target/apimod-1.0-SNAPSHOT-tests.jar;-->
+                        <!--</arg>-->
+                        <!--<arg>&#45;&#45;add-reads=apimod=ALL-UNNAMED</arg>-->
+                        <!--<arg>&#45;&#45;add-reads=clientmod=ALL-UNNAMED</arg>-->
+                        <!--<arg>&#45;&#45;add-exports=apimod/api=ALL-UNNAMED</arg>-->
+                        <!--<arg>&#45;&#45;add-exports=clientmod/client=ALL-UNNAMED</arg>-->
+                        <!--<arg>&#45;&#45;add-modules=apimod</arg>-->
+                    <!--</compilerArgs>-->
                 </configuration>
             </plugin>
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-failsafe-surefire-plugin.version}</version>
+                <!--<configuration>-->
+                    <!--&lt;!&ndash; Don't add any dependencies to the class path &ndash;&gt;-->
+                    <!--<classpathDependencyScopeExclude>test</classpathDependencyScopeExclude>-->
+
+                    <!--<argLine>-->
+                        <!--&#45;&#45;module-path=target/classes;/C/Users/User/.m2/repository/junit/junit/4.12/junit-4.12.jar; &#45;&#45;add-modules api,junit &#45;&#45;add-reads api=junit &#45;&#45;add-opens api/api=junit &#45;&#45;patch-module api=target/test-classes-->
+                    <!--</argLine>-->
+
+                    <!--&lt;!&ndash; Prevents target/classes to be added to the classpath &ndash;&gt;-->
+                    <!--<classesDirectory>path/to/none</classesDirectory>-->
+
+                    <!--&lt;!&ndash; Doing the same for test classes failed as it caused no tests to be found; it still works,-->
+                          <!--I assume the patch-module above takes precedence over their occurrence on the classpath &ndash;&gt;-->
+                    <!--&lt;!&ndash; <testClassesDirectory>path/to/none</testClassesDirectory> &ndash;&gt;-->
+                <!--</configuration>-->
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${maven-failsafe-surefire-plugin.version}</version>
+            </plugin>
         </plugins>
     </build>
 

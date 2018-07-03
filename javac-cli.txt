@@ -60,17 +60,19 @@ Furthermore you should not define the execution to create a test jar
     which is usually not what you want...
 Created a PR to your project you can take a look."
 -->
-1. ajout classe G:\projets\wires\wires\wires\apimod\src\test\java\api\foo\ff.java
+1. I trclasse G:\projets\wires\wires\wires\apimod\src\test\java\api\foo\ff.java
    qui etait le dernier dir vide:
    change rien
-2. le reste: sa branche passe uniquement parce qu'il a retiré la dependance de tests clientmod -> apimod
+2. le reste:
+Thanks for creating a branch. But it passes only because you removed the clientmod -> apimod test dependancy in clientmod's mod.
+Yes that dependency was unused, but only because I wanted to minimize the number of files in the problem reduction branch.
    on la remet: ca fail
 
 
 *****************analyse reponse Till Brychcy*****************
-It looks like maven doesn't support this use case yet.
-
+Thanks for your detailed answer, which is essentially that "It looks like maven doesn't support this use case yet"
 -->So let's try to reproduce the issue without maven.
+
 1. Adapting my former command line which is logged by maven, that is:
     javac "G:\projets\wires\wires\wires\clientmod\src\test\java\client\test\DerivedTest.java" \
     -d "G:\projets\wires\wires\wires\clientmod\target\test-classes" \
@@ -87,6 +89,7 @@ It looks like maven doesn't support this use case yet.
     --add-modules apimod
 
 2. I remove G:\projets\wires\wires\wires\apimod\target\apimod-1.0-SNAPSHOT-tests.jar; from --module-path
+
 3. I add the same to --patch-module clientmod, giving me:
     javac "G:\projets\wires\wires\wires\clientmod\src\test\java\client\test\DerivedTest.java" \
     -d "G:\projets\wires\wires\wires\clientmod\target\test-classes" \
@@ -102,6 +105,74 @@ It looks like maven doesn't support this use case yet.
     --add-exports clientmod/client=ALL-UNNAMED \
     --add-modules apimod
 -->OK!
+So your hypothesis that maven-compiler-plugin, or maven, doesn't support this yet seems validated.
+Though I think it is supposed to in the version I use, which is the latest. I wonder where to start to check that.
+
+So I tried configuring maven-compiler-plugin explicitly but to no avail.
+The general structure is I tried is (maven-compiler-plugin.version = 3.7.0):
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-compiler-plugin</artifactId>
+    <version>${maven-compiler-plugin.version}</version>
+    <configuration>
+        <source>${java.version}</source>
+        <target>${java.version}</target>
+        <release>${java.version}</release>
+        <compilerArgs>
+            [...]
+        </compilerArgs>
+    </configuration>
+</plugin>
+
+I tried the following compilerArgs (corresponding mvn clean install errors in xml comments):
+
+1:
+<!--1. Syntaxically OK, but:-->
+<!--[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.7.0:compile (default-compile) on project apimod: Compilation failure: Compilation failure:-->
+<!--[ERROR] /G:/projets/wires/wires/wires/apimod/src/main/java/api/Base.java:[1,1]-->
+<!--file should be on source path, or on patch path for module-->
+<!--[ERROR] /G:/projets/wires/wires/wires/apimod/src/main/java/module-info.java:[1,1]-->
+<!--file should be on source path, or on patch path for module-->
+<compilerArgs>
+    <arg>--class-path=/G/projets/wires/wires/wires/clientmod/target/test-classes;</arg>
+    <arg>
+        --module-path=/G/projets/wires/wires/wires/clientmod/target/classes;/G/projets/wires/wires/wires/apimod/target/apimod-1.0-SNAPSHOT.jar;
+    </arg>
+    <arg>--source-path=/G/projets/wires/wires/wires/clientmod/src/test/java;</arg>
+    <arg>-Xlint:all</arg>
+    <arg>
+        --patch-module=clientmod=/G/projets/wires/wires/wires/clientmod/target/classes;/G/projets/wires/wires/wires/clientmod/src/test/java;/G/projets/wires/wires/wires/apimod/target/apimod-1.0-SNAPSHOT-tests.jar;
+    </arg>
+    <arg>--add-reads=apimod=ALL-UNNAMED</arg>
+    <arg>--add-reads=clientmod=ALL-UNNAMED</arg>
+    <arg>--add-exports=apimod/api=ALL-UNNAMED</arg>
+    <arg>--add-exports=clientmod/client=ALL-UNNAMED</arg>
+    <arg>--add-modules=apimod</arg>
+</compilerArgs>
+
+2:
+<!--2.-->
+<!--[ERROR] Please refer to dump files (if any exist) [date]-jvmRun[N].dump, [date].dumpstream and [date]-jvmRun[N].dumpstream.-->
+<!--[ERROR] There was an error in the forked process-->
+<!--[ERROR] api/foo/BaseTest (wrong name: apimod/api/foo/BaseTest)-->
+<!--[ERROR] org.apache.maven.surefire.booter.SurefireBooterForkException: There was an error in the forked process-->
+<!--[ERROR] api/foo/BaseTest (wrong name: apimod/api/foo/BaseTest)-->
+<!--[ERROR]         at org.apache.maven.plugin.surefire.booterclient.ForkStarter.fork(ForkStarter.java:673)-->
+<compilerArgs>
+    <arg>--module-source-path=./*/src/main/java;./*/src/test/java/;</arg>
+    <arg>
+        --source-path=/G/projets/wires/wires/wires/apimod/src/main/java;/G/projets/wires/wires/wires/apimod/src/test/java;/G/projets/wires/wires/wires/clientmod/src/test/java;/G/projets/wires/wires/wires/clientmod/src/main/java;
+    </arg>
+    <arg>-Xlint:all</arg>
+    <arg>
+        --patch-module=clientmod=/G/projets/wires/wires/wires/clientmod/target/classes;/G/projets/wires/wires/wires/clientmod/src/test/java;/G/projets/wires/wires/wires/apimod/target/apimod-1.0-SNAPSHOT.jar;/G/projets/wires/wires/wires/apimod/target/apimod-1.0-SNAPSHOT-tests.jar;
+    </arg>
+    <arg>--add-reads=apimod=ALL-UNNAMED</arg>
+    <arg>--add-reads=clientmod=ALL-UNNAMED</arg>
+    <arg>--add-exports=apimod/api=ALL-UNNAMED</arg>
+    <arg>--add-exports=clientmod/client=ALL-UNNAMED</arg>
+    <arg>--add-modules=apimod</arg>
+</compilerArgs>
 
 ****essai parametrage explicite maven pr utiliser --patch-module
 -jvm.config: KO car pr java pas javac
