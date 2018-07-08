@@ -35,101 +35,16 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>${maven-jar-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>test-jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler-plugin.version}</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                    <release>${java.version}</release>
-
-                    <!--1. Syntaxically OK, but:-->
-                    <!--[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.7.0:compile (default-compile) on project apimod: Compilation failure: Compilation failure:-->
-                    <!--[ERROR] /G:/projets/wires/wires/wires/apimod/src/main/java/api/Base.java:[1,1]-->
-                    <!--file should be on source path, or on patch path for module-->
-                    <!--[ERROR] /G:/projets/wires/wires/wires/apimod/src/main/java/module-info.java:[1,1]-->
-                    <!--file should be on source path, or on patch path for module-->
-                    <!--<compilerArgs>-->
-                        <!--<arg>&#45;&#45;class-path=/G/projets/wires/wires/wires/clientmod/target/test-classes;</arg>-->
-                        <!--<arg>-->
-                            <!--&#45;&#45;module-path=/G/projets/wires/wires/wires/clientmod/target/classes;/G/projets/wires/wires/wires/apimod/target/apimod-1.0-SNAPSHOT.jar;-->
-                        <!--</arg>-->
-                        <!--<arg>&#45;&#45;source-path=/G/projets/wires/wires/wires/clientmod/src/test/java;</arg>-->
-                        <!--<arg>-Xlint:all</arg>-->
-                        <!--<arg>-->
-                            <!--&#45;&#45;patch-module=clientmod=/G/projets/wires/wires/wires/clientmod/target/classes;/G/projets/wires/wires/wires/clientmod/src/test/java;/G/projets/wires/wires/wires/apimod/target/apimod-1.0-SNAPSHOT-tests.jar;-->
-                        <!--</arg>-->
-                        <!--<arg>&#45;&#45;add-reads=apimod=ALL-UNNAMED</arg>-->
-                        <!--<arg>&#45;&#45;add-reads=clientmod=ALL-UNNAMED</arg>-->
-                        <!--<arg>&#45;&#45;add-exports=apimod/api=ALL-UNNAMED</arg>-->
-                        <!--<arg>&#45;&#45;add-exports=clientmod/client=ALL-UNNAMED</arg>-->
-                        <!--<arg>&#45;&#45;add-modules=apimod</arg>-->
-                    <!--</compilerArgs>-->
-
-                    <!--2.-->
-                    <!--[ERROR] Please refer to dump files (if any exist) [date]-jvmRun[N].dump, [date].dumpstream and [date]-jvmRun[N].dumpstream.-->
-                    <!--[ERROR] There was an error in the forked process-->
-                    <!--[ERROR] api/foo/BaseTest (wrong name: apimod/api/foo/BaseTest)-->
-                    <!--[ERROR] org.apache.maven.surefire.booter.SurefireBooterForkException: There was an error in the forked process-->
-                    <!--[ERROR] api/foo/BaseTest (wrong name: apimod/api/foo/BaseTest)-->
-                    <!--[ERROR]         at org.apache.maven.plugin.surefire.booterclient.ForkStarter.fork(ForkStarter.java:673)-->
-                    <compilerArgs>
-                        <arg>--module-source-path=./*/src/main/java;./*/src/test/java/;</arg>
-                        <arg>
-                            --source-path=/G/projets/wires/wires/wires/apimod/src/main/java;/G/projets/wires/wires/wires/apimod/src/test/java;/G/projets/wires/wires/wires/clientmod/src/test/java;/G/projets/wires/wires/wires/clientmod/src/main/java;
-                        </arg>
-                        <arg>-Xlint:all</arg>
-                        <arg>
-                            --patch-module=clientmod=/G/projets/wires/wires/wires/clientmod/target/classes;/G/projets/wires/wires/wires/clientmod/src/test/java;/G/projets/wires/wires/wires/apimod/target/apimod-1.0-SNAPSHOT.jar;/G/projets/wires/wires/wires/apimod/target/apimod-1.0-SNAPSHOT-tests.jar;
-                        </arg>
-                        <arg>--add-reads=apimod=ALL-UNNAMED</arg>
-                        <arg>--add-reads=clientmod=ALL-UNNAMED</arg>
-                        <arg>--add-exports=apimod/api=ALL-UNNAMED</arg>
-                        <arg>--add-exports=clientmod/client=ALL-UNNAMED</arg>
-                        <arg>--add-modules=apimod</arg>
-                    </compilerArgs>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-failsafe-surefire-plugin.version}</version>
                 <configuration>
                     <forkMode>never</forkMode>
                     <childDelegation>false</childDelegation>
-
-                    <!--&lt;!&ndash; Don't add any dependencies to the class path &ndash;&gt;-->
-                    <!--<classpathDependencyScopeExclude>test</classpathDependencyScopeExclude>-->
-                    <!--&lt;!&ndash;<argLine>&#45;&#45;module-path=target/classes;/C/Users/User/.m2/repository/junit/junit/4.12/junit-4.12.jar; &#45;&#45;add-modules api,junit &#45;&#45;add-reads api=junit &#45;&#45;add-opens api/api=junit &#45;&#45;patch-module api=target/test-classes</argLine>&ndash;&gt;-->
-                    <!--<argLine>&#45;&#45;module-path=target/classes</argLine>-->
-                    <!--&lt;!&ndash; Prevents target/classes to be added to the classpath &ndash;&gt;-->
-                    <!--<classesDirectory>path/to/none</classesDirectory>-->
-                    <!--&lt;!&ndash; Doing the same for test classes failed as it caused no tests to be found; it still works,-->
-                          <!--I assume the patch-module above takes precedence over their occurrence on the classpath &ndash;&gt;-->
-                    <!--&lt;!&ndash; <testClassesDirectory>path/to/none</testClassesDirectory> &ndash;&gt;-->
                 </configuration>
 
                 <!--<configuration>-->
                     <!--<forkMode>never</forkMode>-->
                 <!--</configuration>-->
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>${maven-failsafe-surefire-plugin.version}</version>
             </plugin>
         </plugins>
     </build>

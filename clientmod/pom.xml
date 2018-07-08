@@ -28,4 +28,31 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <release>${java.version}</release>
+
+                    <compilerArgs>
+                        <arg>--module-source-path=./*/src/main/java;./*/src/test/java/;</arg>
+                        <arg>--source-path=/G/projets/wires/wires/wires/apimod/src/main/java;/G/projets/wires/wires/wires/apimod/src/test/java;/G/projets/wires/wires/wires/clientmod/src/test/java;/G/projets/wires/wires/wires/clientmod/src/main/java;</arg>
+                        <arg>-Xlint:all</arg>
+                        <arg>--patch-module=clientmod=/G/projets/wires/wires/wires/clientmod/target/classes;/G/projets/wires/wires/wires/clientmod/src/test/java;/G/projets/wires/wires/wires/apimod/target/apimod-1.0-SNAPSHOT.jar;/G/projets/wires/wires/wires/apimod/target/apimod-1.0-SNAPSHOT-tests.jar;</arg>
+                        <arg>--add-reads=apimod=ALL-UNNAMED</arg>
+                        <arg>--add-reads=clientmod=ALL-UNNAMED</arg>
+                        <arg>--add-exports=apimod/api=ALL-UNNAMED</arg>
+                        <arg>--add-exports=clientmod/client=ALL-UNNAMED</arg>
+                        <arg>--add-modules=apimod</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

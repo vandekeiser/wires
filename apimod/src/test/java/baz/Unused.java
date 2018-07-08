@@ -1,4 +1,4 @@
-package api.foo;
+package baz;
 
 public class Unused {
 }
