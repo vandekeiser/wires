@@ -71,22 +71,36 @@ Yes that dependency was unused, but only because I wanted to minimize the number
 
 *****************analyse reponse Till Brychcy*****************
 Thanks for your detailed answer, which is essentially that "It looks like maven doesn't support this use case yet"
--->So let's try to reproduce the issue without maven.
+-->So let's try to reproduce the issue without maven. I created branch TRY_ADAPT_khmarbaise-MINIMIZE_ISSUE for these trials (sorry for the confusing branch name).
 
 1. Adapting my former command line which is logged by maven, that is:
-    javac "G:\projets\wires\wires\wires\clientmod\src\test\java\client\test\DerivedTest.java" \
-    -d "G:\projets\wires\wires\wires\clientmod\target\test-classes" \
-    -classpath "G:\projets\wires\wires\wires\clientmod\target\test-classes;" \
-    --module-path "G:\projets\wires\wires\wires\apimod\target\apimod-1.0-SNAPSHOT-tests.jar;G:\projets\wires\wires\wires\clientmod\target\classes;G:\projets\wires\wires\wires\apimod\target\apimod-1.0-SNAPSHOT.jar;" \
-    -sourcepath "G:\projets\wires\wires\wires\clientmod\src\test\java;" \
-    --release 9 \
-    -Xlint:all \
-    --patch-module clientmod="G:\projets\wires\wires\wires\clientmod\target\classes;G:\projets\wires\wires\wires\clientmod\src\test\java;" \
-    --add-reads apimod=ALL-UNNAMED \
-    --add-reads clientmod=ALL-UNNAMED \
-    --add-exports apimod/api=ALL-UNNAMED \
-    --add-exports clientmod/client=ALL-UNNAMED \
-    --add-modules apimod
+javac "G:\projets\wires\wires\wires\clientmod\src\test\java\client\test\DerivedTest.java" \
+-d "G:\projets\wires\wires\wires\clientmod\target\test-classes" \
+-classpath "G:\projets\wires\wires\wires\clientmod\target\test-classes;" \
+--module-path "G:\projets\wires\wires\wires\apimod\target\apimod-1.0-SNAPSHOT-tests.jar;G:\projets\wires\wires\wires\clientmod\target\classes;G:\projets\wires\wires\wires\apimod\target\apimod-1.0-SNAPSHOT.jar;" \
+-sourcepath "G:\projets\wires\wires\wires\clientmod\src\test\java;" \
+--release 9 \
+-Xlint:all \
+--patch-module clientmod="G:\projets\wires\wires\wires\clientmod\target\classes;G:\projets\wires\wires\wires\clientmod\src\test\java;" \
+--add-reads apimod=ALL-UNNAMED \
+--add-reads clientmod=ALL-UNNAMED \
+--add-exports apimod/api=ALL-UNNAMED \
+--add-exports clientmod/client=ALL-UNNAMED \
+--add-modules apimod
+
+javac "G:\projets\wires\wires\wires\clientmod\src\test\java\client\test\DerivedTest.java"
+-d "G:\projets\wires\wires\wires\clientmod\target\test-classes"
+-classpath "G:\projets\wires\wires\wires\clientmod\target\test-classes;"
+--module-path "G:\projets\wires\wires\wires\apimod\target\apimod-1.0-SNAPSHOT-tests.jar;G:\projets\wires\wires\wires\clientmod\target\classes;G:\projets\wires\wires\wires\apimod\target\apimod-1.0-SNAPSHOT.jar;"
+-sourcepath "G:\projets\wires\wires\wires\clientmod\src\test\java;"
+--release 9
+-Xlint:all
+--patch-module clientmod="G:\projets\wires\wires\wires\clientmod\target\classes;G:\projets\wires\wires\wires\clientmod\src\test\java;"
+--add-reads apimod=ALL-UNNAMED
+--add-reads clientmod=ALL-UNNAMED
+--add-exports apimod/api=ALL-UNNAMED
+--add-exports clientmod/client=ALL-UNNAMED
+--add-modules apimod
 
 2. I remove G:\projets\wires\wires\wires\apimod\target\apimod-1.0-SNAPSHOT-tests.jar; from --module-path
 
@@ -181,3 +195,65 @@ I tried the following compilerArgs (corresponding mvn clean install errors in xm
 
 
 javac -d G:\projets\wires\wires\wires\apimod\target\classes -classpath G:\projets\wires\wires\wires\apimod\target\classes; -sourcepath G:\projets\wires\wires\wires\apimod\src\main\java;G:\projets\wires\wires\wires\apimod\target\generated-sources\annotations; -s G:\projets\wires\wires\wires\apimod\target\generated-sources\annotations -g -nowarn -target 9 -source 9 --class-path=/G/projets/wires/wires/wires/clientmod/target/test-classes; --module-path=/G/projets/wires/wires/wires/clientmod/target/classes;/G/projets/wires/wires/wires/apimod/target/apimod-1.0-SNAPSHOT.jar; --source-path=/G/projets/wires/wires/wires/clientmod/src/test/java; -Xlint:all --patch-module=clientmod=/G/projets/wires/wires/wires/clientmod/target/classes;/G/projets/wires/wires/wires/clientmod/src/test/java;/G/projets/wires/wires/wires/apimod/target/apimod-1.0-SNAPSHOT.jar;/G/projets/wires/wires/wires/apimod/target/apimod-1.0-SNAPSHOT-tests.jar; --add-reads=apimod=ALL-UNNAMED --add-reads=clientmod=ALL-UNNAMED --add-exports=apimod/api=ALL-UNNAMED --add-exports=clientmod/client=ALL-UNNAMED --add-modules=apimod
+
+
+-vf contenu du jar ok, sinon fixer la lmigne de cmd puis mvn
+-debugger surefire pr voir pqoi il prend le module comme un noù de pkg
+
+
+Caused by: java.lang.NoClassDefFoundError: api/foo/BaseTest (wrong name: apimod/api/foo/BaseTest)
+    at java.lang.ClassLoader.defineClass1 (Native Method)
+    at java.lang.ClassLoader.defineClass (ClassLoader.java:1007)
+    at java.security.SecureClassLoader.defineClass (SecureClassLoader.java:174)
+    at java.net.URLClassLoader.defineClass (URLClassLoader.java:545)
+    at java.net.URLClassLoader.access$100 (URLClassLoader.java:83)
+    at java.net.URLClassLoader$1.run (URLClassLoader.java:453)
+    at java.net.URLClassLoader$1.run (URLClassLoader.java:447)
+    at java.security.AccessController.doPrivileged (Native Method)
+    at java.net.URLClassLoader.findClass (URLClassLoader.java:446)
+    at java.lang.ClassLoader.loadClass (ClassLoader.java:563)
+    at java.lang.ClassLoader.loadClass (ClassLoader.java:496)
+    at org.apache.maven.surefire.booter.IsolatedClassLoader.loadClass (IsolatedClassLoader.java:100)
+    at org.apache.maven.surefire.util.DefaultScanResult.loadClass (DefaultScanResult.java:136)
+    at org.apache.maven.surefire.util.DefaultScanResult.applyFilter (DefaultScanResult.java:100)
+    at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.scanClasspath (JUnitPlatformProvider.java:129)
+    at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invoke (JUnitPlatformProvider.java:117)
+    at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0 (Native Method)
+    at jdk.internal.reflect.NativeMethodAccessorImpl.invoke (NativeMethodAccessorImpl.java:62)
+    at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke (DelegatingMethodAccessorImpl.java:43)
+    at java.lang.reflect.Method.invoke (Method.java:564)
+    at org.apache.maven.surefire.util.ReflectionUtils.invokeMethodWithArray2 (ReflectionUtils.java:206)
+    at org.apache.maven.surefire.booter.ProviderFactory$ProviderProxy.invoke (ProviderFactory.java:161)
+    at org.apache.maven.surefire.booter.ProviderFactory.invokeProvider (ProviderFactory.java:84)
+    at org.apache.maven.plugin.surefire.InPluginVMSurefireStarter.runSuitesInProcess (InPluginVMSurefireStarter.java:87)
+    at org.apache.maven.plugin.surefire.AbstractSurefireMojo.executeProvider (AbstractSurefireMojo.java:1177)
+    at org.apache.maven.plugin.surefire.AbstractSurefireMojo.executeAfterPreconditionsChecked (AbstractSurefireMojo.java:1022)
+    at org.apache.maven.plugin.surefire.AbstractSurefireMojo.execute (AbstractSurefireMojo.java:868)
+    at org.apache.maven.plugin.DefaultBuildPluginManager.executeMojo (DefaultBuildPluginManager.java:137)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:208)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:154)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:146)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:117)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:81)
+    at org.apache.maven.lifecycle.internal.builder.singlethreaded.SingleThreadedBuilder.build (SingleThreadedBuilder.java:56)
+    at org.apache.maven.lifecycle.internal.LifecycleStarter.execute (LifecycleStarter.java:128)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:305)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:192)
+    at org.apache.maven.DefaultMaven.execute (DefaultMaven.java:105)
+    at org.apache.maven.cli.MavenCli.execute (MavenCli.java:956)
+    at org.apache.maven.cli.MavenCli.doMain (MavenCli.java:290)
+    at org.apache.maven.cli.MavenCli.main (MavenCli.java:194)
+    at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0 (Native Method)
+    at jdk.internal.reflect.NativeMethodAccessorImpl.invoke (NativeMethodAccessorImpl.java:62)
+    at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke (DelegatingMethodAccessorImpl.java:43)
+    at java.lang.reflect.Method.invoke (Method.java:564)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launchEnhanced (Launcher.java:289)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launch (Launcher.java:229)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.mainWithExitCode (Launcher.java:415)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.main (Launcher.java:356)
+
+
+
+ Execution default-test of goal org.apache.maven.plugins:maven-surefire-plugin:2.22.0:test failed:
+  A required class was missing while executing org.apache.maven.plugins:maven-surefire-plugin:2.22.0:test:
+  org/junit/runner/notification/RunNotifier
