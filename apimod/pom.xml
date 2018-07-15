@@ -34,6 +34,9 @@
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                     <release>${java.version}</release>
+                    <jdkToolchain>
+                        <version>9</version>
+                    </jdkToolchain>
                 </configuration>
             </plugin>
 
