@@ -1,9 +1,8 @@
 package client.test;
 
 import org.junit.Test;
-//import org.junit.jupiter.api.Test;
 
-public class DerivedTestX {
+public class DerivedTest {
 
     @Test
     public void gg(){

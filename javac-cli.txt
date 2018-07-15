@@ -257,3 +257,131 @@ Caused by: java.lang.NoClassDefFoundError: api/foo/BaseTest (wrong name: apimod/
  Execution default-test of goal org.apache.maven.plugins:maven-surefire-plugin:2.22.0:test failed:
   A required class was missing while executing org.apache.maven.plugins:maven-surefire-plugin:2.22.0:test:
   org/junit/runner/notification/RunNotifier
+
+
+EBUG] Forking command line:
+cmd.exe /X /C ""C:\Program Files\Java\jdk-9.0.4\bin\java" --add-modules junit --module-path target/classes;C:\Users\User\.m2\repository\junit\junit\4.12\junit-4.12.jar; --patch-module clientmod=target/test-classes --add-reads clientmod=junit --add-opens clientmod/client=junit -jar C:\Users\User\AppData\Local\Temp\surefire13841552934837929929\surefirebooter4496717745192310047.jar C:\Users\User\AppData\Local\Temp\surefire13841552934837929929 2018-07-08T16-14-15_942-jvmRun1 surefire12247060966080945834tmp surefire_114125959905928207058tmp"
+-->
+java --add-modules junit --module-path "target/classes;C:\Users\User\.m2\repository\junit\junit\4.12\junit-4.12.jar;" --patch-module clientmod=target/test-classes --add-reads clientmod=junit --add-opens clientmod/client=junit -jar "C:\Users\User\AppData\Local\Temp\surefire13841552934837929929\surefirebooter4496717745192310047.jar" C:\Users\User\AppData\Local\Temp\surefire13841552934837929929 2018-07-08T16-14-15_942-jvmRun1 surefire12247060966080945834tmp surefire_114125959905928207058tmp
+
+
+ Caused by: java.lang.NoClassDefFoundError: client/test/DerivedTest (wrong name: clientmod/client/test/DerivedTest)
+[ERROR]         at java.base/java.lang.ClassLoader.defineClass1(Native Method)
+[ERROR]         at java.base/java.lang.ClassLoader.defineClass(ClassLoader.java:1007)
+[ERROR]         at java.base/java.security.SecureClassLoader.defineClass(SecureClassLoader.java:174)
+[ERROR]         at java.base/java.net.URLClassLoader.defineClass(URLClassLoader.java:545)
+[ERROR]         at java.base/java.net.URLClassLoader.access$100(URLClassLoader.java:83)
+[ERROR]         at java.base/java.net.URLClassLoader$1.run(URLClassLoader.java:453)
+[ERROR]         at java.base/java.net.URLClassLoader$1.run(URLClassLoader.java:447)
+[ERROR]         at java.base/java.security.AccessController.doPrivileged(Native Method)
+[ERROR]         at java.base/java.net.URLClassLoader.findClass(URLClassLoader.java:446)
+[ERROR]         at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:563)
+[ERROR]         at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:496)
+[ERROR]         at org.apache.maven.surefire.booter.IsolatedClassLoader.loadClass(IsolatedClassLoader.java:100)
+    -->clientmod.client.test.DerivedTest
+[ERROR]         at org.apache.maven.surefire.util.DefaultScanResult.loadClass(DefaultScanResult.java:136)
+    -->clientmod.client.test.DerivedTest
+[ERROR]         at org.apache.maven.surefire.util.DefaultScanResult.applyFilter(DefaultScanResult.java:100)
+[ERROR]         at org.apache.maven.surefire.junit4.JUnit4Provider.scanClassPath(JUnit4Provider.java:309)
+    -->final TestsToRun scannedClasses = scanResult.applyFilter( jUnit4TestChecker, testClassLoader );
+    -->scanResult.classes == clientmod.client.test.DerivedTest
+[ERROR]         at org.apache.maven.surefire.junit4.JUnit4Provider.setTestsToRun(JUnit4Provider.java:189)
+[ERROR]         at org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:132)
+[ERROR]         at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+[ERROR]         at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+[ERROR]         at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+[ERROR]         at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+[ERROR]         at org.apache.maven.surefire.util.ReflectionUtils.invokeMethodWithArray2(ReflectionUtils.java:206)
+[ERROR]         at org.apache.maven.surefire.booter.ProviderFactory$ProviderProxy.invoke(ProviderFactory.java:161)
+[ERROR]         at org.apache.maven.surefire.booter.ProviderFactory.invokeProvider(ProviderFactory.java:84)
+[ERROR]         at org.apache.maven.plugin.surefire.InPluginVMSurefireStarter.runSuitesInProcess(InPluginVMSurefireStarter.java:87)
+[ERROR]         ... 25 more
+
+JUnit4Provider::new(
+    ProviderParameters bootParams
+    =
+    class org.apache.maven.surefire.booter.BaseProviderFactory
+)
+
+-->
+
+BaseProviderFactory::getScanResult
+     -->return DefaultScanResult.from( providerProperties );
+     -->providerProperties == "tc.0" -> "clientmod.client.test.DerivedTest"
+
+BaseProviderFactory::setProviderProperties
+    -->"tc.0" -> "clientmod.client.test.DerivedTest"
+    -->D'OU?
+
+"main@1" prio=5 tid=0x1 nid=NA runnable
+  java.lang.Thread.State: RUNNABLE
+	  at org.apache.maven.surefire.booter.BaseProviderFactory.setProviderProperties(BaseProviderFactory.java:183)
+	  at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(NativeMethodAccessorImpl.java:-1)
+	  at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	  at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	  at java.lang.reflect.Method.invoke(Method.java:564)
+	  at org.apache.maven.surefire.util.ReflectionUtils.invokeMethodWithArray(ReflectionUtils.java:189)
+	  at org.apache.maven.surefire.util.ReflectionUtils.invokeSetter(ReflectionUtils.java:182)
+	  at org.apache.maven.surefire.util.ReflectionUtils.invokeSetter(ReflectionUtils.java:177)
+	  at org.apache.maven.surefire.booter.SurefireReflector.setProviderProperties(SurefireReflector.java:354)
+	  at org.apache.maven.surefire.booter.SurefireReflector.setProviderPropertiesAware(SurefireReflector.java:348)
+	  at org.apache.maven.surefire.booter.ProviderFactory.createProvider(ProviderFactory.java:104)
+	  at org.apache.maven.surefire.booter.ProviderFactory.invokeProvider(ProviderFactory.java:83)
+	  at org.apache.maven.plugin.surefire.InPluginVMSurefireStarter.runSuitesInProcess(InPluginVMSurefireStarter.java:87)
+	  at org.apache.maven.plugin.surefire.AbstractSurefireMojo.executeProvider(AbstractSurefireMojo.java:1177)
+	  at org.apache.maven.plugin.surefire.AbstractSurefireMojo.executeAfterPreconditionsChecked(AbstractSurefireMojo.java:1022)
+	  at org.apache.maven.plugin.surefire.AbstractSurefireMojo.execute(AbstractSurefireMojo.java:868)
+	  at org.apache.maven.plugin.DefaultBuildPluginManager.executeMojo(DefaultBuildPluginManager.java:137)
+	  at org.apache.maven.lifecycle.internal.MojoExecutor.execute(MojoExecutor.java:208)
+	  at org.apache.maven.lifecycle.internal.MojoExecutor.execute(MojoExecutor.java:154)
+	  at org.apache.maven.lifecycle.internal.MojoExecutor.execute(MojoExecutor.java:146)
+	  at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject(LifecycleModuleBuilder.java:117)
+	  at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject(LifecycleModuleBuilder.java:81)
+	  at org.apache.maven.lifecycle.internal.builder.singlethreaded.SingleThreadedBuilder.build(SingleThreadedBuilder.java:56)
+	  at org.apache.maven.lifecycle.internal.LifecycleStarter.execute(LifecycleStarter.java:128)
+	  at org.apache.maven.DefaultMaven.doExecute(DefaultMaven.java:305)
+	  at org.apache.maven.DefaultMaven.doExecute(DefaultMaven.java:192)
+	  at org.apache.maven.DefaultMaven.execute(DefaultMaven.java:105)
+	  at org.apache.maven.cli.MavenCli.execute(MavenCli.java:954)
+	  at org.apache.maven.cli.MavenCli.doMain(MavenCli.java:288)
+	  at org.apache.maven.cli.MavenCli.main(MavenCli.java:192)
+	  at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(NativeMethodAccessorImpl.java:-1)
+	  at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	  at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	  at java.lang.reflect.Method.invoke(Method.java:564)
+	  at org.codehaus.plexus.classworlds.launcher.Launcher.launchEnhanced(Launcher.java:289)
+	  at org.codehaus.plexus.classworlds.launcher.Launcher.launch(Launcher.java:229)
+	  at org.codehaus.plexus.classworlds.launcher.Launcher.mainWithExitCode(Launcher.java:415)
+	  at org.codehaus.plexus.classworlds.launcher.Launcher.main(Launcher.java:356)
+
+
+SurefireReflector::setProviderPropertiesAware
+    -->Map<String, String> properties = "tc.0" -> "clientmod.client.test.DerivedTest"
+
+
+-->essayer de forcer le name?
+    Map.of("tc.0", "client.test.DerivedTest")
+
+
+DefaultScanResult::applyFilter
+    loadClass( testClassLoader, "clientmod/client.test.DerivedTest" );
+
+DefaultScanResult::loadClass
+    classLoader.loadClass( className )
+    ClassLoaders.appClassLoader().loadClass("java.lang.Object")
+        OK
+    ClassLoaders.appClassLoader().loadClass("java.base/java.lang.Object")
+        KO
+    ClassLoaders.appClassLoader().loadClass("api.Base")
+    ClassLoaders.appClassLoader().loadClass("baz.BaseTest")
+    ClassLoaders.appClassLoader().loadClass("client.Derived")
+    ClassLoaders.appClassLoader().loadClass("client.test.DerivedTest")
+    ClassLoaders.appClassLoader().loadClass("apimod/api.Base")
+    ClassLoaders.appClassLoader().loadClass("apimod/baz.BaseTest")
+    ClassLoaders.appClassLoader().loadClass("clientmod/client.Derived")
+    ClassLoaders.appClassLoader().loadClass("clientmod/client.test.DerivedTest")
+        CNFE
+
+Comparaison lancement JUnit ds IJ:
+     class jdk.internal.loader.ClassLoaders$AppClassLoader
+     client.test.DerivedTest
