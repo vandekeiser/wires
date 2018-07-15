@@ -1,4 +1,4 @@
-package client.test;
+package qux;
 
 import api.Base;
 import baz.BaseTest;
@@ -10,6 +10,7 @@ public class DerivedTest extends BaseTest {
     public void should_pass(){
         new Base();
         System.out.println("DerivedTest OK");
+        //if(true) throw new Error("Should see this: DerivedTest");
     }
 
 }

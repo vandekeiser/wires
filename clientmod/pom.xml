@@ -40,7 +40,8 @@
                     <target>${java.version}</target>
                     <release>${java.version}</release>
 
-                    <!--This make mvn clean install pass-->
+                    <!--This makes the test compile even with the test-scoped dependency present,
+                        but then surefire fails (so probably those flags are incorrect too)-->
                     <!--<compilerArgs>-->
                         <!--<arg>&#45;&#45;module-source-path=./*/src/main/java;./*/src/test/java/;</arg>-->
                         <!--<arg>-->
