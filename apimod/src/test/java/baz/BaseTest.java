@@ -5,7 +5,7 @@ import org.junit.Test;
 public class BaseTest {
 
     @Test
-    public void ff(){
+    public void should_pass(){
         System.out.println("BaseTest OK");
     }
 
