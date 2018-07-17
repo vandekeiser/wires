@@ -8,15 +8,14 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>wires.neuron</artifactId>
+    <artifactId>wires-neuron</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>wires.neuron</name>
 
     <dependencies>
         <dependency>
             <groupId>fr.cla</groupId>
-            <artifactId>wires.core</artifactId>
+            <artifactId>wires-core</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

@@ -7,16 +7,15 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>wires</name>
     <description>A Java port of the "Simulator for digital circuits" from SICP (Structure and Interpretation of Computer
         Programs)
     </description>
     <url>https://github.com/vandekeiser/wires</url>
 
     <modules>
-        <module>wires.support</module>
-        <module>wires.core</module>
-        <module>wires.neuron</module>
+        <module>wires-support</module>
+        <module>wires-core</module>
+        <module>wires-neuron</module>
     </modules>
 
     <properties>
@@ -124,14 +123,16 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
                 <configuration>
-                    <!--No warnings for you! _TILT_ This is the PAPA Pinball Circuit Final-->
                     <compilerArguments>
                         <Werror/>
                     </compilerArguments>
                     <!--The "missing serialVersionUID" warning is useless in this project,
                     as in all projects that dont need a serialization compatibility policy
                     more advanced than the default one (see Effective Java).-->
-                    <compilerArgument>-Xlint:all,-serial</compilerArgument>
+                    <!--<compilerArgument>-Xlint:all,-serial</compilerArgument>-->
+
+
+                    <compilerArgument>-Xlint:all,-serial,-exports</compilerArgument>
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
                     <source>9</source>
