@@ -1,3 +1,3 @@
 module clientmod {
-    requires apimod;
+    requires cla.apimod;
 }

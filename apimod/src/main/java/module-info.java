@@ -1,3 +1,3 @@
-module apimod {
-    exports api;
+module cla.apimod {
+    exports cla.api;
 }

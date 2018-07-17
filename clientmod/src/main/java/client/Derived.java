@@ -1,5 +1,5 @@
 package client;
 
-import api.Base;
+import cla.api.Base;
 
 public class Derived extends Base {}

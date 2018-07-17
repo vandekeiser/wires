@@ -1,6 +1,6 @@
 package qux;
 
-import api.Base;
+import cla.api.Base;
 import baz.BaseTest;
 import org.junit.Test;
 
