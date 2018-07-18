@@ -124,16 +124,19 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
                 <configuration>
+                    <!--<compilerArgs>-->
+                        <!--<arg>-verbose</arg>-->
+                    <!--</compilerArgs>-->
                     <compilerArguments>
                         <Werror/>
                     </compilerArguments>
                     <!--The "missing serialVersionUID" warning is useless in this project,
                     as in all projects that dont need a serialization compatibility policy
                     more advanced than the default one (see Effective Java).-->
-                    <!--<compilerArgument>-Xlint:all,-serial</compilerArgument>-->
-
-
-                    <compilerArgument>-Xlint:all,-serial,-exports</compilerArgument>
+                    <!--With this mvn clean install fails-->
+                    <compilerArgument>-Xlint:all,-serial</compilerArgument>
+                    <!--With this mvn clean install passes-->
+                    <!--<compilerArgument>-Xlint:all,-serial,-exports</compilerArgument>-->
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
                     <source>9</source>
