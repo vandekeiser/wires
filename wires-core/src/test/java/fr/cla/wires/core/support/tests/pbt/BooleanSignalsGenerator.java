@@ -11,22 +11,23 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.toList;
 
 //@formatter:off
-public class BooleanSignalsGenerator extends Generator<List<Signal<Boolean>>> {
+public class BooleanSignalsGenerator extends Generator<ListOfSignalsOfBoolean> {
 
     public static final int MULTIPLICITY = 100;
 
     public BooleanSignalsGenerator() {
-        super(listOfBooleanSignals());
+        super(ListOfSignalsOfBoolean.class);
     }
 
     @Override
-    public List<Signal<Boolean>> generate(SourceOfRandomness rand, GenerationStatus status) {
-        return Stream
+    public ListOfSignalsOfBoolean generate(SourceOfRandomness rand, GenerationStatus status) {
+        List<Signal<Boolean>> signals = Stream
             .generate(() -> nextTrilean(rand))
             .map(Trilean::toBooleanSignal)
             .limit(MULTIPLICITY)
             .collect(toList())
         ;
+        return new ListOfSignalsOfBoolean(signals);
     }
 
     private Trilean nextTrilean(SourceOfRandomness rand) {
@@ -36,23 +37,6 @@ public class BooleanSignalsGenerator extends Generator<List<Signal<Boolean>>> {
             case 2: return Trilean.NOT_SET;
             default: throw new AssertionError();
         }
-    }
-
-    private static Class<List<Signal<Boolean>>> listOfBooleanSignals() {
-        Class<?> unbounded = List.class;
-
-        //We promise to only ever produce List<Signal<Boolean>>
-        //...
-        //...
-        //java.lang.IllegalArgumentException:
-        // Cannot find generator for
-        //  java.util.List<fr.cla.wires.Signal<java.lang.Boolean>>:
-        //  fr.cla.wires.Signal<java.lang.Boolean>
-        //  of type fr.cla.wires.Signal<java.lang.Boolean>
-        @SuppressWarnings("unchecked")
-        Class<List<Signal<Boolean>>> listOfBooleans = (Class<List<Signal<Boolean>>>) unbounded;
-
-        return listOfBooleans;
     }
 
     private enum Trilean {

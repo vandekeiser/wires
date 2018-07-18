@@ -3,6 +3,7 @@ package fr.cla.wires.core.boxes.exampleusage.propertybasedtesting;
 
 import com.pholser.junit.quickcheck.Property;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
+import fr.cla.wires.core.support.tests.pbt.ListOfSignalsOfBoolean;
 import fr.cla.wires.core.support.tests.pbt.RandomBooleanSignals;
 import fr.cla.wires.core.Clock;
 import fr.cla.wires.core.Signal;
@@ -69,13 +70,12 @@ public class MultipleAnd_ReduceAndCollectShouldBeEquivalent_PbtTest {
         }
     }
 
-    @Ignore //TODO see BooleanSignalsGenerator::listOfBooleanSignals?
     @Property(trials = TRIALS)
     public void should_give_same_result_even_when_inputs_are_not_all_set(
-        @RandomBooleanSignals List<Signal<Boolean>> signals
+        @RandomBooleanSignals ListOfSignalsOfBoolean signals
     ) {
         given: {
-            Iterator<Signal<Boolean>> _signals = signals.iterator();
+            Iterator<Signal<Boolean>> _signals = signals.get().iterator();
             ins.forEach(w -> w.setSignal(_signals.next()));
         }
         when: {
@@ -121,12 +121,11 @@ public class MultipleAnd_ReduceAndCollectShouldBeEquivalent_PbtTest {
         );
     }
 
-    @Ignore //TODO see BooleanSignalsGenerator::listOfBooleanSignals?
     @Property(trials = TRIALS)
     public void should_sometimes_give_not_set(
-        @RandomBooleanSignals List<Signal<Boolean>> signals
+        @RandomBooleanSignals ListOfSignalsOfBoolean signals
     ) {
-        should_sometimes_give0(signals, Signal.none());
+        should_sometimes_give0(signals.get(), Signal.none());
     }
 
     private void should_sometimes_give0(
