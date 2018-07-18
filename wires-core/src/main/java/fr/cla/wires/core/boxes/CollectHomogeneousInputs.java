@@ -1,11 +1,11 @@
 package fr.cla.wires.core.boxes;
 
-import fr.cla.wires.support.oo.Accumulable;
-import fr.cla.wires.support.oo.Mutable;
 import fr.cla.wires.core.Box;
 import fr.cla.wires.core.Clock;
 import fr.cla.wires.core.Delay;
 import fr.cla.wires.core.Wire;
+import fr.cla.wires.support.oo.Accumulable;
+import fr.cla.wires.support.oo.Mutable;
 
 import java.util.EnumSet;
 import java.util.List;

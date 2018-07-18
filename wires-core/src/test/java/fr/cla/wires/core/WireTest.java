@@ -1,8 +1,6 @@
 package fr.cla.wires.core;
 
 
-import fr.cla.wires.core.Signal;
-import fr.cla.wires.core.Wire;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

@@ -1,18 +1,19 @@
 package fr.cla.wires.core.boxes;
 
-import fr.cla.wires.support.functional.Indexed;
-import fr.cla.wires.support.oo.Accumulable;
 import fr.cla.wires.core.Box;
 import fr.cla.wires.core.Clock;
 import fr.cla.wires.core.Delay;
 import fr.cla.wires.core.Wire;
+import fr.cla.wires.support.functional.Indexed;
+import fr.cla.wires.support.oo.Accumulable;
 
 import java.util.List;
-import java.util.function.*;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collector;
 
 import static java.util.Collections.singletonList;
-import static java.util.Objects.requireNonNull;
 
 //@formatter:off
 /**

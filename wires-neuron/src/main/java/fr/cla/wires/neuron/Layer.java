@@ -1,10 +1,10 @@
 package fr.cla.wires.neuron;
 
-import fr.cla.wires.support.functional.Indexed;
 import fr.cla.wires.core.Clock;
 import fr.cla.wires.core.Delay;
 import fr.cla.wires.core.Wire;
 import fr.cla.wires.core.boxes.CollectIndexedHomogeneousInputs;
+import fr.cla.wires.support.functional.Indexed;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -3,16 +3,15 @@ package fr.cla.wires.core.boxes.exampleusage.propertybasedtesting;
 
 import com.pholser.junit.quickcheck.Property;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
-import fr.cla.wires.core.support.tests.pbt.ListOfSignalsOfBoolean;
-import fr.cla.wires.core.support.tests.pbt.RandomBooleanSignals;
 import fr.cla.wires.core.Clock;
 import fr.cla.wires.core.Signal;
 import fr.cla.wires.core.Wire;
 import fr.cla.wires.core.boxes.exampleusage.multipleinputs.CollectMultipleAnd;
 import fr.cla.wires.core.boxes.exampleusage.multipleinputs.ReduceMultipleAnd;
+import fr.cla.wires.core.support.tests.pbt.ListOfSignalsOfBoolean;
+import fr.cla.wires.core.support.tests.pbt.RandomBooleanSignals;
 import fr.cla.wires.core.support.tests.pbt.RandomBooleans;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.runner.RunWith;
 
 import java.util.Iterator;

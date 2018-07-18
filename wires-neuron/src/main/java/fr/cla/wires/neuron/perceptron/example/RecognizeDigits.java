@@ -1,10 +1,10 @@
 package fr.cla.wires.neuron.perceptron.example;
 
-import fr.cla.wires.support.functional.Indexed;
 import fr.cla.wires.core.Box;
 import fr.cla.wires.core.Clock;
 import fr.cla.wires.core.Delay;
 import fr.cla.wires.core.Wire;
+import fr.cla.wires.support.functional.Indexed;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,6 @@ import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
-import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
 //@formatter:off
