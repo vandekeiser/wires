@@ -139,9 +139,10 @@
                     <!--<compilerArgument>-Xlint:all,-serial,-exports</compilerArgument>-->
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
-                    <!--<source>10</source>-->
-                    <!--<target>10</target>-->
-                    <release>9</release>
+                    <source>9</source>
+                    <target>9</target>
+                    <!--IJ doesn't seem to like release 10-->
+                    <!--<release>10</release>-->
                 </configuration>
             </plugin>
         </plugins>
