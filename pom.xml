@@ -25,7 +25,7 @@
         <mockito.version>2.8.47</mockito.version>
         <quickcheck.version>0.7</quickcheck.version>
 
-        <maven-failsafe-surefire-plugin.version>2.20.1</maven-failsafe-surefire-plugin.version>
+        <maven-failsafe-surefire-plugin.version>2.22.0</maven-failsafe-surefire-plugin.version>
         <maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
         <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
@@ -136,9 +136,16 @@
                     <compilerArgument>-Xlint:all,-serial,-exports</compilerArgument>
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
-                    <source>9</source>
-                    <target>9</target>
+                    <source>10</source>
+                    <target>10</target>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.ow2.asm</groupId>
+                        <artifactId>asm</artifactId>
+                        <version>6.2</version> <!-- Use newer version of ASM -->
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>

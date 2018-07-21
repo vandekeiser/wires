@@ -1,3 +1,22 @@
+The goal of this branch is to make mvn clean install pass.
+That is the criteria for migrating to Java>8,
+ which here is not trivial because Jigsaw modules and maven src-scoped dependencies
+ involve adding --patch-module/--add-exports options to javac/java
+ and only the most recent version of everything works with Java 10.
+Current status is I'm getting:
+    [ERROR] Tests run: 5, Failures: 0, Errors: 5, Skipped: 0, Time elapsed: 4.992 s <<< FAILURE! - in fr.cla.wires.core.boxes.exampleusage.propertybasedtesting.MultipleAnd_ReduceAndCollectShouldBeEquivalent_PbtTest
+    [ERROR] should_sometimes_give_false(fr.cla.wires.core.boxes.exampleusage.propertybasedtesting.MultipleAnd_ReduceAndCollectShouldBeEquivalent_PbtTest)  Time elapsed: 0.093 s  <<< ERROR!
+    com.pholser.junit.quickcheck.internal.ReflectionException: java.lang.IllegalAccessException: class com.pholser.junit.quickcheck.internal.Reflection cannot access class fr.cla.wires.core.support.tests.pbt.BooleansGenerator (in module fr.cla.wires.core) because module fr.cla.wires.core does not export fr.cla.wires.core.support.tests.pbt to unnamed module @1ed1993a
+The problem is:
+    "module fr.cla.wires.core does not export fr.cla.wires.core.support.tests.pbt to unnamed module"
+But should it be:
+    -Maven who adds --add-exports to the unnamed module
+    -Or javac to require an export to the unnamed module
+-->Need to read up and test
+
+
+
+
 # Java port of the "Simulator for digital circuits" from SICP
 A Java port of the "Simulator for digital circuits" from SICP (Structure and Interpretation of Computer Programs).
 The full book is available online: https://mitpress.mit.edu/sicp/full-text/book/book.html
@@ -11,7 +30,7 @@ For now (and for once) I wanna keep from looking at how frameworks like DL4J/Ten
 Instead I'm going to try to use: 
     -SICP concepts (wires, ...) as low-level bricks 
     -to implement the model from the French book "Réseaux neuronaux" by Jean-Philippe Rennard (Editions Vuibert) 
-    -using my Java experience to do it in a more object-oriented way than in the book    
+    -using my Java experience to do it in a more object-oriented way than in the book
  
 See:
  - Classes in `/src/main/java/fr/cla/wires/boxes/exampleusage/` for example usages of how to connect `Wire`s to `Box`es
