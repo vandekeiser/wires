@@ -1,3 +1,5 @@
+mvn clean install only works in Java 8 while I'm doing the migration.
+
 # Java port of the "Simulator for digital circuits" from SICP
 A Java port of the "Simulator for digital circuits" from SICP (Structure and Interpretation of Computer Programs).
 The full book is available online: https://mitpress.mit.edu/sicp/full-text/book/book.html

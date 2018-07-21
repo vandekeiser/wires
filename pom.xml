@@ -16,7 +16,6 @@
         <module>wires-support</module>
         <module>wires-core</module>
         <module>wires-neuron</module>
-        <module>wires-jlink</module>
     </modules>
 
     <properties>
@@ -25,7 +24,7 @@
         <mockito.version>2.8.47</mockito.version>
         <quickcheck.version>0.7</quickcheck.version>
 
-        <maven-failsafe-surefire-plugin.version>2.20.1</maven-failsafe-surefire-plugin.version>
+        <maven-failsafe-surefire-plugin.version>2.22.0</maven-failsafe-surefire-plugin.version>
         <maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
         <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
@@ -130,14 +129,12 @@
                     <!--The "missing serialVersionUID" warning is useless in this project,
                     as in all projects that dont need a serialization compatibility policy
                     more advanced than the default one (see Effective Java).-->
-                    <!--<compilerArgument>-Xlint:all,-serial</compilerArgument>-->
-
-
-                    <compilerArgument>-Xlint:all,-serial,-exports</compilerArgument>
+                    <compilerArgument>-Xlint:all,-serial</compilerArgument>
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
-                    <source>9</source>
-                    <target>9</target>
+                    <source>8</source>
+                    <target>8</target>
+                    <!--<release>8</release>-->
                 </configuration>
             </plugin>
         </plugins>
