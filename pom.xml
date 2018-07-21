@@ -116,27 +116,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <!--Configure javac-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler-plugin.version}</version>
-                <configuration>
-                    <compilerArguments>
-                        <Werror/>
-                    </compilerArguments>
-                    <!--The "missing serialVersionUID" warning is useless in this project,
-                    as in all projects that dont need a serialization compatibility policy
-                    more advanced than the default one (see Effective Java).-->
-                    <compilerArgument>-Xlint:all,-serial</compilerArgument>
-                    <showDeprecation>true</showDeprecation>
-                    <showWarnings>true</showWarnings>
-                    <source>8</source>
-                    <target>8</target>
-                    <!--<release>8</release>-->
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 
@@ -172,5 +151,91 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>java-8</id>
+            <activation>
+                <jdk>1.8</jdk>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>${maven-compiler-plugin.version}</version>
+                        <configuration>
+                            <compilerArguments>
+                                <Werror/>
+                            </compilerArguments>
+                            <!--The "missing serialVersionUID" warning is useless in this project,
+                            as in all projects that dont need a serialization compatibility policy
+                            more advanced than the default one (see Effective Java).-->
+                            <compilerArgument>-Xlint:all,-serial</compilerArgument>
+                            <showDeprecation>true</showDeprecation>
+                            <showWarnings>true</showWarnings>
+                            <source>8</source>
+                            <target>8</target>
+                            <!--<release>8</release>-->jh
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>java-10</id>
+            <activation>
+                <jdk>10</jdk>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>${maven-compiler-plugin.version}</version>
+                        <configuration>
+                            <compilerArguments>
+                                <Werror/>
+                            </compilerArguments>
+                            <!--The "missing serialVersionUID" warning is useless in this project,
+                            as in all projects that dont need a serialization compatibility policy
+                            more advanced than the default one (see Effective Java).-->
+                            <compilerArgument>-Xlint:all,-serial</compilerArgument>
+                            <showDeprecation>true</showDeprecation>
+                            <showWarnings>true</showWarnings>
+                            <release>10</release>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>java-9</id>
+            <activation>
+                <jdk>9</jdk>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>${maven-compiler-plugin.version}</version>
+                        <configuration>
+                            <compilerArguments>
+                                <Werror/>
+                            </compilerArguments>
+                            <!--The "missing serialVersionUID" warning is useless in this project,
+                            as in all projects that dont need a serialization compatibility policy
+                            more advanced than the default one (see Effective Java).-->
+                            <compilerArgument>-Xlint:all,-serial</compilerArgument>
+                            <showDeprecation>true</showDeprecation>
+                            <showWarnings>true</showWarnings>
+                            <release>9</release>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
