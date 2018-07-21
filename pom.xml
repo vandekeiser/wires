@@ -156,6 +156,10 @@
                 </configuration>
 
                 <!--Test 3: try this: https://stackoverflow.com/questions/49398894/unable-to-compile-simple-java-10-project-with-maven
+
+                This is exactmy the same exception as in:
+                https://issues.apache.org/jira/browse/SUREFIRE-1439
+
                 Produces :-->
                 <!--[ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:2.20.1:test (default-test) on project wires-support: Execution default-test of goal org.apache.maven.plugins:maven-surefire-plugin:2.20.1:test failed.: NullPointerException -> [Help 1]-->
                 <!--[...]-->
