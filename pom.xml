@@ -139,10 +139,17 @@
                     <!--<compilerArgument>-Xlint:all,-serial,-exports</compilerArgument>-->
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
+
+                    <!--With JAVA_HOME=Java 10.0.2, this produces:-->
+                    <!--"[WARNING] bootstrap class path not set in conjunction with -source 9"-->
+                    <!--With JAVA_HOME=Java 9.0.4, this produces:-->
+                    <!--"[WARNING] /G:/projets/wires/wires/wires/wires-core/src/test/java/fr/cla/wires/core/MavenVsJavaModulesReproduceTest.java:[9,54]
+                    class fr.cla.wires.support.oo.ddd.AbstractValueObjectTest in module  is not exported"-->
                     <source>9</source>
                     <target>9</target>
+
                     <!--IJ doesn't seem to like release 10-->
-                    <!--<release>10</release>-->
+                    <!--<release>9</release>-->
                 </configuration>
             </plugin>
         </plugins>
