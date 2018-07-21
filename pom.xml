@@ -136,8 +136,24 @@
                     <compilerArgument>-Xlint:all,-serial,-exports</compilerArgument>
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
-                    <source>9</source>
-                    <target>9</target>
+
+                    <!--Produces IlegalArgumentException in org.objectweb.asm.ClassReader.<init>:-->
+                    <!--[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.7.0:testCompile (default-testCompile) on project wires-support: Execution default-testCompile of goal org.apache.maven.plugins:maven-compiler-plugin:3.7.0:testCompile failed.: IllegalArgumentException -> [Help 1]-->
+                    <!--[...]-->
+                    <!--Caused by: java.lang.IllegalArgumentException-->
+                    <!--at org.objectweb.asm.ClassReader.<init> (Unknown Source)-->
+                    <!--at org.objectweb.asm.ClassReader.<init> (Unknown Source)-->
+                    <!--at org.objectweb.asm.ClassReader.<init> (Unknown Source)-->
+                    <!--at org.codehaus.plexus.languages.java.jpms.AsmModuleInfoParser.parse (AsmModuleInfoParser.java:80)-->
+                    <!--at org.codehaus.plexus.languages.java.jpms.AsmModuleInfoParser.getModuleDescriptor (AsmModuleInfoParser.java:54)-->
+                    <!--at org.codehaus.plexus.languages.java.jpms.LocationManager.resolvePaths (LocationManager.java:83)-->
+                    <!--at org.apache.maven.plugin.compiler.TestCompilerMojo.preparePaths (TestCompilerMojo.java:281)-->
+                    <!--[...]-->
+                    <release>10</release>
+
+                    <!--Same:-->
+                    <!--<source>10</source>-->
+                    <!--<target>10</target>-->
                 </configuration>
             </plugin>
         </plugins>
