@@ -127,17 +127,14 @@
                     <compilerArguments>
                         <Werror/>
                     </compilerArguments>
-                    <!--The "missing serialVersionUID" warning is useless in this project,
-                    as in all projects that dont need a serialization compatibility policy
-                    more advanced than the default one (see Effective Java).-->
+
                     <!--<compilerArgument>-Xlint:all,-serial</compilerArgument>-->
-
-
                     <compilerArgument>-Xlint:all,-serial,-exports</compilerArgument>
+
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
 
-                    <!--Produces IlegalArgumentException in org.objectweb.asm.ClassReader.<init>:-->
+                    <!--Test 1: Produces IlegalArgumentException in org.objectweb.asm.ClassReader.<init>:-->
                     <!--[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.7.0:testCompile (default-testCompile) on project wires-support: Execution default-testCompile of goal org.apache.maven.plugins:maven-compiler-plugin:3.7.0:testCompile failed.: IllegalArgumentException -> [Help 1]-->
                     <!--[...]-->
                     <!--Caused by: java.lang.IllegalArgumentException-->
@@ -151,10 +148,31 @@
                     <!--[...]-->
                     <release>10</release>
 
-                    <!--Same:-->
+                    <!--Test 2: Same IlegalArgumentException-->
                     <!--<source>10</source>-->
                     <!--<target>10</target>-->
                 </configuration>
+
+                <!--Test 3: try this: https://stackoverflow.com/questions/49398894/unable-to-compile-simple-java-10-project-with-maven
+                Produces :-->
+                <!--[ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:2.20.1:test (default-test) on project wires-support: Execution default-test of goal org.apache.maven.plugins:maven-surefire-plugin:2.20.1:test failed.: NullPointerException -> [Help 1]-->
+                <!--[...]-->
+                <!--Caused by: java.lang.NullPointerException-->
+                <!--at org.apache.maven.surefire.shade.org.apache.commons.lang3.SystemUtils.isJavaVersionAtLeast (SystemUtils.java:1626)-->
+                <!--at org.apache.maven.plugin.surefire.AbstractSurefireMojo.createSurefireBootDirectoryInTemp (AbstractSurefireMojo.java:2904)-->
+                <!--at org.apache.maven.plugin.surefire.AbstractSurefireMojo.getSurefireTempDir (AbstractSurefireMojo.java:2129)-->
+                <!--at org.apache.maven.plugin.surefire.AbstractSurefireMojo.getForkConfiguration (AbstractSurefireMojo.java:1967)-->
+                <!--at org.apache.maven.plugin.surefire.AbstractSurefireMojo.executeProvider (AbstractSurefireMojo.java:1111)-->
+                <!--at org.apache.maven.plugin.surefire.AbstractSurefireMojo.executeAfterPreconditionsChecked (AbstractSurefireMojo.java:954)-->
+                <!--at org.apache.maven.plugin.surefire.AbstractSurefireMojo.execute (AbstractSurefireMojo.java:832)-->
+                <!--[...]-->
+                <!--<dependencies>-->
+                    <!--<dependency>-->
+                        <!--<groupId>org.ow2.asm</groupId>-->
+                        <!--<artifactId>asm</artifactId>-->
+                        <!--<version>6.2</version> &lt;!&ndash; Use newer version of ASM &ndash;&gt;-->
+                    <!--</dependency>-->
+                <!--</dependencies>-->
             </plugin>
         </plugins>
     </build>
