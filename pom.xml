@@ -16,7 +16,6 @@
         <module>wires-support</module>
         <module>wires-core</module>
         <module>wires-neuron</module>
-        <module>wires-jlink</module>
     </modules>
 
     <properties>
@@ -133,8 +132,7 @@
 
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
-                    <source>10</source>
-                    <target>10</target>
+                    <release>10</release>
                 </configuration>
                 <dependencies>
                     <dependency>
