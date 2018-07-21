@@ -129,6 +129,8 @@
                     </compilerArguments>
 
                     <!--<compilerArgument>-Xlint:all,-serial</compilerArgument>-->
+                    <!--This is a workaround for another problem, which might a bug in javac.-->
+                    <!--Here my point is not this.-->
                     <compilerArgument>-Xlint:all,-serial,-exports</compilerArgument>
 
                     <showDeprecation>true</showDeprecation>
