@@ -58,13 +58,6 @@
         </pluginManagement>
 
         <plugins>
-            <!--Both maven-surefire-plugin and maven-failsafe-plugin belong to the Maven Surefire project.-->
-            <!--The reason that there are those two different plugins is,
-            that the maven-failsafe-plugin does not fail the build immediately
-            so the post-integration-test phase will run in any case.
-            Only the verify phase fails the build on test failures.-->
-
-            <!--Runs unit tests and binds to the test phase by default-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -136,10 +129,10 @@
                     <!--The "missing serialVersionUID" warning is useless in this project,
                     as in all projects that dont need a serialization compatibility policy
                     more advanced than the default one (see Effective Java).-->
-                    <!--<compilerArgument>-Xlint:all,-serial</compilerArgument>-->
+                    <compilerArgument>-Xlint:all,-serial</compilerArgument>
 
 
-                    <compilerArgument>-Xlint:all,-serial,-exports</compilerArgument>
+                    <!--<compilerArgument>-Xlint:all,-serial,-exports</compilerArgument>-->
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
                     <source>10</source>
