@@ -64,9 +64,6 @@
                 <version>${maven-failsafe-surefire-plugin.version}</version>
                 <configuration>
                     <forkCount>0</forkCount>
-                    <argLine>
-                        --add-opens fr.cla.wires.core.support.tests.pbt=ALL-UNNAMED
-                    </argLine>
                 </configuration>
             </plugin>
 
