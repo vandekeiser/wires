@@ -130,9 +130,6 @@
                     as in all projects that dont need a serialization compatibility policy
                     more advanced than the default one (see Effective Java).-->
                     <compilerArgument>-Xlint:all,-serial</compilerArgument>
-
-
-                    <!--<compilerArgument>-Xlint:all,-serial,-exports</compilerArgument>-->
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
                     <source>10</source>
