@@ -1,9 +1,8 @@
-package fr.cla.wires.core.support.tests.pbt;
+package fr.cla.wires.core;
 
 import com.pholser.junit.quickcheck.generator.GenerationStatus;
 import com.pholser.junit.quickcheck.generator.Generator;
 import com.pholser.junit.quickcheck.random.SourceOfRandomness;
-import fr.cla.wires.core.Signal;
 
 import java.util.List;
 import java.util.stream.Stream;

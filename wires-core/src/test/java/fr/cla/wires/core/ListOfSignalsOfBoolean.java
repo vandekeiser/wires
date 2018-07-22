@@ -1,4 +1,4 @@
-package fr.cla.wires.core.support.tests.pbt;
+package fr.cla.wires.core;
 
 import fr.cla.wires.core.Signal;
 
