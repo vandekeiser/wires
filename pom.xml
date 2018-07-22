@@ -69,6 +69,12 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-failsafe-surefire-plugin.version}</version>
+                <configuration>
+                    <forkCount>0</forkCount>
+                    <argLine>
+                        --add-opens fr.cla.wires.core.support.tests.pbt=ALL-UNNAMED
+                    </argLine>
+                </configuration>
             </plugin>
 
             <plugin>
