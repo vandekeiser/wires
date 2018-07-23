@@ -11,7 +11,7 @@ import static java.util.Objects.requireNonNull;
 //@formatter:off
 /**
  * An example usage of how to connect wires to boxes.
- * @see fr.cla.wires.core.exampleusage.basic for a general description of the examples of basic Boxes
+ * @see fr.cla.wires.core.boxes.exampleusage.basic for a general description of the examples of basic Boxes
  * @see CompositeHalfAdder for the alternative composite implementation
  */
 public final class LeafHalfAdder extends Box {

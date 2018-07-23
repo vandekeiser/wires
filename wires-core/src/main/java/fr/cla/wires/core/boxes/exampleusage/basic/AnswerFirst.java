@@ -10,7 +10,7 @@ import static java.util.Objects.requireNonNull;
 //@formatter:off
 /**
  * An example usage of how to connect wires to boxes.
- * @see fr.cla.wires.core.exampleusage
+ * @see fr.cla.wires.core.boxes.exampleusage
  */
 public final class AnswerFirst extends Box {
 
