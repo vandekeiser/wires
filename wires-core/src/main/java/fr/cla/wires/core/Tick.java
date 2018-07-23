@@ -25,6 +25,8 @@ public final class Tick extends AbstractValueObject<Tick> {
 
     @Override
     protected List<Object> equalityCriteria() {
+        //Bad idea to use Java9 List.of here since in an equals method fields could potentially be legally null.
+        // In Tick it can't happen but I don't want to copy-paste List.of by mistake..
         return singletonList(tick);
     }
 

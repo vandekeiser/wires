@@ -23,6 +23,8 @@ public final class Delay extends AbstractValueObject<Delay> {
 
     @Override
     protected List<Object> equalityCriteria() {
+        //Bad idea to use Java9 List.of here since in an equals method field could potentially be legally null.
+        // In Delay it can't happen but I don't want to copy-paste List.of by mistake..
         return singletonList(duration);
     }
 

@@ -37,6 +37,8 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
 
     @Override
     protected List<Object> equalityCriteria() {
+        //Bad idea to use Java9 List.of here since in an equals method field could potentially be legally null.
+        //For Signal it is effectively the case that this.value can be null.
         return singletonList(value);
     }
 

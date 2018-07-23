@@ -13,8 +13,6 @@ import java.util.function.Function;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collector;
 
-import static java.util.Collections.singletonList;
-
 //@formatter:off
 /**
  * Take the index of observed Wires into account for neural networks (use a weight matrix).
@@ -33,7 +31,8 @@ extends Box {
     }
 
     protected CollectIndexedHomogeneousInputs(List<Wire<O>> ins, Wire<T> out, Clock clock, Delay delay) {
-        this(ins, singletonList(out), clock, delay);
+        //Can use Java9 List.of here since out can't legally be null.
+        this(ins, List.of(out), clock, delay);
     }
 
     protected CollectIndexedHomogeneousInputs(List<Wire<O>> ins, List<Wire<T>> outs, Clock clock, Delay delay) {
