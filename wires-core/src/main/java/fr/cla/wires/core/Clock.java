@@ -72,8 +72,8 @@ public final class Clock {
         }
 
         <V> OnSignalChanged<V> afterDelay(Delay delay, OnSignalChanged<V> callback) {
-            Delay _delay = requireNonNull(delay);
-            OnSignalChanged<V> _callback = requireNonNull(callback);
+            var _delay = requireNonNull(delay);
+            var _callback = requireNonNull(callback);
 
             return v -> waitFor(_delay).thenCall(_callback, v);
         }

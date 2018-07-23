@@ -38,7 +38,7 @@ public abstract class Box {
 
     //Don't make package-private as this is the only alternative to the "Staged Builder"
     protected final <O> void onSignalChanged(Wire<O> observed, OnSignalChanged<O> callback) {
-        OnSignalChanged<O> _callback = requireNonNull(callback);
+        var _callback = requireNonNull(callback);
 
         observed.onSignalChanged(
             agenda.afterDelay(delay, _callback)
@@ -119,7 +119,7 @@ public abstract class Box {
         }
 
         public final void transformation(Function<O, T> transformation) {
-            Function<O, T> _transformation = requireNonNull(transformation);
+            var _transformation = requireNonNull(transformation);
 
             onSignalChanged(observed,
                 newIn -> target.setSignal(
@@ -132,8 +132,8 @@ public abstract class Box {
             BiFunction<O, P, T> transformation,
             Wire<P> unchangedSecond
         ) {
-            BiFunction<O, P, T> _transformation= requireNonNull(transformation);
-            Wire<P> _unchangedSecond = requireNonNull(unchangedSecond);
+            var _transformation= requireNonNull(transformation);
+            var _unchangedSecond = requireNonNull(unchangedSecond);
 
             onSignalChanged(observed,
                 newIn1 -> target.setSignal(
@@ -146,8 +146,8 @@ public abstract class Box {
             Wire<P> unchangedFirst,
             BiFunction<P, O, T> transformation
         ) {
-            Wire<P> _unchangedFirst = requireNonNull(unchangedFirst);
-            BiFunction<P, O, T> _transformation= requireNonNull(transformation);
+            var _unchangedFirst = requireNonNull(unchangedFirst);
+            var _transformation= requireNonNull(transformation);
 
             onSignalChanged(observed,
                 newIn2 -> target.setSignal(
@@ -173,7 +173,7 @@ public abstract class Box {
         }
 
         public final void collect(Collector<O, ?, T> collector) {
-            Collector<O, ?, T> _collector = requireNonNull(collector);
+            var _collector = requireNonNull(collector);
 
             onSignalChanged(observed,
                 newIn -> target.setSignal(
@@ -197,7 +197,7 @@ public abstract class Box {
         }
 
         public final void collectIndexed(Collector<Indexed<O>, ?, T> collector) {
-            Collector<Indexed<O>, ?, T> _collector = requireNonNull(collector);
+            var _collector = requireNonNull(collector);
 
             onSignalChanged(observed,
                 newIn -> target.setSignal(
@@ -224,8 +224,8 @@ public abstract class Box {
         }
 
         public final void reduce(BinaryOperator<T> accumulator, T identity) {
-            BinaryOperator<T> _accumulator = requireNonNull(accumulator);
-            T _identity = requireNonNull(identity);
+            var _accumulator = requireNonNull(accumulator);
+            var _identity = requireNonNull(identity);
 
             onSignalChanged(observed,
                 newIn -> target.setSignal(
@@ -252,8 +252,8 @@ public abstract class Box {
         }
 
         public final void reduce(BinaryOperator<T> accumulator, T identity) {
-            BinaryOperator<T> _accumulator = requireNonNull(accumulator);
-            T _identity = requireNonNull(identity);
+            var _accumulator = requireNonNull(accumulator);
+            var _identity = requireNonNull(identity);
 
             onSignalChanged(observed,
                 newIn -> target.setSignal(

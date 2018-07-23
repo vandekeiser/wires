@@ -7,6 +7,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+//TODO this is copy-pasted from github and not tested
 //@formatter:off
 public class Streams {
 
@@ -52,7 +53,6 @@ public class Streams {
         );
     }
 
-    //@formatter:off
     private static class ZippingSpliterator<L, R, O> implements Spliterator<O> {
 
         static <L, R, O> Spliterator<O> zipping(Spliterator<L> lefts, Spliterator<R> rights, BiFunction<L, R, O> combiner) {

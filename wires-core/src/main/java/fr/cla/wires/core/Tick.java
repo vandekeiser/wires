@@ -107,8 +107,8 @@ public final class Tick extends AbstractValueObject<Tick> {
         }
 
         <V> void thenCall(OnSignalChanged<V> callback, Signal<V> signal) {
-            OnSignalChanged<V> _callback = requireNonNull(callback);
-            Signal<V> _signal = requireNonNull(signal);
+            var _callback = requireNonNull(callback);
+            var _signal = requireNonNull(signal);
 
             todo.add(() -> _callback.accept(_signal));
         }
