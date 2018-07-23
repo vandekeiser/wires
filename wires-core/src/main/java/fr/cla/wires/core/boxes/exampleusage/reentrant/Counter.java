@@ -2,6 +2,7 @@ package fr.cla.wires.core.boxes.exampleusage.reentrant;
 
 import fr.cla.wires.core.*;
 
+import static java.lang.String.*;
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off
@@ -82,7 +83,15 @@ public final class Counter extends Box {
         //Negative step could sometimes make sense, so don't forbid that.
         return step;
     }
-    
+
+    @Override
+    public String toString() {
+        return format(
+            "{initial:%s, out:%s, step:%s}",
+            initial, out, step
+        );
+    }
+
     public static Builder out(Wire<Long> out) {
         return new Builder(out);
     }
@@ -134,7 +143,7 @@ public final class Counter extends Box {
         }
 
         private static String formatMessage(long currentCounter, long attemptedStep) {
-            return String.format(
+            return format(
                 "Counter overflow! currentCounter: %s, attemptedStep: %s",
                 currentCounter, attemptedStep
             );

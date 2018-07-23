@@ -7,7 +7,9 @@ import fr.cla.wires.core.Wire;
 import org.junit.Before;
 import org.junit.Test;
 
+import static java.lang.String.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 //@formatter:off
 /**
@@ -73,6 +75,8 @@ public class CounterTest {
             when: {
                 clock.tick();
             }
+
+            fail(format("Should have thrown Counter.OverflowException. Was:" + clock));
         } catch (Counter.OverflowException expected) {
             then: {
                 assertThat(expected.getCurrentCounter()).isEqualTo(Long.MAX_VALUE);
