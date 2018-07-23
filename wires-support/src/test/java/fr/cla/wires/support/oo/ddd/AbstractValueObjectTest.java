@@ -4,10 +4,7 @@ import fr.cla.wires.support.oo.AbstractValueObject;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
-import java.util.Collections;
 import java.util.List;
-
-import static java.util.Collections.*;
 
 //@formatter:off
 public class AbstractValueObjectTest {
@@ -31,7 +28,7 @@ public class AbstractValueObjectTest {
 
         @Override
         protected List<Object> equalityCriteria() {
-            return singletonList(value);
+            return List.of(value);
         }
     }
 
@@ -45,7 +42,7 @@ public class AbstractValueObjectTest {
 
         @Override
         protected List<Object> equalityCriteria() {
-            return singletonList(value);
+            return List.of(value);
         }
     }
 

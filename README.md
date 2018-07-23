@@ -1,3 +1,5 @@
+The master branch is ported to Java 10, and uses specificities of it so can't be compiled nor ran on jdk < 10. The JAVA8 branch can be compiled and ran on jdk 8/9/10 (there are maven "auto-profiles" for those).
+
 # Java port of the "Simulator for digital circuits" from SICP
 A Java port of the "Simulator for digital circuits" from SICP (Structure and Interpretation of Computer Programs).
 The full book is available online: https://mitpress.mit.edu/sicp/full-text/book/book.html
