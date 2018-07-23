@@ -172,7 +172,7 @@
     <profiles>
         <profile>
             <id>java-8</id>
-            <activation>
+            <activation> 
                 <jdk>1.8</jdk>
             </activation>
             <build>
