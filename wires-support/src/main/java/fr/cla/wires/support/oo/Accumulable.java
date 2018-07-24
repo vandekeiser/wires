@@ -84,8 +84,8 @@ public class Accumulable<I, A> extends Mutable<A> {
         private final BinaryOperator<T> accumulator;
 
         public Collector(
-        Function<O, T> accumulationValue,
-        BinaryOperator<T> accumulator
+            Function<O, T> accumulationValue,
+            BinaryOperator<T> accumulator
         )  {
             this.accumulationValue = requireNonNull(accumulationValue);
             this.accumulator = requireNonNull(accumulator);
@@ -93,7 +93,7 @@ public class Accumulable<I, A> extends Mutable<A> {
 
         @Override public Supplier<Accumulable<O, T>> supplier() {
             return () -> Accumulable.initiallyEmpty(
-            accumulationValue, accumulator
+                accumulationValue, accumulator
             );
         }
 
@@ -121,7 +121,6 @@ public class Accumulable<I, A> extends Mutable<A> {
     public static class IndexedCollector<O, T>
     implements java.util.stream.Collector<Indexed<O>, Accumulable<Indexed<O>, T>, T> {
         private final Function<Accumulable<Indexed<O>, T>, T> getAccumulated = Mutable::get;
-
         private final Function<Indexed<O>, T> accumulationValue;
         private final BinaryOperator<T> accumulator;
         private final UnaryOperator<T> finisher;
