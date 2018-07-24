@@ -1,4 +1,4 @@
-package fr.cla.wires.core.support.tests.pbt;
+package fr.cla.wires.core.test.support.pbt;
 
 import com.pholser.junit.quickcheck.From;
 
@@ -11,8 +11,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 //@formatter:off
 @Target({PARAMETER, FIELD, ANNOTATION_TYPE, TYPE_USE})
 @Retention(RUNTIME)
-@From(BooleansGenerator.class)
-public @interface RandomBooleans {
+@From(BooleanSignalsGenerator.class)
+public @interface RandomBooleanSignals {
 
 }
 //@formatter:on
