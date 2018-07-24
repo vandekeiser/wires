@@ -7,6 +7,8 @@ import fr.cla.wires.core.boxes.CollectHomogeneousInputsToOutputOfSameType;
 
 import java.util.List;
 import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import static java.util.Objects.requireNonNull;
 
@@ -28,6 +30,14 @@ extends CollectHomogeneousInputsToOutputOfSameType<Boolean> {
 
     @Override protected BinaryOperator<Boolean> accumulator() {
         return this::and;
+    }
+
+    @Override protected Function<Boolean, Boolean> accumulationValue() {
+        return Function.identity();
+    }
+
+    @Override protected UnaryOperator<Boolean> finisher() {
+        return UnaryOperator.identity();
     }
 
     private boolean and(boolean b1, boolean b2) {

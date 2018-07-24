@@ -67,6 +67,14 @@ public class Accumulable<I, A> extends Mutable<A> {
         );
     }
 
+    public static <O, T> java.util.stream.Collector<O, ?, T> collector(
+        Function<O, T> accumulationValue,
+        BinaryOperator<T> accumulator,
+        UnaryOperator<T> finisher
+    ) {
+        return new Collector<>(accumulationValue, accumulator, finisher);
+    }
+
     public static <O, T> java.util.stream.Collector<Indexed<O>, ?, T> indexedCollector(
         Function<Indexed<O>, T> accumulationValue,
         BinaryOperator<T> accumulator,
@@ -82,13 +90,16 @@ public class Accumulable<I, A> extends Mutable<A> {
     implements java.util.stream.Collector<O, Accumulable<O, T>, T> {
         private final Function<O, T> accumulationValue;
         private final BinaryOperator<T> accumulator;
+        private final UnaryOperator<T> finisher;
 
         public Collector(
             Function<O, T> accumulationValue,
-            BinaryOperator<T> accumulator
+            BinaryOperator<T> accumulator,
+            UnaryOperator<T> finisher
         )  {
             this.accumulationValue = requireNonNull(accumulationValue);
             this.accumulator = requireNonNull(accumulator);
+            this.finisher = requireNonNull(finisher);
         }
 
         @Override public Supplier<Accumulable<O, T>> supplier() {

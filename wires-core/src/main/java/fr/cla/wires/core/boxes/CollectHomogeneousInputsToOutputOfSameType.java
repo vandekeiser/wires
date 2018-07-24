@@ -6,6 +6,7 @@ import fr.cla.wires.core.Wire;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 //@formatter:off
 /**
@@ -38,11 +39,6 @@ extends CollectHomogeneousInputs<O, O> {
 
     protected CollectHomogeneousInputsToOutputOfSameType(List<Wire<O>> ins, Wire<O> out, Clock clock, Delay delay) {
         super(ins, out, clock, delay);
-    }
-
-    //Not final intentionally
-    @Override protected Function<O, O> accumulationValue() {
-        return Function.identity();
     }
 
 }

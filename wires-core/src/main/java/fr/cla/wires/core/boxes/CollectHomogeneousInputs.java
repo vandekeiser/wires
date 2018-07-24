@@ -9,6 +9,7 @@ import fr.cla.wires.support.oo.Accumulable;
 import java.util.List;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collector;
 
 import static java.util.Objects.requireNonNull;
@@ -84,13 +85,14 @@ extends Box {
     }
 
     private Collector<O, ?, T> collector() {
-        return new Accumulable.Collector<>(
-            accumulationValue(), accumulator()
+        return Accumulable.collector(
+            accumulationValue(), accumulator(), finisher()
         );
     }
 
     protected abstract Function<O, T> accumulationValue();
     protected abstract BinaryOperator<T> accumulator();
+    protected abstract UnaryOperator<T> finisher();
 
 }
 //@formatter:on
