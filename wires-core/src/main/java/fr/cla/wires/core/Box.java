@@ -132,7 +132,7 @@ public abstract class Box {
             BiFunction<O, P, T> signalValuesCombinator,
             Wire<P> rightWire
         ) {
-            var f= requireNonNull(signalValuesCombinator);
+            var f = requireNonNull(signalValuesCombinator);
             var r = requireNonNull(rightWire);
 
             onSignalChanged(observed,
