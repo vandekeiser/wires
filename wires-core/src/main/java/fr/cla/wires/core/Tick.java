@@ -19,7 +19,7 @@ public final class Tick extends AbstractValueObject<Tick> {
 
     private Tick(long tick) {
         super(Tick.class);
-        if(tick < 0) throw new AssertionError("tick must be >= 0, was: " + tick);
+        if(tick < 0L) throw new AssertionError("tick must be >= 0L, was: " + tick);
         this.tick = tick;
     }
 
@@ -38,7 +38,7 @@ public final class Tick extends AbstractValueObject<Tick> {
     public Tick plus(Delay delay) {
         long newTick;
         try {
-            newTick = Math.addExact(tick, (long)delay.duration()); //throws ArithmeticException if overflows long
+            newTick = Math.addExact(tick, (long)delay.duration());
         } catch(ArithmeticException overflow) {
             throw new Tick.OverflowException(this, delay, overflow);
         }
@@ -100,7 +100,7 @@ public final class Tick extends AbstractValueObject<Tick> {
     static final class Queue {
         private final Tick tick;
         //Run callbacks in FIFO order
-        private final java.util.Queue<Runnable> todo = new ArrayDeque<>();
+        private final java.util.Queue<Runnable> todos = new ArrayDeque<>();
 
         Queue(Tick tick) {
             this.tick = requireNonNull(tick);
@@ -110,17 +110,17 @@ public final class Tick extends AbstractValueObject<Tick> {
             var cb = requireNonNull(callback);
             var s = requireNonNull(signal);
 
-            todo.add(() -> cb.accept(s));
+            todos.add(() -> cb.accept(s));
         }
 
         void runAll() {
-            todo.forEach(Runnable::run);
+            todos.forEach(Runnable::run);
         }
 
         @Override public String toString() {
             return String.format(
-                "{tick: %s, todo:%s}",
-                tick, todo
+                "{tick: %s, todos:%s}",
+                tick, todos
             );
         }
     }

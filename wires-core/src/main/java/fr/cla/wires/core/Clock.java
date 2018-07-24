@@ -75,7 +75,7 @@ public final class Clock {
             var d = requireNonNull(delay);
             var cb = requireNonNull(callback);
 
-            return signalOfV -> waitFor(d).thenCall(cb, signalOfV);
+            return newSignalOfV -> waitFor(d).thenCall(cb, newSignalOfV);
         }
 
         private Tick.Queue waitFor(Delay delay) {
