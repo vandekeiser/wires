@@ -6,11 +6,6 @@ import java.util.Objects;
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off
-//TODO: factor what is common with Mutable:
-//  IntrinsicallyIdentifiable/ExtrinsicallyIdentifiable
-//  IntrinsicallyIdentifiable/CriteriaIdentifiable
-//  Individual/CriteriaIdentifiable
-//  Entity/CriteriaIdentifiable
 /**
  * A DDD Value Object: immutable object with no identity (equality defined by a set of fields).
  * (it just doesn't have validation)
