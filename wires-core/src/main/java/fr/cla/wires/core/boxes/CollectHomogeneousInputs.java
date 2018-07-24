@@ -5,19 +5,13 @@ import fr.cla.wires.core.Clock;
 import fr.cla.wires.core.Delay;
 import fr.cla.wires.core.Wire;
 import fr.cla.wires.support.oo.Accumulable;
-import fr.cla.wires.support.oo.Mutable;
 
-import java.util.EnumSet;
 import java.util.List;
-import java.util.Set;
-import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collector;
 
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collector.Characteristics.UNORDERED;
 
 //@formatter:off
 /**
@@ -73,7 +67,7 @@ extends Box {
      * to the less linear:
      * {@code
      *      onSignalChanged(in,
-     *          newIn -> out.setSignal(
+     *          newSignal -> out.setSignal(
      *              collect(ins, collector())
      *          )
      *      );
@@ -88,53 +82,13 @@ extends Box {
     }
 
     private Collector<O, ?, T> collector() {
-        return new AccumulableCollector<>(
+        return new Accumulable.Collector<>(
             accumulationValue(), accumulator()
         );
     }
 
     protected abstract Function<O, T> accumulationValue();
     protected abstract BinaryOperator<T> accumulator();
-
-
-
-
-    private static class AccumulableCollector<O, T>
-    implements Collector<O, Accumulable<O, T>, T> {
-        private final Function<O, T> accumulationValue;
-        private final BinaryOperator<T> accumulator;
-
-        private AccumulableCollector(
-            Function<O, T> accumulationValue,
-            BinaryOperator<T> accumulator
-        )  {
-            this.accumulationValue = requireNonNull(accumulationValue);
-            this.accumulator = requireNonNull(accumulator);
-        }
-
-        @Override public Supplier<Accumulable<O, T>> supplier() {
-            return () -> Accumulable.initiallyEmpty(
-                accumulationValue, accumulator
-            );
-        }
-
-        @Override public BiConsumer<Accumulable<O, T>, O> accumulator() {
-            return Accumulable::accumulate;
-        }
-
-        @Override public BinaryOperator<Accumulable<O, T>> combiner() {
-            return Accumulable::combine;
-        }
-
-        @Override public Function<Accumulable<O, T>, T> finisher() {
-            return Mutable::get;
-        }
-
-        @Override public Set<Characteristics> characteristics() {
-            //TODO some collectors might not be UNORDERED
-            return EnumSet.of(UNORDERED);
-        }
-    }
 
 }
 //@formatter:on

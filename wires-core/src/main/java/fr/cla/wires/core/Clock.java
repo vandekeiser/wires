@@ -72,10 +72,10 @@ public final class Clock {
         }
 
         <V> OnSignalChanged<V> afterDelay(Delay delay, OnSignalChanged<V> callback) {
-            var _delay = requireNonNull(delay);
-            var _callback = requireNonNull(callback);
+            var d = requireNonNull(delay);
+            var cb = requireNonNull(callback);
 
-            return v -> waitFor(_delay).thenCall(_callback, v);
+            return signalOfV -> waitFor(d).thenCall(cb, signalOfV);
         }
 
         private Tick.Queue waitFor(Delay delay) {

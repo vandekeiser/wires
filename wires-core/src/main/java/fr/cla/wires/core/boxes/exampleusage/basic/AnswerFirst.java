@@ -37,14 +37,14 @@ public final class AnswerFirst extends Box {
      *      onSignalChanged(in1)
      *          .set(out)
      *          .toResultOfApplying()
-     *          .transformation(this::answerFirst, in2)
+     *          .signalValueTransformation(this::answerFirst, in2)
      *      ;
      * }
      * to the less linear:
      * {@code
      *      onSignalChanged(in1,
-     *          newIn1 -> out.setSignal(
-     *              Signal.map(newIn1, in2.getSignal(), this::answerFirst)
+     *          newIn1Signal -> out.setSignal(
+     *              Signal.map(newIn1Signal, in2.getSignal(), this::answerFirst)
      *          )
      *      );
      * }
@@ -53,12 +53,12 @@ public final class AnswerFirst extends Box {
         this.<Boolean, Boolean>onSignalChanged(in1)
             .set(out)
             .toResultOfApplying()
-            .transformation(this::answerFirst, in2)
+            .signalValuesCombinator(this::answerFirst, in2)
         ;
         this.<Boolean, Boolean>onSignalChanged(in2)
             .set(out)
             .toResultOfApplying()
-            .transformation(in1, this::answerFirst)
+            .signalValuesCombinator(in1, this::answerFirst)
         ;
         return this;
     }

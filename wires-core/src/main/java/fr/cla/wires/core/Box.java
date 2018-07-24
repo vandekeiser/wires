@@ -38,10 +38,10 @@ public abstract class Box {
 
     //Don't make package-private as this is the only alternative to the "Staged Builder"
     protected final <O> void onSignalChanged(Wire<O> observed, OnSignalChanged<O> callback) {
-        var _callback = requireNonNull(callback);
+        var cb = requireNonNull(callback);
 
         observed.onSignalChanged(
-            agenda.afterDelay(delay, _callback)
+            agenda.afterDelay(delay, cb)
         );
     }
 
@@ -118,40 +118,40 @@ public abstract class Box {
             super(observed, target);
         }
 
-        public final void transformation(Function<O, T> transformation) {
-            var _transformation = requireNonNull(transformation);
+        public final void signalValueTransformation(Function<O, T> signalValueTransformation) {
+            var f = requireNonNull(signalValueTransformation);
 
             onSignalChanged(observed,
-                newIn -> target.setSignal(
-                    newIn.map(_transformation)
+                newSignal -> target.setSignal(
+                    newSignal.map(f)
                 )
             );
         }
 
-        public final <P> void transformation(
-            BiFunction<O, P, T> transformation,
-            Wire<P> unchangedSecond
+        public final <P> void signalValuesCombinator(
+            BiFunction<O, P, T> signalValuesCombinator,
+            Wire<P> rightWire
         ) {
-            var _transformation= requireNonNull(transformation);
-            var _unchangedSecond = requireNonNull(unchangedSecond);
+            var f= requireNonNull(signalValuesCombinator);
+            var r = requireNonNull(rightWire);
 
             onSignalChanged(observed,
-                newIn1 -> target.setSignal(
-                    Signal.map(newIn1, _unchangedSecond.getSignal(), _transformation)
+                newSignal -> target.setSignal(
+                    Signal.map(newSignal, r.getSignal(), f)
                 )
             );
         }
 
-        public final <P> void transformation(
-            Wire<P> unchangedFirst,
-            BiFunction<P, O, T> transformation
+        public final <P> void signalValuesCombinator(
+            Wire<P> leftWire,
+            BiFunction<P, O, T> signalValuesCombinator
         ) {
-            var _unchangedFirst = requireNonNull(unchangedFirst);
-            var _transformation= requireNonNull(transformation);
+            var l = requireNonNull(leftWire);
+            var f = requireNonNull(signalValuesCombinator);
 
             onSignalChanged(observed,
-                newIn2 -> target.setSignal(
-                    Signal.map(_unchangedFirst.getSignal(), newIn2, _transformation)
+                newSignal -> target.setSignal(
+                    Signal.map(l.getSignal(), newSignal, f)
                 )
             );
         }
@@ -173,11 +173,11 @@ public abstract class Box {
         }
 
         public final void collect(Collector<O, ?, T> collector) {
-            var _collector = requireNonNull(collector);
+            var c = requireNonNull(collector);
 
             onSignalChanged(observed,
-                newIn -> target.setSignal(
-                    Wire.collect(inputs, _collector)
+                newSignal -> target.setSignal(
+                    Wire.collect(inputs, c)
                 )
             );
         }
@@ -197,11 +197,11 @@ public abstract class Box {
         }
 
         public final void collectIndexed(Collector<Indexed<O>, ?, T> collector) {
-            var _collector = requireNonNull(collector);
+            var c = requireNonNull(collector);
 
             onSignalChanged(observed,
-                newIn -> target.setSignal(
-                    Wire.collectIndexed(inputs, _collector)
+                newSignal -> target.setSignal(
+                    Wire.collectIndexed(inputs, c)
                 )
             );
         }
@@ -224,12 +224,12 @@ public abstract class Box {
         }
 
         public final void reduce(BinaryOperator<T> accumulator, T identity) {
-            var _accumulator = requireNonNull(accumulator);
-            var _identity = requireNonNull(identity);
+            var acc = requireNonNull(accumulator);
+            var id = requireNonNull(identity);
 
             onSignalChanged(observed,
-                newIn -> target.setSignal(
-                    Wire.mapAndReduceIndexed(inputs, accumulationValue, _accumulator, _identity)
+                newSignal -> target.setSignal(
+                    Wire.mapAndReduceIndexed(inputs, accumulationValue, acc, id)
                 )
             );
         }
@@ -252,12 +252,12 @@ public abstract class Box {
         }
 
         public final void reduce(BinaryOperator<T> accumulator, T identity) {
-            var _accumulator = requireNonNull(accumulator);
-            var _identity = requireNonNull(identity);
+            var acc = requireNonNull(accumulator);
+            var id = requireNonNull(identity);
 
             onSignalChanged(observed,
-                newIn -> target.setSignal(
-                    Wire.mapAndReduce(inputs, accumulationValue, _accumulator, _identity)
+                newSignal -> target.setSignal(
+                    Wire.mapAndReduce(inputs, accumulationValue, acc, id)
                 )
             );
         }

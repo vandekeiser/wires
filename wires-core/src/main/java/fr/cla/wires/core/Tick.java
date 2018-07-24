@@ -60,7 +60,7 @@ public final class Tick extends AbstractValueObject<Tick> {
      * Long.MAX_VALUE == 2^63-1 == 9_223_372_036_854_775_807.
      *
      * Java note: could maybe have imagined making this one a checked exception for once,
-     *  but they don't work with java.util.function's @FunctionalInterfaces,
+     *  but they don't work with java.util.signalValueTransformation's @FunctionalInterfaces,
      *  and I don't want to write/depend-on checked @FunctionalInterfaces for just that.
      */
     public static final class OverflowException extends RuntimeException {
@@ -107,10 +107,10 @@ public final class Tick extends AbstractValueObject<Tick> {
         }
 
         <V> void thenCall(OnSignalChanged<V> callback, Signal<V> signal) {
-            var _callback = requireNonNull(callback);
-            var _signal = requireNonNull(signal);
+            var cb = requireNonNull(callback);
+            var s = requireNonNull(signal);
 
-            todo.add(() -> _callback.accept(_signal));
+            todo.add(() -> cb.accept(s));
         }
 
         void runAll() {

@@ -37,14 +37,14 @@ public final class And extends Box {
      *      onSignalChanged(in1)
      *          .set(out)
      *          .toResultOfApplying()
-     *          .transformation(this::and, in2)
+     *          .signalValuesCombinator(this::and, in2)
      *      ;
      * }
      * to the less linear:
      * {@code
      *      onSignalChanged(in1,
-     *          newIn1 -> out.setSignal(
-     *              Signal.map(newIn1, in2.getSignal(), this::and)
+     *          newIn1Signal -> out.setSignal(
+     *              Signal.map(newIn1Signal, in2.getSignal(), this::and)
      *          )
      *      );
      * }
@@ -53,12 +53,12 @@ public final class And extends Box {
         this.<Boolean, Boolean>onSignalChanged(in1)
             .set(out)
             .toResultOfApplying()
-            .transformation(Boolean::logicalAnd, in2)
+            .signalValuesCombinator(Boolean::logicalAnd, in2)
         ;
         this.<Boolean, Boolean>onSignalChanged(in2)
             .set(out)
             .toResultOfApplying()
-            .transformation(in1, Boolean::logicalAnd)
+            .signalValuesCombinator(in1, Boolean::logicalAnd)
         ;
         return this;
     }

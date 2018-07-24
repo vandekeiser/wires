@@ -42,7 +42,7 @@ public final class Counter extends Box {
      *      onSignalChanged(out)
      *          .set(out)
      *          .toResultOfApplying()
-     *          .transformation(this::add, step)
+     *          .signalValueTransformation(this::add, step)
      *      ;
      * }
      * to the less linear:
@@ -58,9 +58,9 @@ public final class Counter extends Box {
         this.<Long, Long>onSignalChanged(out)
             .set(out)
             .toResultOfApplying()
-            .transformation(this::add, step)
+            .signalValuesCombinator(this::add, step)//a decomposer en 2 steps!
         ;
-        out.setSignal(Signal.of(initial)); //Do this after registering the transformation, so that this change is visible. 
+        out.setSignal(Signal.of(initial)); //Do this after registering the transformation, so that this change is visible.
         return this;
     }
     

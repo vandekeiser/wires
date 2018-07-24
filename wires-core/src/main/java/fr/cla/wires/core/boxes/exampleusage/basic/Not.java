@@ -36,14 +36,14 @@ public final class Not extends Box {
      *      onSignalChanged(in)
      *          .set(out)
      *          .toResultOfApplying()
-     *          .transformation(this::not)
+     *          .signalValueTransformation(this::not)
      *      ;
      * }
      * to the less linear:
      * {@code
      *      onSignalChanged(observed,
-     *          newIn -> target.setSignal(
-     *              newIn.map(this::not)
+     *          newSignal -> target.setSignal(
+     *              newSignal.map(this::not)
      *          )
      *      );
      * }
@@ -52,7 +52,7 @@ public final class Not extends Box {
         this.<Boolean, Boolean>onSignalChanged(in)
             .set(out)
             .toResultOfApplying()
-            .transformation(this::not)
+            .signalValueTransformation(this::not)
         ;
         return this;
     }

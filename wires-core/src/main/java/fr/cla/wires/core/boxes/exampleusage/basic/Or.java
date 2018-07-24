@@ -37,14 +37,14 @@ public final class Or extends Box {
      *      onSignalChanged(in1)
      *          .set(out)
      *          .toResultOfApplying()
-     *          .transformation(this::or, in2)
+     *          .signalValueTransformation(this::or, in2)
      *      ;
      * }
      * to the less linear:
      * {@code
      *      onSignalChanged(in1,
-     *          newIn1 -> out.setSignal(
-     *              Signal.map(newIn1, in2.getSignal(), this::or)
+     *          newIn1Signal -> out.setSignal(
+     *              Signal.map(newIn1Signal, in2.getSignal(), this::or)
      *          )
      *      );
      * }
@@ -53,12 +53,12 @@ public final class Or extends Box {
         this.<Boolean, Boolean>onSignalChanged(in1)
             .set(out)
             .toResultOfApplying()
-            .transformation(Boolean::logicalOr, in2)
+            .signalValuesCombinator(Boolean::logicalOr, in2)
         ;
         this.<Boolean, Boolean>onSignalChanged(in2)
             .set(out)
             .toResultOfApplying()
-            .transformation(in1, Boolean::logicalOr)
+            .signalValuesCombinator(in1, Boolean::logicalOr)
         ;
         return this;
     }

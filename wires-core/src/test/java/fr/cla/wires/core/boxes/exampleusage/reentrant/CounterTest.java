@@ -81,7 +81,8 @@ public class CounterTest {
             then: {
                 assertThat(expected.getCurrentCounter()).isEqualTo(Long.MAX_VALUE);
                 assertThat(expected.getAttemptedStep()).isEqualTo(1L);
-            }       
+                assertThat(expected.getOverflow()).isNotNull();
+            }
         }
     }
 

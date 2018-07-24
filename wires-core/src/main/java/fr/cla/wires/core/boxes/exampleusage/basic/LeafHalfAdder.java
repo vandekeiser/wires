@@ -42,22 +42,22 @@ public final class LeafHalfAdder extends Box {
         this.<Boolean, Boolean>onSignalChanged(inA)
             .set(sum)
             .toResultOfApplying()
-            .transformation(this::sum, inB)
+            .signalValuesCombinator(this::sum, inB)
         ;
         this.<Boolean, Boolean>onSignalChanged(inB)
             .set(sum)
             .toResultOfApplying()
-            .transformation(inA, this::sum)
+            .signalValuesCombinator(inA, this::sum)
         ;
         this.<Boolean, Boolean>onSignalChanged(inA)
             .set(carry)
             .toResultOfApplying()
-            .transformation(this::carry, inB)
+            .signalValuesCombinator(this::carry, inB)
         ;
         this.<Boolean, Boolean>onSignalChanged(inB)
             .set(carry)
             .toResultOfApplying()
-            .transformation(inA, this::carry)
+            .signalValuesCombinator(inA, this::carry)
         ;
         return this;
     }

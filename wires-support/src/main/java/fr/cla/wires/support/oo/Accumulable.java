@@ -5,7 +5,6 @@ import fr.cla.wires.support.functional.Indexed;
 import java.util.EnumSet;
 import java.util.Set;
 import java.util.function.*;
-import java.util.stream.Collector;
 
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collector.Characteristics.UNORDERED;
@@ -68,26 +67,66 @@ public class Accumulable<I, A> extends Mutable<A> {
         );
     }
 
-    public static <O, T> Collector<Indexed<O>, ?, T> indexedCollector(
+    public static <O, T> java.util.stream.Collector<Indexed<O>, ?, T> indexedCollector(
         Function<Indexed<O>, T> accumulationValue,
         BinaryOperator<T> accumulator,
         UnaryOperator<T> finisher
     ) {
-        return new AccumulableCollector<>(accumulationValue, accumulator, finisher);
+        return new IndexedCollector<>(accumulationValue, accumulator, finisher);
     }
 
 
 
 
-    static class AccumulableCollector<O, T>
-    implements Collector<Indexed<O>, Accumulable<Indexed<O>, T>, T> {
+    public static class Collector<O, T>
+    implements java.util.stream.Collector<O, Accumulable<O, T>, T> {
+        private final Function<O, T> accumulationValue;
+        private final BinaryOperator<T> accumulator;
+
+        public Collector(
+        Function<O, T> accumulationValue,
+        BinaryOperator<T> accumulator
+        )  {
+            this.accumulationValue = requireNonNull(accumulationValue);
+            this.accumulator = requireNonNull(accumulator);
+        }
+
+        @Override public Supplier<Accumulable<O, T>> supplier() {
+            return () -> Accumulable.initiallyEmpty(
+            accumulationValue, accumulator
+            );
+        }
+
+        @Override public BiConsumer<Accumulable<O, T>, O> accumulator() {
+            return Accumulable::accumulate;
+        }
+
+        @Override public BinaryOperator<Accumulable<O, T>> combiner() {
+            return Accumulable::combine;
+        }
+
+        @Override public Function<Accumulable<O, T>, T> finisher() {
+            return Mutable::get;
+        }
+
+        @Override public Set<Characteristics> characteristics() {
+            //TODO some collectors might not be UNORDERED
+            return EnumSet.of(UNORDERED);
+        }
+    }
+
+
+
+
+    public static class IndexedCollector<O, T>
+    implements java.util.stream.Collector<Indexed<O>, Accumulable<Indexed<O>, T>, T> {
         private final Function<Accumulable<Indexed<O>, T>, T> getAccumulated = Mutable::get;
 
         private final Function<Indexed<O>, T> accumulationValue;
         private final BinaryOperator<T> accumulator;
         private final UnaryOperator<T> finisher;
 
-        private AccumulableCollector(
+        private IndexedCollector(
             Function<Indexed<O>, T> accumulationValue,
             BinaryOperator<T> accumulator,
             UnaryOperator<T> finisher

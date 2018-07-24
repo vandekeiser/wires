@@ -64,7 +64,7 @@ extends Box {
      * to the less linear:
      * {@code
      *      onSignalChanged(in,
-     *          newIn -> out.setSignal(
+     *          newSignal -> out.setSignal(
      *              mapAndReduce(ins, accumulationValue(), accumulator(), identity())
      *          )
      *      )
