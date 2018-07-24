@@ -11,10 +11,11 @@ import java.util.function.Function;
 
 import static java.util.Objects.requireNonNull;
 
-//TODO: refact as extending CollectHomogeneousInputs (accumulator->collector)
-
 /**
- * TODO javadoc in same style as CollectHomogeneousInputsToOutputOfSameType
+ * A Box that has N inputs, but all of the same type of {@code Signal},
+ *  and the ouptut of which is the result is map(accumulationValue).reduce(accumulator, identity)
+ * @param <O> The type of Signal that transits on observed Wires, same as in Box
+ * @param <T> The type of Signal that transits on target Wires, same as in Box
  */
 //@formatter:off
 public abstract class ReduceHomogeneousInputs<O, T>
@@ -55,7 +56,7 @@ extends Box {
      *          .set(out)
      *          .from(ins)
      *          .map(accumulationValue())
-     *          .reduce(accumulator(), identity()
+     *          .reduce(accumulator(), identity())
      *      ;
      * }
      * to the less linear:

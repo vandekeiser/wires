@@ -9,7 +9,6 @@ import java.util.function.Function;
 
 //@formatter:off
 /**
- * TODO @links & CO
  * -->"Explaining the intention" approach to javadoc:
  * Does like its parent CollectHomogeneousInputs: "
  *      Use a java.util.stream.Collector to compute the Signal to write to the target Wire

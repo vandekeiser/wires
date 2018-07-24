@@ -49,8 +49,8 @@ public final class Clock {
      * Remembers which tasks (Tick.Queue) to execute at each Tick.
      */
     static final class Agenda {
-        private Tick now = Tick.ZERO;
         private final Map<Tick, Tick.Queue> appointments = new HashMap<>();
+        private Tick now = Tick.ZERO;
 
         void tick() {
             now = now.plus(Delay.of(1));

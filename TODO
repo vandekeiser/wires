@@ -1,0 +1,5 @@
+-mv support main/test
+-tst 2 chgts/tick
+-split staged builders a 2 wires
+    -methodes rightWire/leftWire
+-tst ZippingSpliterator

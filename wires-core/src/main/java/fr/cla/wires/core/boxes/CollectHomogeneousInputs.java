@@ -15,7 +15,6 @@ import static java.util.Objects.requireNonNull;
 
 //@formatter:off
 /**
- * TODO: javadoc in same style as CollectHomogeneousInputsToOutputOfSameType
  * A Box that has N inputs, but all of the same type of {@code Signal}.
  * @param <O> O like "observed".
  *           The type of {@code Signal} that transits on the observed {@code Wire}s.

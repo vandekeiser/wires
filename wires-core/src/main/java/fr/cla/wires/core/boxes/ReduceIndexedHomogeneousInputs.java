@@ -13,12 +13,11 @@ import java.util.function.Function;
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off
-
 /**
  * Try this abstraction to take index into account for neural networks (use weigth matrix).
- * @param <O> Same as in Box
- * @param <T> Same as in Box
- * @param <I> Same as in Box
+ * @param <O> The type of Signal that transits on observed Wires, same as in Box
+ * @param <T> The type of Signal that transits on target Wires, same as in Box
+ * @param <I> The type of index for observed Wires
  */
 public abstract class ReduceIndexedHomogeneousInputs<O, T, I>
 extends Box {
