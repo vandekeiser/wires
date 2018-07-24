@@ -128,9 +128,9 @@ public abstract class Box {
             );
         }
 
-        public final <P> void signalValuesCombinator(
-            BiFunction<O, P, T> signalValuesCombinator,
-            Wire<P> rightWire
+        public final <R> void signalValuesCombinator(
+            BiFunction<O, R, T> signalValuesCombinator,
+            Wire<R> rightWire
         ) {
             var f = requireNonNull(signalValuesCombinator);
             var r = requireNonNull(rightWire);
@@ -142,9 +142,9 @@ public abstract class Box {
             );
         }
 
-        public final <P> void signalValuesCombinator(
-            Wire<P> leftWire,
-            BiFunction<P, O, T> signalValuesCombinator
+        public final <L> void signalValuesCombinator(
+            Wire<L> leftWire,
+            BiFunction<L, O, T> signalValuesCombinator
         ) {
             var l = requireNonNull(leftWire);
             var f = requireNonNull(signalValuesCombinator);
