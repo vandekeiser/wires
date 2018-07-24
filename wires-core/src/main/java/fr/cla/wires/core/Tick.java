@@ -100,10 +100,11 @@ public final class Tick extends AbstractValueObject<Tick> {
     static final class Queue {
         private final Tick tick;
         //Run callbacks in FIFO order
-        private final java.util.Queue<Runnable> todos = new ArrayDeque<>();
+        private final java.util.Queue<Runnable> todos;
 
         Queue(Tick tick) {
             this.tick = requireNonNull(tick);
+            this.todos = new ArrayDeque<>();
         }
 
         <V> void thenCall(OnSignalChanged<V> callback, Signal<V> signal) {
