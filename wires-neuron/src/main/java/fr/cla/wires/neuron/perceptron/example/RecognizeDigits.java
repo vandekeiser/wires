@@ -76,7 +76,8 @@ public class RecognizeDigits extends Box {
     }
 
 
-    @Override protected RecognizeDigits startup() {
+    @Override
+    protected RecognizeDigits startup() {
         segments2Hiddens.startup();
         hiddens2Digits.startup();
         return this;

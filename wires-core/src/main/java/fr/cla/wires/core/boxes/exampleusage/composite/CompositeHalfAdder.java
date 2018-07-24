@@ -42,7 +42,8 @@ public final class CompositeHalfAdder extends Box {
         this.e = Wire.make();
     }
 
-    @Override protected CompositeHalfAdder startup() {
+    @Override
+    protected CompositeHalfAdder startup() {
         //SICP p. 274
         Or.in1(inA).in2(inB).out(d).time(clock);
         And.in1(inA).in2(inB).out(carry).time(clock);

@@ -41,14 +41,17 @@ extends Box {
 
     /**
      * This method is used to not do the startup in the constructor,
-     * to not let "this" escape through the method ref,
+     * to avoid letting "this" escape through the method ref,
      * so that the Box is "properly constructed".
      *
-     * @implNote The contract for overriders is to call super.startup(), return this:
+     * The contract for overriders is to call super.startup(), return this, and that's it:
+     *  this class already knows all there is to know about startup,
+     *  since it knows about all the in/out Wires and that's all there is to startup.
      * This method is only not marked final as a convenience to allow covariant return.
      *
      * @return this Box, started.
      */
+    @Override
     protected CollectHomogeneousInputs<O, T> startup() {
         ins.forEach(this::startup);
         return this;

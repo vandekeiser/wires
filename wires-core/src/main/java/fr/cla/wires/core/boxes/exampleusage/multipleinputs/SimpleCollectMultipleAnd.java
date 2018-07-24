@@ -58,7 +58,7 @@ extends CollectHomogeneousInputsToOutputOfSameType<Boolean> {
      *  with less "builder code", it is still worth having at least a factory method to hide the startup:
      *
      * This method is used to not do the startup in the constructor,
-     * to not let "this" escape through the method ref,
+     * to avoid letting "this" escape through the method ref,
      * so that the Box is "properly constructed".
      *
      * @return a started Box.

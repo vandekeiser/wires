@@ -34,7 +34,7 @@ public final class Counter extends Box {
 
     /**
      * This method is used to not do the startup in the constructor,
-     * to not let "this" escape through the method ref,
+     * to avoid letting "this" escape through the method ref,
      * so that the Box is "properly constructed".
      *
      * The DSL implemented by the "Staged Builder" pattern translates:

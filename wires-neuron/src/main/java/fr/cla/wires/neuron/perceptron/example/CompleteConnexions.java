@@ -34,6 +34,7 @@ extends Box {
         this.collector = requireNonNull(collector);
     }
 
+    @Override
     protected CompleteConnexions<I, O> startup() {
         ins.forEach(this::startup);
         return this;

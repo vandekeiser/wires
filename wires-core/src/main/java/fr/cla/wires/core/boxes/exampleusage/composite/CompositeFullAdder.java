@@ -42,7 +42,8 @@ public final class CompositeFullAdder extends Box {
         this.c2 = Wire.make();
     }
 
-    @Override protected CompositeFullAdder startup() {
+    @Override
+    protected CompositeFullAdder startup() {
         //SICP p. 276
         CompositeHalfAdder.inA(inB).inB(inCarry).sum(s).carry(c1).time(clock);
         CompositeHalfAdder.inA(inA).inB(s).sum(sum).carry(c2).time(clock);

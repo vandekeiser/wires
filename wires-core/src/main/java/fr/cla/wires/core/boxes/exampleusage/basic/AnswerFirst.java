@@ -29,7 +29,7 @@ public final class AnswerFirst extends Box {
 
     /**
      * This method is used to not do the startup in the constructor,
-     * to not let "this" escape through the method ref,
+     * to avoid letting "this" escape through the method ref,
      * so that the Box is "properly constructed".
      *
      * The DSL implemented by the "Staged Builder" pattern translates:
@@ -49,7 +49,8 @@ public final class AnswerFirst extends Box {
      *      );
      * }
      */
-    @Override protected AnswerFirst startup() {
+    @Override
+    protected AnswerFirst startup() {
         this.<Boolean, Boolean>onSignalChanged(in1)
             .set(out)
             .toResultOfApplying()
