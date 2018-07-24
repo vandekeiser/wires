@@ -75,14 +75,6 @@ public class Accumulable<I, A> extends Mutable<A> {
         return new Collector<>(accumulationValue, accumulator, finisher);
     }
 
-    public static <O, T> java.util.stream.Collector<Indexed<O>, ?, T> indexedCollector(
-        Function<Indexed<O>, T> accumulationValue,
-        BinaryOperator<T> accumulator,
-        UnaryOperator<T> finisher
-    ) {
-        return new IndexedCollector<>(accumulationValue, accumulator, finisher);
-    }
-
 
 
 
@@ -118,50 +110,6 @@ public class Accumulable<I, A> extends Mutable<A> {
         }
 
         @Override public Function<Accumulable<O, T>, T> finisher() {
-            return getAccumulated.andThen(finisher);
-        }
-
-        @Override public Set<Characteristics> characteristics() {
-            //TODO some collectors might not be UNORDERED
-            return EnumSet.of(UNORDERED);
-        }
-    }
-
-
-
-
-    public static class IndexedCollector<O, T>
-    implements java.util.stream.Collector<Indexed<O>, Accumulable<Indexed<O>, T>, T> {
-        private final Function<Accumulable<Indexed<O>, T>, T> getAccumulated = Mutable::get;
-        private final Function<Indexed<O>, T> accumulationValue;
-        private final BinaryOperator<T> accumulator;
-        private final UnaryOperator<T> finisher;
-
-        private IndexedCollector(
-            Function<Indexed<O>, T> accumulationValue,
-            BinaryOperator<T> accumulator,
-            UnaryOperator<T> finisher
-        )  {
-            this.accumulationValue = requireNonNull(accumulationValue);
-            this.accumulator = requireNonNull(accumulator);
-            this.finisher = requireNonNull(finisher);
-        }
-
-        @Override public Supplier<Accumulable<Indexed<O>, T>> supplier() {
-            return () -> Accumulable.initiallyEmpty(
-                accumulationValue, accumulator
-            );
-        }
-
-        @Override public BiConsumer<Accumulable<Indexed<O>, T>, Indexed<O>> accumulator() {
-            return Accumulable::accumulate;
-        }
-
-        @Override public BinaryOperator<Accumulable<Indexed<O>, T>> combiner() {
-            return Accumulable::combine;
-        }
-
-        @Override public Function<Accumulable<Indexed<O>, T>, T> finisher() {
             return getAccumulated.andThen(finisher);
         }
 

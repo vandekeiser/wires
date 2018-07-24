@@ -74,7 +74,7 @@ extends Box {
     }
 
     private Collector<Indexed<O>, ?, T> collector() {
-        return Accumulable.indexedCollector(
+        return Accumulable.collector(
            accumulationValue(), accumulator(), finisher()
         );
     }

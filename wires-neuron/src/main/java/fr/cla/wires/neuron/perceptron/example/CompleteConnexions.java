@@ -98,7 +98,7 @@ extends Box {
 
         public CompleteConnexions<I, O> delay(Delay delay) {
             Delay _delay = requireNonNull(delay);
-            Collector<Indexed<I>, ?, O> collector = Accumulable.indexedCollector(
+            Collector<Indexed<I>, ?, O> collector = Accumulable.collector(
                 accumulationValue, accumulator, finisher
             );
             return new CompleteConnexions<>(ins, outs, collector, clock, _delay).startup();
