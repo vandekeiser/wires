@@ -85,7 +85,7 @@ public class Accumulable<I, A> extends Mutable<A> {
         private final BinaryOperator<T> accumulator;
         private final UnaryOperator<T> finisher;
 
-        public Collector(
+        private Collector(
             Function<O, T> accumulationValue,
             BinaryOperator<T> accumulator,
             UnaryOperator<T> finisher
