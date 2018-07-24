@@ -25,7 +25,6 @@ public abstract class AbstractValueObject<T extends AbstractValueObject<T>> {
         if(! type.isInstance(obj)) return false;
         T that = type.cast(obj);
         
-        //TODO attack with TDD, challenging the "contract of equals" properties with pathological counter-examples
         return Objects.equals(
             this.equalityCriteria(),
             that.equalityCriteria()
@@ -47,7 +46,6 @@ public abstract class AbstractValueObject<T extends AbstractValueObject<T>> {
         );
     }
 
-    //It doesn't matter if a field is included twice, since that would not change the result of equals().
     protected abstract List<Object> equalityCriteria();
 
 }
