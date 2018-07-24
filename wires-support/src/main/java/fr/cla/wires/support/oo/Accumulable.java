@@ -88,6 +88,7 @@ public class Accumulable<I, A> extends Mutable<A> {
 
     public static class Collector<O, T>
     implements java.util.stream.Collector<O, Accumulable<O, T>, T> {
+        private final Function<Accumulable<O, T>, T> getAccumulated = Mutable::get;
         private final Function<O, T> accumulationValue;
         private final BinaryOperator<T> accumulator;
         private final UnaryOperator<T> finisher;
@@ -117,7 +118,7 @@ public class Accumulable<I, A> extends Mutable<A> {
         }
 
         @Override public Function<Accumulable<O, T>, T> finisher() {
-            return Mutable::get;
+            return getAccumulated.andThen(finisher);
         }
 
         @Override public Set<Characteristics> characteristics() {
