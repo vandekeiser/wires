@@ -18,13 +18,20 @@ public abstract class AbstractValueObject<T extends AbstractValueObject<T>> {
         this.type = requireNonNull(type);
     }
 
+    /**
+     * Precises the Object::equals contract by saying that
+     * 2 AbstractValueObject of different concrete type are never equal.
+     */
     @Override public final boolean equals(Object obj) {
         //An optimization, but also avoids StackOverflows on cyclic object graphs.
         if(obj == this) return true;
 
-        if(! type.isInstance(obj)) return false;
+        //KO, AbstractValueObject_PbtTest would fail as this doesn't prevent VO1A eq VO1B
+        //if(! type.isInstance(obj)) return false;
+        if(obj == null) return false;
+        if(! Objects.equals(this.getClass(), obj.getClass())) return false;
+
         T that = type.cast(obj);
-        
         return Objects.equals(
             this.equalityCriteria(),
             that.equalityCriteria()
