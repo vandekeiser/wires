@@ -51,21 +51,27 @@ public class Accumulable<I, A> extends Mutable<A> {
     }
 
     public final Accumulable<I, A> combine(Accumulable<I, A> that) {
-        if (this.isPresent() && that.isPresent()) mutableEquivalentToInitially(
-            accumulator.apply(this.get(), that.get())
-        );
-        else if (this.isPresent()) mutableEquivalentToInitially(
-            this.get()
-        );
-        else if (that.isPresent()) mutableEquivalentToInitially(
-            that.get()
-        );
-        else mutableEquivalentToInitially(
-            EMPTY
-        );
+        mutableEquivalentToInitially(newValueConsidering(that));
         return this;
     }
 
+    private A newValueConsidering(Accumulable<I, A> that) {
+        if (this.isPresent() && that.isPresent()) {
+            return accumulator.apply(this.get(), that.get());
+        } else if (this.isPresent()) {
+            return this.get();
+        } else if (that.isPresent()) {
+            return that.get();
+        } else {
+            return EMPTY;
+        }
+    }
+
+    /**
+     * Modifies this to put it into the same state (as defined by equals)
+     * as calling initially/initiallyEmpty (static methods which creates a new Accumulable instance) would.
+     * @param newValue
+     */
     private void mutableEquivalentToInitially(A newValue) {
         set(newValue);
     }
