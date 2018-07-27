@@ -7,8 +7,6 @@ import fr.cla.wires.support.oo.ddd.support.pbt.RandomVo;
 import fr.cla.wires.support.oo.ddd.support.pbt.VoSingleton;
 import org.junit.runner.RunWith;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 //@formatter:off
 @RunWith(JUnitQuickcheck.class)
 public class AbstractValueObject_PbtTest {
@@ -19,9 +17,6 @@ public class AbstractValueObject_PbtTest {
     public void equals_should_be_reflexive(
         @RandomVo VoSingleton s
     ) {
-        assertThat(
-            s.x.equals(s.x)
-        ).isTrue();
     }
 
 }
