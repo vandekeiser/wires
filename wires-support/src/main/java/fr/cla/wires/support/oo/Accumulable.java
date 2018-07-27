@@ -12,6 +12,7 @@ import static java.util.stream.Collector.Characteristics.UNORDERED;
 //@formatter:off
 public class Accumulable<I, A> extends Mutable<A> {
 
+    private final A EMPTY = null;
     private final Function<I, A> accumulationValue;
     private final BinaryOperator<A> accumulator;
 
@@ -50,21 +51,23 @@ public class Accumulable<I, A> extends Mutable<A> {
     }
 
     public final Accumulable<I, A> combine(Accumulable<I, A> that) {
-        if (this.isPresent() && that.isPresent()) return initially(
-            accumulator.apply(this.get(), that.get()),
-            accumulationValue, accumulator
+        if (this.isPresent() && that.isPresent()) mutableEquivalentToInitially(
+            accumulator.apply(this.get(), that.get())
         );
-        else if (this.isPresent()) return initially(
-            this.get(),
-            accumulationValue, accumulator
+        else if (this.isPresent()) mutableEquivalentToInitially(
+            this.get()
         );
-        else if (that.isPresent()) return initially(
-            that.get(),
-            accumulationValue, accumulator
+        else if (that.isPresent()) mutableEquivalentToInitially(
+            that.get()
         );
-        else return initiallyEmpty(
-            accumulationValue, accumulator
+        else mutableEquivalentToInitially(
+            EMPTY
         );
+        return this;
+    }
+
+    private void mutableEquivalentToInitially(A newValue) {
+        set(newValue);
     }
 
     public static <O, T> java.util.stream.Collector<O, ?, T> collector(
