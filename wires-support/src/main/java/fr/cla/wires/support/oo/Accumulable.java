@@ -1,7 +1,5 @@
 package fr.cla.wires.support.oo;
 
-import fr.cla.wires.support.functional.Indexed;
-
 import java.util.EnumSet;
 import java.util.Set;
 import java.util.function.*;
@@ -10,7 +8,7 @@ import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collector.Characteristics.UNORDERED;
 
 //@formatter:off
-public class Accumulable<I, A> extends Mutable<A> {
+public class Accumulable<I, A> extends MutableValue<A> {
 
     private final A EMPTY = null;
     private final Function<I, A> accumulationValue;
@@ -69,8 +67,11 @@ public class Accumulable<I, A> extends Mutable<A> {
 
     /**
      * Modifies this to put it into the same state (as defined by equals)
-     * as calling initially/initiallyEmpty (static methods which creates a new Accumulable instance) would.
-     * @param newValue
+     * as calling initially (static method which creates a new Accumulable instance) would.
+     *
+     * -If newValue is null, throws NullPointerException.
+     * -Otherwise after calling this method, this.equals(initially(newValue)) is guaranteed to be true.
+     * @param newValue If I was calling initially I would pass this single param to it.
      */
     private void mutableEquivalentToInitially(A newValue) {
         set(newValue);
@@ -84,12 +85,25 @@ public class Accumulable<I, A> extends Mutable<A> {
         return new Collector<>(accumulationValue, accumulator, finisher);
     }
 
-
+    /**
+     * Package private, to allow only whitebox tests to suppress warnings.
+     * This method must not be called from anything other than a test.
+     * (then if something throws ClassCastException later, it will be detectable before pushing)
+     * It could even take Object, but the tests only to pass an AbstractValueObject<?>.
+     * If newValue is not an instance of AbstractValueObject<A>, the result and later behaviour is undefined.
+     * @param newValue Must be an AbstractValueObject<A>
+     * @throws NullPointerException if newValue is null
+     */
+    void mutableEquivalentToInitially(AbstractValueObject<?> newValue) {
+        @SuppressWarnings("unchecked") //See javadoc
+        A unsafeNewValue = (A) newValue;
+        mutableEquivalentToInitially(unsafeNewValue);
+    }
 
 
     public static class Collector<O, T>
     implements java.util.stream.Collector<O, Accumulable<O, T>, T> {
-        private final Function<Accumulable<O, T>, T> getAccumulated = Mutable::get;
+        private final Function<Accumulable<O, T>, T> getAccumulated = MutableValue::get;
         private final Function<O, T> accumulationValue;
         private final BinaryOperator<T> accumulator;
         private final UnaryOperator<T> finisher;

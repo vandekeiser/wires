@@ -29,7 +29,7 @@ public final class Wire<T> {
     //This also means that the unicity of listeners should be well-defined.
     // For now they are all instances of Wire, thus (since Wire is mutable) it must either:
     //      -continue to inherit equals/hashCode from Object,
-    //      -become a Mutable (requires refactoring Mutable)
+    //      -become a MutableValue (requires refactoring MutableValue)
     //      -become a DDD Entity with a specific ID
     private final Set<OnSignalChanged<T>> listeners = new HashSet<>();
 
