@@ -159,18 +159,6 @@
             <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.pholser</groupId>
-            <artifactId>junit-quickcheck-core</artifactId>
-            <version>${quickcheck.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.pholser</groupId>
-            <artifactId>junit-quickcheck-generators</artifactId>
-            <version>${quickcheck.version}</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
 </project>
