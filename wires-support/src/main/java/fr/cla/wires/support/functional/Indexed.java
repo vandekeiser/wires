@@ -1,6 +1,9 @@
 package fr.cla.wires.support.functional;
 
-import java.util.Objects;
+import fr.cla.wires.support.oo.AbstractValueObject;
+
+import java.util.Arrays;
+import java.util.List;
 
 //@formatter:off
 /**
@@ -8,7 +11,7 @@ import java.util.Objects;
  *
  * @param <T> The type of the indexed value.
  */
-public final class Indexed<T> {
+public final class Indexed<T> extends AbstractValueObject<Indexed<T>> {
 
     /**
      * Combine an index and a value into an indexed value.
@@ -25,6 +28,7 @@ public final class Indexed<T> {
     private final T value;
 
     private Indexed(int index, T value) {
+        super(indexedOfT());
         this.index = index;
         this.value = value;
     }
@@ -44,21 +48,27 @@ public final class Indexed<T> {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (! (obj instanceof Indexed)) return false;
-        Indexed<?> that = (Indexed<?>) obj;
-        return Objects.equals(index, that.index) && Objects.equals(value, that.value);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(index, value);
-    }
-
-    @Override
     public String toString() {
         return String.format("{ index: %d, value: %s }", index, value);
+    }
+
+    @Override
+    protected List<Object> equalityCriteria() {
+        return Arrays.asList(this.index, this.value);
+    }
+
+    private static <T> Class<Indexed<T>> indexedOfT() {
+        Class<?> unbounded = Indexed.class;
+
+        //Doesn't matter, as this is only used in AbstractValueObject::equals, for the isInstance check.
+        //This unchecked cast means that Indexed of all types are compared together without ClassCastException,
+        // but this doesn't matter because Indexed with equal values and indices should be equal.
+        //This is proved by IndexedTest::should_not_get_classcast_when_calling_equals_on_indexeds_of_different_types
+        // and IndexedTest::equals_should_be_true_for_indexeds_of_different_types_but_same_value_and_index
+        @SuppressWarnings("unchecked")
+        Class<Indexed<T>> indexedOfT = (Class<Indexed<T>>) unbounded;
+
+        return indexedOfT;
     }
 
 }
