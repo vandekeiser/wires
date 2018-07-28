@@ -50,6 +50,12 @@ public class Accumulable_PbtTest {
         ).isEqualTo(
             Accumulable.initially(initialAndNewValues.y, accumulationValue, accumulator)
         );
+
+        assertThat(
+            acc.hashCode()
+        ).isEqualTo(
+            Accumulable.initially(initialAndNewValues.y, accumulationValue, accumulator).hashCode()
+        );
     }
 
 }
