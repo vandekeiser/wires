@@ -59,7 +59,7 @@ extends Box {
      *      onSignalChanged(in)
      *          .set(out)
      *          .from(ins)
-     *          .map(accumulationValue())
+     *          .map(weight())
      *          .reduce(accumulator(), identity()
      *      ;
      * }
@@ -67,7 +67,7 @@ extends Box {
      * {@code
      *      onSignalChanged(in,
      *          newSignal -> out.setSignal(
-     *              mapAndReduce(ins, accumulationValue(), accumulator(), identity())
+     *              mapAndReduce(ins, weight(), accumulator(), identity())
      *          )
      *      )
      * }
@@ -76,12 +76,12 @@ extends Box {
         this.<O, T>onSignalChanged(in)
             .set(out)
             .from(ins)
-            .mapIndexed(accumulationValue())
+            .mapIndexed(weight())
             .reduce(accumulator(), identity())
         ;
     }
 
-    protected abstract Function<Indexed<O>, T> accumulationValue();
+    protected abstract Function<Indexed<O>, T> weight();
     protected abstract BinaryOperator<T> accumulator();
     protected abstract T identity();
 

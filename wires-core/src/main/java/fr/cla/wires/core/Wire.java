@@ -65,7 +65,7 @@ public final class Wire<T> {
      * Collect an aggregate result from the inputs of N Wires, using Stream::reduce.
      * Can do less than this::collect but less complex.
      * @param inputs The in Wires.
-     * @param accumulationValue Maps in signals to values which are then accumulated during the reduction.
+     * @param weight Maps in signals to values which are then accumulated during the reduction.
      * @param accumulator This accumulation function must be associative, per Stream::reduce.
      * @param identity This must be the neutral element of the group associated with the reducer (ex: 0 for +, 1 for *).
      * @param <T> The type of Signal that transits on the target Wire
@@ -74,7 +74,7 @@ public final class Wire<T> {
      */
     static <O, T> Signal<T> mapAndReduce(
         Collection<Wire<O>> inputs,
-        Function<O, T> accumulationValue,
+        Function<O, T> weight,
         BinaryOperator<T> accumulator,
         T identity
     ) {
@@ -82,14 +82,14 @@ public final class Wire<T> {
             Signal.none() :
             Signal.mapAndReduce(
                 inputs.stream().map(Wire::getSignal),
-                accumulationValue, accumulator, identity
+                weight, accumulator, identity
             )
         ;
     }
 
     public static <T, O> Signal<T> mapAndReduceIndexed(
         List<Wire<O>> inputs,
-        Function<Indexed<O>, T> accumulationValue,
+        Function<Indexed<O>, T> weight,
         BinaryOperator<T> accumulator,
         T identity
     ) {
@@ -97,7 +97,7 @@ public final class Wire<T> {
             Signal.none() :
             Signal.mapAndReduceIndexed(
                 inputs.stream().map(Wire::getSignal),
-                accumulationValue, accumulator, identity
+                weight, accumulator, identity
             )
         ;
     }

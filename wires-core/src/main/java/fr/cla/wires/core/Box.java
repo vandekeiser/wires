@@ -182,17 +182,17 @@ public abstract class Box {
             );
         }
 
-        public final Reducing<O, T> map(Function<O, T> accumulationValue) {
+        public final Reducing<O, T> map(Function<O, T> weight) {
             return new Reducing<>(
                 observed, target, inputs,
-                requireNonNull(accumulationValue)
+                requireNonNull(weight)
             );
         }
 
-        public final ReducingIndexed<O, T> mapIndexed(Function<Indexed<O>, T> indexedAccumulationValue) {
+        public final ReducingIndexed<O, T> mapIndexed(Function<Indexed<O>, T> indexedWeight) {
             return new ReducingIndexed<>(
                 observed, target, inputs,
-                requireNonNull(indexedAccumulationValue)
+                requireNonNull(indexedWeight)
             );
         }
 
@@ -211,16 +211,16 @@ public abstract class Box {
 
 
     protected class ReducingIndexed<O, T> extends InputsAndOutputCaptured<O, T> {
-        private final Function<Indexed<O>, T> accumulationValue;
+        private final Function<Indexed<O>, T> weight;
 
         private ReducingIndexed(
             Wire<O> observed,
             Wire<T> target,
             List<Wire<O>> inputs,
-            Function<Indexed<O>, T> accumulationValue
+            Function<Indexed<O>, T> weight
         ) {
             super(observed, target, inputs);
-            this.accumulationValue = requireNonNull(accumulationValue);
+            this.weight = requireNonNull(weight);
         }
 
         public final void reduce(BinaryOperator<T> accumulator, T identity) {
@@ -229,7 +229,7 @@ public abstract class Box {
 
             onSignalChanged(observed,
                 newSignal -> target.setSignal(
-                    Wire.mapAndReduceIndexed(inputs, accumulationValue, acc, id)
+                    Wire.mapAndReduceIndexed(inputs, weight, acc, id)
                 )
             );
         }
@@ -239,16 +239,16 @@ public abstract class Box {
 
 
     protected class Reducing<O, T> extends InputsAndOutputCaptured<O, T> {
-        private final Function<O, T> accumulationValue;
+        private final Function<O, T> weight;
 
         private Reducing(
             Wire<O> observed,
             Wire<T> target,
             List<Wire<O>> inputs,
-            Function<O, T> accumulationValue
+            Function<O, T> weight
         ) {
             super(observed, target, inputs);
-            this.accumulationValue = requireNonNull(accumulationValue);
+            this.weight = requireNonNull(weight);
         }
 
         public final void reduce(BinaryOperator<T> accumulator, T identity) {
@@ -257,7 +257,7 @@ public abstract class Box {
 
             onSignalChanged(observed,
                 newSignal -> target.setSignal(
-                    Wire.mapAndReduce(inputs, accumulationValue, acc, id)
+                    Wire.mapAndReduce(inputs, weight, acc, id)
                 )
             );
         }

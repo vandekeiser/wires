@@ -45,7 +45,7 @@ public class Neuron extends CollectIndexedHomogeneousInputs<Double, Double, Long
     }
 
     @Override
-    protected Function<Indexed<Double>, Double> accumulationValue() {
+    protected Function<Indexed<Double>, Double> weight() {
         return indexed -> {
             int index = indexed.getIndex();
             double value = indexed.getValue();

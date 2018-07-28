@@ -8,49 +8,48 @@ import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collector.Characteristics.UNORDERED;
 
 //@formatter:off
-
 /**
  * An Accumulable has an initial value and knows how to take in new partial values ({@code accumulator}),
  * and how to combine itself with another Accumulable. This way it can easily be used by a Collector.
  * @param <I> Type of inputs.
- *           Their "weights" are determined by {@code accumulationValue}
+ *           Their "weights" are determined by {@code weight}
  *           then accumulated into the current value by {@code accumulator}
  * @param <A> Type of accumulated value
  */
 public class Accumulable<I, A> extends MutableValue<A> {
 
     private final A EMPTY = null;
-    private final Function<I, A> accumulationValue;
+    private final Function<I, A> weight;
     private final BinaryOperator<A> accumulator;
 
     protected Accumulable(
         A initialValue,
         boolean acceptNull, 
-        Function<I, A> accumulationValue,
+        Function<I, A> weight,
         BinaryOperator<A> accumulator
     ) {
         super(initialValue, acceptNull);
-        this.accumulationValue = requireNonNull(accumulationValue);
+        this.weight = requireNonNull(weight);
         this.accumulator = requireNonNull(accumulator);
     }
 
     public static <I, A> Accumulable<I, A> initiallyEmpty(
-        Function<I, A> accumulationValue,
+        Function<I, A> weight,
         BinaryOperator<A> accumulator
     ) {
-        return new Accumulable<>(null, true, accumulationValue, accumulator);
+        return new Accumulable<>(null, true, weight, accumulator);
     }
 
     public static <I, A> Accumulable<I, A> initially(
         A initialValue,
-        Function<I, A> accumulationValue,
+        Function<I, A> weight,
         BinaryOperator<A> accumulator
     ) {
-        return new Accumulable<>(initialValue, false, accumulationValue, accumulator);
+        return new Accumulable<>(initialValue, false, weight, accumulator);
     }
 
     public final void accumulate(I elt) {
-        mutableEquivalentToInitially(accumulateValue(elt));
+        mutableEquivalentToInitially(weight(elt));
     }
 
     public final Accumulable<I, A> combine(Accumulable<I, A> that) {
@@ -58,12 +57,12 @@ public class Accumulable<I, A> extends MutableValue<A> {
         return this;
     }
 
-    private A accumulateValue(I elt) {
-        A accumulatedValue = accumulationValue.apply(elt);
+    private A weight(I elt) {
+        A eltWeight = this.weight.apply(elt);
         if(this.isPresent() ) {
-            return accumulator.apply(this.get(), accumulatedValue);
+            return accumulator.apply(this.get(), eltWeight);
         } else {
-            return accumulatedValue;
+            return eltWeight;
         }
     }
 
@@ -92,11 +91,11 @@ public class Accumulable<I, A> extends MutableValue<A> {
     }
 
     public static <O, T> java.util.stream.Collector<O, ?, T> collector(
-        Function<O, T> accumulationValue,
+        Function<O, T> weight,
         BinaryOperator<T> accumulator,
         UnaryOperator<T> finisher
     ) {
-        return new Collector<>(accumulationValue, accumulator, finisher);
+        return new Collector<>(weight, accumulator, finisher);
     }
 
     /**
@@ -121,24 +120,25 @@ public class Accumulable<I, A> extends MutableValue<A> {
 
     public static class Collector<O, T>
     implements java.util.stream.Collector<O, Accumulable<O, T>, T> {
-        private final Function<Accumulable<O, T>, T> getAccumulated = MutableValue::get;
-        private final Function<O, T> accumulationValue;
+        private final Function<Accumulable<O, T>, T> getAccumulated;
+        private final Function<O, T> weight;
         private final BinaryOperator<T> accumulator;
         private final UnaryOperator<T> finisher;
 
         private Collector(
-            Function<O, T> accumulationValue,
+            Function<O, T> weight,
             BinaryOperator<T> accumulator,
             UnaryOperator<T> finisher
         )  {
-            this.accumulationValue = requireNonNull(accumulationValue);
+            this.getAccumulated = MutableValue::get;
+            this.weight = requireNonNull(weight);
             this.accumulator = requireNonNull(accumulator);
             this.finisher = requireNonNull(finisher);
         }
 
         @Override public Supplier<Accumulable<O, T>> supplier() {
             return () -> Accumulable.initiallyEmpty(
-                accumulationValue, accumulator
+                weight, accumulator
             );
         }
 

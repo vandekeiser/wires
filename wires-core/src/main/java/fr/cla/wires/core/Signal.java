@@ -82,7 +82,7 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
      * Collect an aggregate result from the inputs of N Wires, using Stream::reduce.
      * Can do less than this::collect but less complex.
      * @param inputs The in Signals. No Signal is allowed to be Signal.none(), since that was already check by Wire::mapAndReduce.
-     * @param accumulationValue Maps in signals to values which are then accumulated during the reduction.
+     * @param weight Maps in signals to values which are then accumulated during the reduction.
      * @param accumulator This accumulation function (technically a java.util.function.BinaryOperator) must be associative, per Stream::reduce.
      * @param identity This must be the neutral element of the group associated with the reducer (ex: 0 for +, 1 for *).
      * @param <T> The type of Signal that transits on the target Wire
@@ -91,21 +91,21 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
      */
     static <O, T> Signal<T> mapAndReduce(
         Stream<Signal<O>> inputs,
-        Function<O, T> accumulationValue,
+        Function<O, T> weight,
         BinaryOperator<T> accumulator,
         T identity
     ) {
         return Signal.of(inputs
             .map(Signal::value)
             .map(Optional::get)
-            .map(accumulationValue)
+            .map(weight)
             .reduce(identity, accumulator)
         );
     }
 
     static <O, T> Signal<T> mapAndReduceIndexed(
         Stream<Signal<O>> inputs,
-        Function<Indexed<O>, T> accumulationValue,
+        Function<Indexed<O>, T> weight,
         BinaryOperator<T> accumulator,
         T identity
     ) {
@@ -113,7 +113,7 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         Stream<Indexed<O>> indexedValues = Streams.index(values);
 
         return Signal.of(
-            indexedValues.map(accumulationValue).reduce(identity, accumulator)
+            indexedValues.map(weight).reduce(identity, accumulator)
         );
     }
 

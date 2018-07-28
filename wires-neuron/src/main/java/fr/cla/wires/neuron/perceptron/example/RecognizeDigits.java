@@ -46,7 +46,7 @@ public class RecognizeDigits extends Box {
         return CompleteConnexions.<Double, Double>
             ins(x)
             .outs(y)
-            .accumulationValue(weightedInput(weigths))
+            .weight(weightedInput(weigths))
             .accumulator(sumWeightedInput())
             .finisher(potential2Signal())
             .clock(clock)

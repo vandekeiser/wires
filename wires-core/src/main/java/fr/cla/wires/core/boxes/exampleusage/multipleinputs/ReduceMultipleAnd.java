@@ -26,7 +26,7 @@ public class ReduceMultipleAnd extends ReduceHomogeneousInputs<Boolean, Boolean>
         super(ins, out, clock, delay);
     }
 
-    @Override protected Function<Boolean, Boolean> accumulationValue() {
+    @Override protected Function<Boolean, Boolean> weight() {
         return Function.identity();
     }
     @Override protected Boolean identity() {

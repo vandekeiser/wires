@@ -31,13 +31,13 @@ public class Accumulable_PbtTest {
         @RandomVoPair VoPair initialAndNewValues //we know its x and y are not null
     ) {
         // TODO: randomize those 2 among enums
-        Function<AbstractValueObject<?>, AbstractValueObject<?>> accumulationValue = Function.identity();
+        Function<AbstractValueObject<?>, AbstractValueObject<?>> weight = Function.identity();
         BinaryOperator<AbstractValueObject<?>> accumulator = (x, y) -> x;
 
         //Given
         Accumulable<AbstractValueObject<?>, AbstractValueObject<?>> acc =  Accumulable.initially(
             initialAndNewValues.x,
-            accumulationValue,
+            weight,
             accumulator
         );
 
@@ -48,13 +48,13 @@ public class Accumulable_PbtTest {
         assertThat(
             acc
         ).isEqualTo(
-            Accumulable.initially(initialAndNewValues.y, accumulationValue, accumulator)
+            Accumulable.initially(initialAndNewValues.y, weight, accumulator)
         );
 
         assertThat(
             acc.hashCode()
         ).isEqualTo(
-            Accumulable.initially(initialAndNewValues.y, accumulationValue, accumulator).hashCode()
+            Accumulable.initially(initialAndNewValues.y, weight, accumulator).hashCode()
         );
     }
 

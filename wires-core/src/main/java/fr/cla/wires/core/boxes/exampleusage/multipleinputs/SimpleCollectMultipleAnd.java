@@ -48,7 +48,7 @@ extends CollectHomogeneousInputsToOutputOfSameType<Boolean> {
         return this::and;
     }
 
-    @Override protected Function<Boolean, Boolean> accumulationValue() {
+    @Override protected Function<Boolean, Boolean> weight() {
         return Function.identity();
     }
 

@@ -62,7 +62,7 @@ extends Box {
     public static class Builder<I, O> {
         private List<Wire<I>> ins;
         private List<Wire<O>> outs;
-        private Function<Indexed<I>, O> accumulationValue;
+        private Function<Indexed<I>, O> weight;
         private BinaryOperator<O> accumulator;
         private UnaryOperator<O> finisher;
         private Clock clock;
@@ -76,8 +76,8 @@ extends Box {
             return this;
         }
 
-        public Builder<I, O> accumulationValue(Function<Indexed<I>, O> accumulationValue) {
-            this.accumulationValue = requireNonNull(accumulationValue);
+        public Builder<I, O> weight(Function<Indexed<I>, O> weight) {
+            this.weight = requireNonNull(weight);
             return this;
         }
 
@@ -99,7 +99,7 @@ extends Box {
         public CompleteConnexions<I, O> delay(Delay delay) {
             Delay _delay = requireNonNull(delay);
             Collector<Indexed<I>, ?, O> collector = Accumulable.collector(
-                accumulationValue, accumulator, finisher
+                weight, accumulator, finisher
             );
             return new CompleteConnexions<>(ins, outs, collector, clock, _delay).startup();
         }

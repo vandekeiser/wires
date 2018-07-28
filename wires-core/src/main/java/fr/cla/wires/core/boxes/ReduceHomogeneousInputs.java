@@ -13,7 +13,7 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * A Box that has N inputs, but all of the same type of {@code Signal},
- *  and the ouptut of which is the result is map(accumulationValue).reduce(accumulator, identity)
+ *  and the ouptut of which is the result is map(weight).reduce(accumulator, identity)
  * @param <O> The type of Signal that transits on observed Wires, same as in Box
  * @param <T> The type of Signal that transits on target Wires, same as in Box
  */
@@ -58,7 +58,7 @@ extends Box {
      *      onSignalChanged(in)
      *          .set(out)
      *          .from(ins)
-     *          .map(accumulationValue())
+     *          .map(weight())
      *          .reduce(accumulator(), identity())
      *      ;
      * }
@@ -66,7 +66,7 @@ extends Box {
      * {@code
      *      onSignalChanged(in,
      *          newSignal -> out.setSignal(
-     *              mapAndReduce(ins, accumulationValue(), accumulator(), identity())
+     *              mapAndReduce(ins, weight(), accumulator(), identity())
      *          )
      *      )
      * }
@@ -75,12 +75,12 @@ extends Box {
         this.<O, T>onSignalChanged(in)
             .set(out)
             .from(ins)
-            .map(accumulationValue())
+            .map(weight())
             .reduce(accumulator(), identity())
         ;
     }
 
-    protected abstract Function<O,T> accumulationValue();
+    protected abstract Function<O,T> weight();
     protected abstract BinaryOperator<T> accumulator();
     protected abstract T identity();
 

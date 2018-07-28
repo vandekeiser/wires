@@ -86,11 +86,11 @@ extends Box {
 
     private Collector<O, ?, T> collector() {
         return Accumulable.collector(
-            accumulationValue(), accumulator(), finisher()
+            weight(), accumulator(), finisher()
         );
     }
 
-    protected abstract Function<O, T> accumulationValue();
+    protected abstract Function<O, T> weight();
     protected abstract BinaryOperator<T> accumulator();
     protected abstract UnaryOperator<T> finisher();
 
