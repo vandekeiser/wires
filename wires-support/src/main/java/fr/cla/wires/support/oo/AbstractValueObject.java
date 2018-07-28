@@ -73,7 +73,9 @@ public abstract class AbstractValueObject<T extends AbstractValueObject<T>> {
 
     public enum SameTypePolicy {
         /**
-         *
+         * The most simple, we're sure to respect the Object::equals contract without collaboration from the concrete classes.
+         * On the other hand this fails if the class is replaced at load-time by a proxy (eg. by Hibernate).
+         * Also of course this isn't as flexible as CAN_EQUAL, as there is now way to still be equal even without adding state.
          */
         SAME_CONCRETE_CLASS {
             @Override <T> boolean isSameType(AbstractValueObject<?> thisObj, Class<T> thisObjType, AbstractValueObject<?> thatObj) {
