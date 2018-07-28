@@ -74,7 +74,10 @@ public abstract class AbstractValueObject<T extends AbstractValueObject<T>> {
          * Also of course this isn't as flexible as CAN_EQUAL, as there is now way to still be equal even without adding state.
          */
         SAME_CONCRETE_CLASS {
-            @Override <T> boolean isSameType(AbstractValueObject<?> thisObj, Class<T> thisObjType, AbstractValueObject<?> thatObj) {
+            @Override boolean isSameType(
+                AbstractValueObject<?> thisObj, Class<?> thisObjType,
+                AbstractValueObject<?> thatObj, Class<?> thatObjType
+            ) {
                 return Objects.equals(thisObj.getClass(), thatObj.getClass());
             }
         },
@@ -85,19 +88,26 @@ public abstract class AbstractValueObject<T extends AbstractValueObject<T>> {
          * OK otherwise.
          *
          * This has the advantage of working in the face of Hibernate proxies.
-         * It also allows a derived to compare equal to its parent while still respecting the Object::equals contract iff:
+         * It also allows a derived VO to compare equal to its parent while still respecting the Object::equals contract iff:
          * -it adds no state compared to its parent class
          *
-         * But is not always strict enough, as it doesn't allow distinguishing:
+         * But is not always fine-grained enough, as it doesn't allow distinguishing:
          *  -derived classes that do add state and should not compare equal to their parent
          *  -derived classes that do not add state and could compare equal to their parent
          * That degree of fine-grained control requires using CAN_EQUAL,
          *  and placing canEqual overrides in coordination with adding state or not.
-         *  (so this is still the responsibility of the derived class)
+         *  (this then becomes the responsibility of the derived class)
          */
         IS_INSTANCE{
-            @Override <T> boolean isSameType(AbstractValueObject<?> thisObj, Class<T> thisObjType, AbstractValueObject<?> thatObj) {
-                return thisObjType.isInstance(thatObj);
+            @Override boolean isSameType(
+                AbstractValueObject<?> thisObj, Class<?> thisObjType,
+                AbstractValueObject<?> thatObj, Class<?> thatObjType
+            ) {
+                return
+                    thisObjType.isInstance(thatObj)
+                    &&
+                    thatObjType.isInstance(thisObj)
+                ;
             }
         },
 
@@ -112,8 +122,10 @@ public abstract class AbstractValueObject<T extends AbstractValueObject<T>> {
          * TODO: test with Hibernate-instrumented class where the concrete class is a load-type proxy
          */
         CAN_EQUAL{
-            @Override <T> boolean isSameType(AbstractValueObject<?> thisObj, Class<T> thisObjType, AbstractValueObject<?> thatObj) {
-                //Ensure equals stays symmetric
+            boolean isSameType(
+                AbstractValueObject<?> thisObj, Class<?> thisObjType,
+                AbstractValueObject<?> thatObj, Class<?> thatObjType
+            ) {
                 return
                     thisObj.canEqual(thatObj)
                     &&
@@ -126,17 +138,18 @@ public abstract class AbstractValueObject<T extends AbstractValueObject<T>> {
         /**
          * @throws NullPointerException iff thisObj or thisObjType is null (which is impossible from the equals method)
          */
-        <T> boolean safeIsSameType(AbstractValueObject<?> thisObj, Class<T> thisObjType, Object thatObj) {
+        boolean safeIsSameType(AbstractValueObject<?> thisObj, Class<?> thisObjType, Object thatObj) {
             thisObj = requireNonNull(thisObj);
             thisObjType = requireNonNull(thisObjType);
 
             if(!(thatObj instanceof AbstractValueObject)) return false;
             AbstractValueObject<?> thatVo = (AbstractValueObject<?>) thatObj;
+            Class<?> thatObjType = thatVo.type;
 
-            return isSameType(thisObj, thisObjType, thatVo);
+            return isSameType(thisObj, thisObjType, thatVo, thatObjType);
         }
 
-        abstract <T> boolean isSameType(AbstractValueObject<?> thisObj, Class<T> thisObjType, AbstractValueObject<?> thatObj);
+        abstract boolean isSameType(AbstractValueObject<?> thisObj, Class<?> thisObjType, AbstractValueObject<?> thatObj, Class<?> thatObjType);
     }
 
 }
