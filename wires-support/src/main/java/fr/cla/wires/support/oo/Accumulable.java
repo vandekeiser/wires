@@ -8,6 +8,15 @@ import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collector.Characteristics.UNORDERED;
 
 //@formatter:off
+
+/**
+ * An Accumulable has an initial value and knows how to take in new partial values ({@code accumulator}),
+ * and how to combine itself with another Accumulable. This way it can easily be used by a Collector.
+ * @param <I> Type of inputs.
+ *           Their "weights" are determined by {@code accumulationValue}
+ *           then accumulated into the current value by {@code accumulator}
+ * @param <A> Type of accumulated value
+ */
 public class Accumulable<I, A> extends MutableValue<A> {
 
     private final A EMPTY = null;
@@ -41,19 +50,24 @@ public class Accumulable<I, A> extends MutableValue<A> {
     }
 
     public final void accumulate(I elt) {
-        if(this.isPresent() ) {
-            set(accumulator.apply(this.get(), accumulationValue.apply(elt)));
-        } else {
-            set(accumulationValue.apply(elt));
-        }
+        mutableEquivalentToInitially(accumulateValue(elt));
     }
 
     public final Accumulable<I, A> combine(Accumulable<I, A> that) {
-        mutableEquivalentToInitially(newValueConsidering(that));
+        mutableEquivalentToInitially(combineValues(that));
         return this;
     }
 
-    private A newValueConsidering(Accumulable<I, A> that) {
+    private A accumulateValue(I elt) {
+        A accumulatedValue = accumulationValue.apply(elt);
+        if(this.isPresent() ) {
+            return accumulator.apply(this.get(), accumulatedValue);
+        } else {
+            return accumulatedValue;
+        }
+    }
+
+    private A combineValues(Accumulable<I, A> that) {
         if (this.isPresent() && that.isPresent()) {
             return accumulator.apply(this.get(), that.get());
         } else if (this.isPresent()) {
