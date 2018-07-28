@@ -1,14 +1,11 @@
 package fr.cla.wires.support.oo.ddd;
 
 import com.pholser.junit.quickcheck.Property;
-import com.pholser.junit.quickcheck.generator.java.math.BigIntegerGenerator;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
 import fr.cla.wires.support.oo.AbstractValueObject;
 import fr.cla.wires.support.oo.Accumulable;
-import fr.cla.wires.support.oo.ddd.support.pbt.RandomVo;
 import fr.cla.wires.support.oo.ddd.support.pbt.RandomVoPair;
 import fr.cla.wires.support.oo.ddd.support.pbt.VoPair;
-import fr.cla.wires.support.oo.ddd.support.pbt.VoSingleton;
 import org.junit.runner.RunWith;
 
 import java.util.function.BinaryOperator;
@@ -42,7 +39,7 @@ public class Accumulable_PbtTest {
         );
 
         //When
-        acc.mutableEquivalentToInitially(initialAndNewValues.y);
+        acc.unsafeMutableEquivalentToInitially(initialAndNewValues.y);
 
         //Then
         assertThat(

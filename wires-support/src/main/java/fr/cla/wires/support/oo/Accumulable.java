@@ -102,8 +102,8 @@ public class Accumulable<I, A> extends MutableValue<A> {
      * @param newValue Must be an AbstractValueObject<A>
      * @throws NullPointerException if newValue is null
      */
-    public void mutableEquivalentToInitially(AbstractValueObject<?> newValue) {
-        //void mutableEquivalentToInitially(AbstractValueObject<?> newValue) {
+    public void unsafeMutableEquivalentToInitially(AbstractValueObject<?> newValue) {
+        //void unsafeMutableEquivalentToInitially(AbstractValueObject<?> newValue) {
         @SuppressWarnings("unchecked") //See javadoc
         A unsafeNewValue = (A) newValue;
         mutableEquivalentToInitially(unsafeNewValue);
