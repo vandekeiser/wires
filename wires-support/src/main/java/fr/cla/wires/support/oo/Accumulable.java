@@ -90,14 +90,6 @@ public class Accumulable<I, A> extends MutableValue<A> {
         set(newValue);
     }
 
-    public static <O, T> java.util.stream.Collector<O, ?, T> collector(
-        Function<O, T> weight,
-        BinaryOperator<T> accumulator,
-        UnaryOperator<T> finisher
-    ) {
-        return new Collector<>(weight, accumulator, finisher);
-    }
-
     /**
      * TODO: Must make it public for now because of https://issues.apache.org/jira/browse/MCOMPILER-354
      * which prevents me from putting Accumulable_PbtTest in fr.cla.wires.support.oo
@@ -111,11 +103,21 @@ public class Accumulable<I, A> extends MutableValue<A> {
      * @throws NullPointerException if newValue is null
      */
     public void mutableEquivalentToInitially(AbstractValueObject<?> newValue) {
-    //void mutableEquivalentToInitially(AbstractValueObject<?> newValue) {
+        //void mutableEquivalentToInitially(AbstractValueObject<?> newValue) {
         @SuppressWarnings("unchecked") //See javadoc
         A unsafeNewValue = (A) newValue;
         mutableEquivalentToInitially(unsafeNewValue);
     }
+
+    public static <O, T> java.util.stream.Collector<O, ?, T> collector(
+        Function<O, T> weight,
+        BinaryOperator<T> accumulator,
+        UnaryOperator<T> finisher
+    ) {
+        return new Collector<>(weight, accumulator, finisher);
+    }
+
+
 
 
     public static class Collector<O, T>
