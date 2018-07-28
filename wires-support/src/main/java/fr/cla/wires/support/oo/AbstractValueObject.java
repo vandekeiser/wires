@@ -26,6 +26,7 @@ public abstract class AbstractValueObject<T extends AbstractValueObject<T>> {
         //An optimization, but also avoids StackOverflows on cyclic object graphs.
         if(obj == this) return true;
 
+        SameTypePolicy x = null;
         //KO, AbstractValueObject_PbtTest would fail as this doesn't prevent VO1A eq VO1B
         //if(! type.isInstance(obj)) return false;
         if(obj == null) return false;
@@ -55,5 +56,8 @@ public abstract class AbstractValueObject<T extends AbstractValueObject<T>> {
 
     protected abstract List<Object> equalityCriteria();
 
+    public boolean canEqual(AbstractValueObject<?> thisObj) {
+        return true;
+    }
 }
 //@formatter:on
