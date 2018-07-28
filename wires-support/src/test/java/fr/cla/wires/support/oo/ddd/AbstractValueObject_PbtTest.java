@@ -47,12 +47,43 @@ public class AbstractValueObject_PbtTest {
     }
 
     @Property(trials = TRIALS)
+    public void equals_null_should_be_false(
+    @RandomVo VoSingleton s
+    ) {
+        assertThat(
+           s.x.equals(null)
+        ).isFalse();
+    }
+
+    @Property(trials = TRIALS)
+    public void equals_should_be_consistent(
+        @RandomVoPair VoPair p
+    ) {
+        assertThat(
+            p.x.equals(p.y)
+        ).isEqualTo(
+            p.x.equals(p.y)
+        );
+    }
+
+    @Property(trials = TRIALS)
     public void equals_implies_same_hashCode(
         @RandomVoPair VoPair p
     ) {
         if(p.x.equals(p.y)){
             assertEquals(p.x.hashCode(), p.y.hashCode());
         }
+    }
+
+    @Property(trials = TRIALS)
+    public void hashCode_should_be_consistent(
+        @RandomVo VoSingleton s
+    ) {
+        assertThat(
+            s.x.hashCode()
+        ).isEqualTo(
+            s.x.hashCode()
+        );
     }
 
     /**
