@@ -27,7 +27,7 @@ public class VO2 extends AbstractValueObject<VO2> {
     }
 
     @Override
-    protected boolean canEqual(Object that) {
+    protected boolean canEqual(AbstractValueObject<?> that) {
         return that instanceof VO2;
     }
 

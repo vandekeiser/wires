@@ -64,8 +64,8 @@ public abstract class AbstractValueObject<T extends AbstractValueObject<T>> {
     /**
      * @see SameTypePolicy.CAN_EQUAL
      */
-    protected boolean canEqual(Object that) {
-        return that instanceof AbstractValueObject;
+    protected boolean canEqual(AbstractValueObject<?> that) {
+        return true;
     }
 
 

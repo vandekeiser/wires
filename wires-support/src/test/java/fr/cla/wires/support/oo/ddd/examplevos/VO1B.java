@@ -1,6 +1,7 @@
 package fr.cla.wires.support.oo.ddd.examplevos;
 
 import com.pholser.junit.quickcheck.random.SourceOfRandomness;
+import fr.cla.wires.support.oo.AbstractValueObject;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,7 +29,7 @@ public class VO1B extends VO1 {
     }
 
     @Override
-    protected boolean canEqual(Object that) {
+    protected boolean canEqual(AbstractValueObject<?> that) {
         return that instanceof VO1B;
     }
 

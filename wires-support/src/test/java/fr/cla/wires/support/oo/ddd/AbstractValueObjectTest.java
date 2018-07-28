@@ -32,7 +32,7 @@ public class AbstractValueObjectTest {
         }
 
         @Override
-        protected boolean canEqual(Object that) {
+        protected boolean canEqual(AbstractValueObject<?> that) {
             return that instanceof ValueObject1;
         }
     }
@@ -51,7 +51,7 @@ public class AbstractValueObjectTest {
         }
 
         @Override
-        protected boolean canEqual(Object that) {
+        protected boolean canEqual(AbstractValueObject<?> that) {
             return that instanceof ValueObject2;
         }
     }
