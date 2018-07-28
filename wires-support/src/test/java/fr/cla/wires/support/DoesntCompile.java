@@ -1,9 +1,9 @@
 //OK
 //package fr.cla.wires.support.oo.ddd;
 //KO
-package fr.cla.wires.support.oo;
+package fr.cla.wires.support;
 
-import fr.cla.wires.support.oo.ddd.support.pbt.JavacComplainsThisIsNotExported;
+import fr.cla.wires.support.ddd.x.JavacComplainsThisIsNotExported;
 
 
 public class DoesntCompile {
