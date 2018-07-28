@@ -4,6 +4,7 @@ package fr.cla.wires.support.oo.ddd;
 import com.pholser.junit.quickcheck.Property;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
 import fr.cla.wires.support.oo.ddd.support.pbt.*;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -57,6 +58,12 @@ public class AbstractValueObject_PbtTest {
     /**
      * Not part of the equals contract but part of the
      */
+    //Uncomment to test AbstractValueObject.SameTypePolicy.IS_INSTANCE
+    //Comment to test AbstractValueObject.SameTypePolicy.SAME_CONCRETE_CLASS
+    //Uncomment to test AbstractValueObject.SameTypePolicy.CAN_EQUAL
+    //    - as long as all overrides X of AbstractValueObject::canEqual return (obj instanceof X)
+    //)
+    //@Ignore
     @Property(trials = TRIALS)
     public void equals_should_be_false_for_different_types(
         @RandomVoPair VoPair p

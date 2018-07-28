@@ -17,7 +17,9 @@ public abstract class AbstractValueObject<T extends AbstractValueObject<T>> {
     private final Class<T> type;
 
     protected AbstractValueObject(Class<T> type) {
-        this(type, SameTypePolicy.SAME_CONCRETE_CLASS);
+        //this(type, SameTypePolicy.SAME_CONCRETE_CLASS);
+        //this(type, SameTypePolicy.IS_INSTANCE);
+        this(type, SameTypePolicy.CAN_EQUAL);
     }
 
     protected AbstractValueObject(Class<T> type, SameTypePolicy sameTypePolicy) {

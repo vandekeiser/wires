@@ -2,11 +2,13 @@ package fr.cla.wires.support.oo.ddd.examplevos;
 
 import com.pholser.junit.quickcheck.random.SourceOfRandomness;
 import fr.cla.wires.support.oo.AbstractValueObject;
+import fr.cla.wires.support.oo.ddd.AbstractValueObjectTest;
 
 import java.util.List;
 
 import static java.util.Collections.singletonList;
 
+//@formatter:off
 public class VO1 extends AbstractValueObject<VO1> {
 
     protected final Value x;
@@ -24,4 +26,11 @@ public class VO1 extends AbstractValueObject<VO1> {
     protected List<Object> equalityCriteria() {
         return singletonList(x);
     }
+
+    @Override
+    protected boolean canEqual(Object that) {
+        return that instanceof VO1;
+    }
+
 }
+//@formatter:on

@@ -4,6 +4,7 @@ import com.pholser.junit.quickcheck.random.SourceOfRandomness;
 
 import java.util.Arrays;
 
+//@formatter:off
 public enum Value {
     V1,
     V2,
@@ -28,3 +29,4 @@ public enum Value {
         return VALUES_PLUS_NULL.length;
     }
 }
+//@formatter:on

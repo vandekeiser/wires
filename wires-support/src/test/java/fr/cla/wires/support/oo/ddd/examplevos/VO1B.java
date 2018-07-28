@@ -5,6 +5,7 @@ import com.pholser.junit.quickcheck.random.SourceOfRandomness;
 import java.util.Arrays;
 import java.util.List;
 
+//@formatter:off
 public class VO1B extends VO1 {
 
     private final Value y;
@@ -25,4 +26,11 @@ public class VO1B extends VO1 {
     protected List<Object> equalityCriteria() {
         return Arrays.asList(super.x, y);
     }
+
+    @Override
+    protected boolean canEqual(Object that) {
+        return that instanceof VO1B;
+    }
+
 }
+//@formatter:on

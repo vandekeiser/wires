@@ -30,6 +30,11 @@ public class AbstractValueObjectTest {
         protected List<Object> equalityCriteria() {
             return List.of(value);
         }
+
+        @Override
+        protected boolean canEqual(Object that) {
+            return that instanceof ValueObject1;
+        }
     }
 
     private static class ValueObject2 extends AbstractValueObject<ValueObject1> {
@@ -43,6 +48,11 @@ public class AbstractValueObjectTest {
         @Override
         protected List<Object> equalityCriteria() {
             return List.of(value);
+        }
+
+        @Override
+        protected boolean canEqual(Object that) {
+            return that instanceof ValueObject2;
         }
     }
 

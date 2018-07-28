@@ -7,6 +7,7 @@ import java.util.List;
 
 import static java.util.Collections.singletonList;
 
+//@formatter:off
 public class VO2 extends AbstractValueObject<VO2> {
 
     protected final Value x;
@@ -24,4 +25,11 @@ public class VO2 extends AbstractValueObject<VO2> {
     protected List<Object> equalityCriteria() {
         return singletonList(x);
     }
+
+    @Override
+    protected boolean canEqual(Object that) {
+        return that instanceof VO2;
+    }
+
 }
+//@formatter:on
