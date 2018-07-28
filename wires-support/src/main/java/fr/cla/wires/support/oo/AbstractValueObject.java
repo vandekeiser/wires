@@ -27,10 +27,6 @@ public abstract class AbstractValueObject<T extends AbstractValueObject<T>> {
         this.sameTypePolicy = requireNonNull(sameTypePolicy);
     }
 
-    /**
-     * Precises the Object::equals contract by saying that
-     * 2 AbstractValueObject of different concrete type are never equal.
-     */
     @Override public final boolean equals(Object obj) {
         //An optimization, but also avoids StackOverflows on cyclic object graphs.
         if(obj == this) return true;
