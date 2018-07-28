@@ -2,7 +2,6 @@ package fr.cla.wires.support.oo.ddd.examplevos;
 
 import com.pholser.junit.quickcheck.random.SourceOfRandomness;
 import fr.cla.wires.support.oo.AbstractValueObject;
-import fr.cla.wires.support.oo.ddd.AbstractValueObjectTest;
 
 import java.util.List;
 
