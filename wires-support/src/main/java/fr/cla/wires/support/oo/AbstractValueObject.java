@@ -97,6 +97,8 @@ public abstract class AbstractValueObject<T extends AbstractValueObject<T>> {
          * That degree of fine-grained control requires using CAN_EQUAL,
          *  and placing canEqual overrides in coordination with adding state or not.
          *  (this then becomes the responsibility of the derived class)
+         *
+         *  TODO: test with Hibernate-instrumented class where the concrete class is a load-type proxy
          */
         IS_INSTANCE{
             @Override boolean isSameType(
@@ -118,7 +120,6 @@ public abstract class AbstractValueObject<T extends AbstractValueObject<T>> {
          * This could allow to keep strict concrete class same-type policy when Hibernate modifies our class
          *  but we want to ignore that from an equality point of view.
          *
-         * TODO: test
          * TODO: test with Hibernate-instrumented class where the concrete class is a load-type proxy
          */
         CAN_EQUAL{
