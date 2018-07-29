@@ -1,8 +1,13 @@
--mv support main/test
+-fix contraintes pkg (cf. https://issues.apache.org/jira/browse/MCOMPILER-354)
 -tst 2 chgts/tick
 -split staged builders a 2 wires
     -methodes rightWire/leftWire
 -tst ZippingSpliterator
--if (!Hibernate.getClass(this).equals(Hibernate.getClass(obj))) {
-     return false;
- }
+
+-CAN_EQUAL test impls specifiques
+-wires-support-voequals-hibernate-instrumentation-torture
+    -->vf que je me choppe pas des classcast..
+    -->indispensable ou isInstance/canEqual suffisent __vraiment__?
+        if (!Hibernate.getClass(this).equals(Hibernate.getClass(obj))) {
+             return false;
+         }
