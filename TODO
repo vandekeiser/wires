@@ -3,3 +3,6 @@
 -split staged builders a 2 wires
     -methodes rightWire/leftWire
 -tst ZippingSpliterator
+-if (!Hibernate.getClass(this).equals(Hibernate.getClass(obj))) {
+     return false;
+ }

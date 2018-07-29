@@ -13,25 +13,25 @@ import static java.util.Objects.requireNonNull;
  */
 public abstract class AbstractValueObject<T extends AbstractValueObject<T>> {
 
-    private final SameTypePolicy sameTypePolicy;
     private final Class<T> type;
+    private final Equatability equatability;
 
     protected AbstractValueObject(Class<T> type) {
-        //this(type, SameTypePolicy.SAME_CONCRETE_CLASS);
-        //this(type, SameTypePolicy.IS_INSTANCE);
-        this(type, SameTypePolicy.CAN_EQUAL);
+        this(type, Equatability.SAME_CONCRETE_CLASS);
+        //this(type, Equatability.IS_INSTANCE);
+        //this(type, Equatability.CAN_EQUAL);
     }
 
-    protected AbstractValueObject(Class<T> type, SameTypePolicy sameTypePolicy) {
+    protected AbstractValueObject(Class<T> type, Equatability equatability) {
         this.type = requireNonNull(type);
-        this.sameTypePolicy = requireNonNull(sameTypePolicy);
+        this.equatability = requireNonNull(equatability);
     }
 
     @Override public final boolean equals(Object obj) {
         //An optimization, but also avoids StackOverflows on cyclic object graphs.
         if(obj == this) return true;
 
-        if(! sameTypePolicy.safeIsSameType(this, type, obj)) return false;
+        if(! equatability.areEquatable(this, type, obj)) return false;
 
         T that = type.cast(obj);
         return Objects.equals(
@@ -58,7 +58,7 @@ public abstract class AbstractValueObject<T extends AbstractValueObject<T>> {
     protected abstract List<Object> equalityCriteria();
 
     /**
-     * @see SameTypePolicy.CAN_EQUAL
+     * @see "Equatability.CAN_EQUAL"
      */
     protected boolean canEqual(AbstractValueObject<?> that) {
         return true;
@@ -67,14 +67,14 @@ public abstract class AbstractValueObject<T extends AbstractValueObject<T>> {
 
 
 
-    public enum SameTypePolicy {
+    public enum Equatability {
         /**
          * The most simple, we're sure to respect the Object::equals contract without collaboration from the concrete classes.
          * On the other hand this fails if the class is replaced at load-time by a proxy (eg. by Hibernate).
          * Also of course this isn't as flexible as CAN_EQUAL, as there is now way to still be equal even without adding state.
          */
         SAME_CONCRETE_CLASS {
-            @Override boolean isSameType(
+            @Override protected boolean areEquatable(
                 AbstractValueObject<?> thisObj, Class<?> thisObjType,
                 AbstractValueObject<?> thatObj, Class<?> thatObjType
             ) {
@@ -101,7 +101,7 @@ public abstract class AbstractValueObject<T extends AbstractValueObject<T>> {
          *  TODO: test with Hibernate-instrumented class where the concrete class is a load-type proxy
          */
         IS_INSTANCE{
-            @Override boolean isSameType(
+            @Override protected boolean areEquatable(
                 AbstractValueObject<?> thisObj, Class<?> thisObjType,
                 AbstractValueObject<?> thatObj, Class<?> thatObjType
             ) {
@@ -123,7 +123,7 @@ public abstract class AbstractValueObject<T extends AbstractValueObject<T>> {
          * TODO: test with Hibernate-instrumented class where the concrete class is a load-type proxy
          */
         CAN_EQUAL{
-            boolean isSameType(
+            @Override protected boolean areEquatable(
                 AbstractValueObject<?> thisObj, Class<?> thisObjType,
                 AbstractValueObject<?> thatObj, Class<?> thatObjType
             ) {
@@ -139,7 +139,10 @@ public abstract class AbstractValueObject<T extends AbstractValueObject<T>> {
         /**
          * @throws NullPointerException iff thisObj or thisObjType is null (which is impossible from the equals method)
          */
-        boolean safeIsSameType(AbstractValueObject<?> thisObj, Class<?> thisObjType, Object thatObj) {
+        public final boolean areEquatable(
+            AbstractValueObject<?> thisObj, Class<?> thisObjType,
+            Object thatObj
+        ) {
             thisObj = requireNonNull(thisObj);
             thisObjType = requireNonNull(thisObjType);
 
@@ -147,10 +150,13 @@ public abstract class AbstractValueObject<T extends AbstractValueObject<T>> {
             AbstractValueObject<?> thatVo = (AbstractValueObject<?>) thatObj;
             Class<?> thatObjType = thatVo.type;
 
-            return isSameType(thisObj, thisObjType, thatVo, thatObjType);
+            return areEquatable(thisObj, thisObjType, thatVo, thatObjType);
         }
 
-        abstract boolean isSameType(AbstractValueObject<?> thisObj, Class<?> thisObjType, AbstractValueObject<?> thatObj, Class<?> thatObjType);
+        protected abstract boolean areEquatable(
+            AbstractValueObject<?> thisObj, Class<?> thisObjType,
+            AbstractValueObject<?> thatObj, Class<?> thatObjType
+        );
     }
 
 }

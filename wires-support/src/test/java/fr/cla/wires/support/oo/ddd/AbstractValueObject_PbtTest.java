@@ -89,9 +89,9 @@ public class AbstractValueObject_PbtTest {
     /**
      * Not part of the equals contract but part of the
      */
-    //Uncomment to test AbstractValueObject.SameTypePolicy.IS_INSTANCE
-    //Comment to test AbstractValueObject.SameTypePolicy.SAME_CONCRETE_CLASS
-    //Uncomment to test AbstractValueObject.SameTypePolicy.CAN_EQUAL
+    //Uncomment to test AbstractValueObject.Equatability.IS_INSTANCE
+    //Comment to test AbstractValueObject.Equatability.SAME_CONCRETE_CLASS
+    //Uncomment to test AbstractValueObject.Equatability.CAN_EQUAL
     //    - as long as all overrides X of AbstractValueObject::canEqual return (obj instanceof X)
     //)
     //@Ignore
