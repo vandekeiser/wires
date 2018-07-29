@@ -67,15 +67,22 @@
                 </configuration>
             </plugin>
 
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-jmod-plugin</artifactId>-->
+                <!--<version>3.0.0-alpha-1</version>-->
+                <!--<extensions>true</extensions>-->
+            <!--</plugin>-->
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jlink-plugin</artifactId>
                 <version>${maven-jlink-plugin.version}</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <!-- configuration elements goes here -->
                 </configuration>
             </plugin>
+
 
             <!--Runs integration tests and binds to the integration-test and verify phases by default-->
             <plugin>

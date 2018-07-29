@@ -11,3 +11,6 @@
         if (!Hibernate.getClass(this).equals(Hibernate.getClass(obj))) {
              return false;
          }
+
+-forkCount VS                     <forkMode>never</forkMode>
+                                <childDelegation>false</childDelegation>
