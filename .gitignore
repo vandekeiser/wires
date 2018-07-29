@@ -7,5 +7,7 @@
 
 *.txt
 logs/*
+*.log
 
 *.pdf
+*.zip
