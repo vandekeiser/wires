@@ -48,7 +48,7 @@ public abstract class AbstractValueObject<T extends AbstractValueObject<T>> {
 
     @Override public String toString() {
         return String.format(
-            "%s@%s%s",
+            "%s@%s=%s",
             getClass().getSimpleName(),
             Integer.toHexString(System.identityHashCode(this)),
             equalityCriteria()
