@@ -73,7 +73,6 @@ public final class Wire<T> {
      * @param inputs The in Wires.
      * @param weight Maps in signals to values which are then accumulated during the reduction.
      * @param accumulator This accumulation function must be associative, per Stream::reduce.
-     * @param identity This must be the neutral element of the group associated with the reducer (ex: 0 for +, 1 for *).
      * @param <T> The type of Signal that transits on the target Wire
      * @param <O> The type of Signal that transits on the observed Wire
      * @return If if any input is none then Signal.none(), else the result of applying the reducer to the "accumulation value" of all inputs.
