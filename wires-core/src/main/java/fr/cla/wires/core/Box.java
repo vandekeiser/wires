@@ -225,11 +225,10 @@ public abstract class Box {
 
         public final void reduce(BinaryOperator<T> accumulator, T identity) {
             var acc = requireNonNull(accumulator);
-            var id = requireNonNull(identity);
 
             onSignalChanged(observed,
                 newSignal -> target.setSignal(
-                    Wire.mapAndReduceIndexed(inputs, weight, acc, id)
+                    Wire.mapAndReduceIndexed(inputs, weight, acc)
                 )
             );
         }

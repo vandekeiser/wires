@@ -14,6 +14,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static fr.cla.wires.support.functional.Indexed.*;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
 
@@ -105,26 +106,38 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         ;
     }
 
-    private static <T> BinaryOperator<Optional<T>> maybe(BinaryOperator<T> accumulator) {
+    private static <T> BinaryOperator<Optional<T>> maybe(
+        BinaryOperator<T> accumulator
+    ) {
         return (maybe1, maybe2) -> maybe1.flatMap(v1 -> maybe2.flatMap(v2 ->
             Optional.of(accumulator.apply(v1, v2))
         ));
     }
 
+    private static <O, T> Function<Indexed<Optional<O>>, Optional<T>> maybe(
+        Function<Indexed<O>, T> weight
+    ) {
+        return indexed -> indexed.getValue().map(
+            v -> weight.apply(index(indexed.getIndex(), v))
+        );
+    }
+
     static <O, T> Signal<T> mapAndReduceIndexed(
         Collection<Signal<O>> inputs,
         Function<Indexed<O>, T> weight,
-        BinaryOperator<T> accumulator,
-        T identity
+        BinaryOperator<T> accumulator
     ) {
-        if(anySignalIsFloating(inputs)) return Signal.none();
+        Stream<Optional<O>> values = inputs.stream().map(Signal::value);
+        Stream<Indexed<Optional<O>>> indexedValues = Streams.index(values);
 
-        Stream<O> values = inputs.stream().map(Signal::value).map(Optional::get);
-        Stream<Indexed<O>> indexedValues = Streams.index(values);
+        return indexedValues
+            .map(maybe(weight))
+            .reduce(maybe(accumulator))
+            .orElseGet(Optional::empty)
+            .map(Signal::of)
+            .orElseGet(Signal::none)
+        ;
 
-        return Signal.of(
-            indexedValues.map(weight).reduce(identity, accumulator)
-        );
     }
 
     /**
