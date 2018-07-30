@@ -97,7 +97,7 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         BinaryOperator<T> accumulator,
         T identity
     ) {
-        if(anySignalIsFloating(inputs)) return Signal.none();
+        //if(anySignalIsFloating(inputs)) return Signal.none();
 
         return Signal.of(
             inputs.stream()
