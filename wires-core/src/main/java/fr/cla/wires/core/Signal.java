@@ -98,14 +98,20 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         T identity
     ) {
         //if(anySignalIsFloating(inputs)) return Signal.none();
-
-        return Signal.of(
-            inputs.stream()
+        return inputs.stream()
             .map(Signal::value)
-            .map(Optional::get)
-            .map(weight)
-            .reduce(identity, accumulator)
-        );
+            .map(maybe -> maybe.map(weight))
+            .reduce(maybe(accumulator))
+            .orElseGet(Optional::empty)
+            .map(Signal::of)
+            .orElseGet(Signal::none)
+        ;
+    }
+
+    private static <T> BinaryOperator<Optional<T>> maybe(BinaryOperator<T> accumulator) {
+        return (maybe1, maybe2) -> maybe1.flatMap(v1 -> maybe2.flatMap(v2 ->
+            Optional.of(accumulator.apply(v1, v2))
+        ));
     }
 
     static <O, T> Signal<T> mapAndReduceIndexed(
