@@ -94,10 +94,8 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
     static <O, T> Signal<T> mapAndReduce(
         Collection<Signal<O>> inputs,
         Function<O, T> weight,
-        BinaryOperator<T> accumulator,
-        T identity
+        BinaryOperator<T> accumulator
     ) {
-        //if(anySignalIsFloating(inputs)) return Signal.none();
         return inputs.stream()
             .map(Signal::value)
             .map(maybe -> maybe.map(weight))

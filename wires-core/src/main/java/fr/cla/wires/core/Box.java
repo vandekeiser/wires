@@ -251,13 +251,12 @@ public abstract class Box {
             this.weight = requireNonNull(weight);
         }
 
-        public final void reduce(BinaryOperator<T> accumulator, T identity) {
+        public final void reduce(BinaryOperator<T> accumulator) {
             var acc = requireNonNull(accumulator);
-            var id = requireNonNull(identity);
 
             onSignalChanged(observed,
                 newSignal -> target.setSignal(
-                    Wire.mapAndReduce(inputs, weight, acc, id)
+                    Wire.mapAndReduce(inputs, weight, acc)
                 )
             );
         }

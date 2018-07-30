@@ -29,9 +29,6 @@ public class ReduceMultipleAnd extends ReduceHomogeneousInputs<Boolean, Boolean>
     @Override protected Function<Boolean, Boolean> weight() {
         return Function.identity();
     }
-    @Override protected Boolean identity() {
-        return true;
-    }
     @Override protected BinaryOperator<Boolean> accumulator() {
         return this::and;
     }

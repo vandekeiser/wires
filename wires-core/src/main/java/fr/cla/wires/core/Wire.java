@@ -81,12 +81,11 @@ public final class Wire<T> {
     static <O, T> Signal<T> mapAndReduce(
         Collection<Wire<O>> inputs,
         Function<O, T> weight,
-        BinaryOperator<T> accumulator,
-        T identity
+        BinaryOperator<T> accumulator
     ) {
         return Signal.mapAndReduce(
             inputs.stream().map(Wire::getSignal).collect(toList()),
-            weight, accumulator, identity
+            weight, accumulator
         );
     }
 
