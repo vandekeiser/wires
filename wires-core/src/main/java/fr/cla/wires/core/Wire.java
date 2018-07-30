@@ -41,6 +41,10 @@ public final class Wire<T> {
         return signal;
     }
 
+    /**
+     * @param signal A non-null signal
+     * @throws NullPointerException if signal is null
+     */
     public void setSignal(Signal<T> signal) {
         if(signal.equals(this.signal)) return;
 

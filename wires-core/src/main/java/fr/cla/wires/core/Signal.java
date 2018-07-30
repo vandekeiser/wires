@@ -95,7 +95,8 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         BinaryOperator<T> accumulator,
         T identity
     ) {
-        return Signal.of(inputs
+        return Signal.of(
+            inputs
             .map(Signal::value)
             .map(Optional::get)
             .map(weight)
@@ -134,7 +135,8 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         Stream<Signal<O>> inputs,
         Collector<O, ?, T> collector
     ) {
-        return Signal.of(inputs
+        return Signal.of(
+            inputs
             .map(Signal::value)
             .map(Optional::get)
             .collect(collector)
