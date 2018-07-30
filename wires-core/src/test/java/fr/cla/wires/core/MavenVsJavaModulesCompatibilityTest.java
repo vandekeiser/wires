@@ -1,7 +1,7 @@
 package fr.cla.wires.core;
 
 import fr.cla.wires.support.functional.Streams;
-import fr.cla.wires.support.oo.ddd.AbstractValueObjectTest;
+import fr.cla.wires.support.oo.test.AbstractValueObjectTest;
 import org.junit.Test;
 
 import java.lang.reflect.Constructor;

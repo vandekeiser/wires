@@ -86,27 +86,23 @@ public class Accumulable<I, A> extends MutableValue<A> {
      * -Otherwise after calling this method, this.equals(initially(newValue)) is guaranteed to be true.
      * @param newValue If I was calling initially I would pass this single param to it.
      */
-    private void mutableEquivalentToInitially(A newValue) {
+    public void mutableEquivalentToInitially(A newValue) {
         set(newValue);
     }
 
     /**
-     * TODO: Must make it public for now because of https://issues.apache.org/jira/browse/MCOMPILER-354
-     * which prevents me from putting Accumulable_PbtTest in fr.cla.wires.support.oo
+     * This method must not be called from anything other than a whitebox test.
+     * (then if something throws ClassCastException later, it will be detectable before pushing).
+     * It is only public because of MCOMPILER-354. But at least it's not in an exported package.
      *
-     * Package private, to allow only whitebox tests to suppress warnings.
-     * This method must not be called from anything other than a test.
-     * (then if something throws ClassCastException later, it will be detectable before pushing)
-     * It could even take Object, but the tests only to pass an AbstractValueObject<?>.
      * If newValue is not an instance of AbstractValueObject<A>, the result and later behaviour is undefined.
      * @param newValue Must be an AbstractValueObject<A>
      * @throws NullPointerException if newValue is null
      */
     public void unsafeMutableEquivalentToInitially(AbstractValueObject<?> newValue) {
-        //void unsafeMutableEquivalentToInitially(AbstractValueObject<?> newValue) {
         @SuppressWarnings("unchecked") //See javadoc
         A unsafeNewValue = (A) newValue;
-        mutableEquivalentToInitially(unsafeNewValue);
+        this.mutableEquivalentToInitially(unsafeNewValue);
     }
 
     public static <O, T> java.util.stream.Collector<O, ?, T> collector(

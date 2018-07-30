@@ -8,9 +8,9 @@ import fr.cla.wires.core.Signal;
 import fr.cla.wires.core.Wire;
 import fr.cla.wires.core.boxes.exampleusage.multipleinputs.CollectMultipleAnd;
 import fr.cla.wires.core.boxes.exampleusage.multipleinputs.ReduceMultipleAnd;
-import fr.cla.wires.core.test.support.pbt.ListOfSignalsOfBoolean;
-import fr.cla.wires.core.test.support.pbt.RandomBooleanSignals;
-import fr.cla.wires.test.support.pbt.RandomBooleans;
+import fr.cla.wires.core.pbt.ListOfSignalsOfBoolean;
+import fr.cla.wires.core.pbt.RandomBooleanSignals;
+import fr.cla.wires.support.pbt.RandomBooleans;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
@@ -18,7 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static fr.cla.wires.core.test.support.pbt.BooleanSignalsGenerator.MULTIPLICITY;
+import static fr.cla.wires.core.pbt.BooleanSignalsGenerator.MULTIPLICITY;
 import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
