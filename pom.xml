@@ -15,8 +15,6 @@
     <modules>
         <module>wires-support</module>
         <module>wires-core</module>
-        <module>wires-neuron</module>
-        <module>wires-jlink</module>
     </modules>
 
     <properties>
