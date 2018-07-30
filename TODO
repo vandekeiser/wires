@@ -14,3 +14,17 @@
 
 -forkCount VS                     <forkMode>never</forkMode>
                                 <childDelegation>false</childDelegation>
+
+/**
+ * Module fr.cla.wires.support exports it test classes too,
+ * to allow test-scoped-dependencies and white-box-testing at the same time.
+ *
+ * TODO: check that..
+ * This doesn't add any runtime footprint
+ *  -since the test modules are not added by maven-jlink.
+ *      -java --list-modules
+ *  -with NeuronApp.main
+ *  -with mvn exec:exec
+ */
+
+ [WARNING] /G:/projets/wires/wires/wires/wires-support/src/test/java/fr/cla/wires/support/test/random/bools/BooleansGenerator.java:[21,35] class com.pholser.junit.quickcheck.random.SourceOfRandomness in module  is not exported

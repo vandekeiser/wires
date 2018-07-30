@@ -3,8 +3,7 @@ package fr.cla.wires.support.oo.ddd;
 
 import com.pholser.junit.quickcheck.Property;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
-import fr.cla.wires.support.oo.ddd.support.pbt.*;
-import org.junit.Ignore;
+import fr.cla.wires.support.test.random.vo.*;
 import org.junit.runner.RunWith;
 
 import static org.assertj.core.api.Assertions.assertThat;
