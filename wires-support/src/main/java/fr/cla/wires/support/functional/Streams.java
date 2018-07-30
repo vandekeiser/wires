@@ -1,5 +1,6 @@
 package fr.cla.wires.support.functional;
 
+import java.util.List;
 import java.util.Spliterator;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -51,6 +52,10 @@ public class Streams {
             ZippingSpliterator.zipping(lefts.spliterator(), rights.spliterator(), combiner),
             false
         );
+    }
+
+    public static <O> Stream<Indexed<O>> index(List<O> values) {
+        return index(values.stream());
     }
 
     private static class ZippingSpliterator<L, R, O> implements Spliterator<O> {

@@ -9,8 +9,10 @@ import java.util.Set;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.*;
 
 //@formatter:off
 /**
@@ -82,13 +84,10 @@ public final class Wire<T> {
         BinaryOperator<T> accumulator,
         T identity
     ) {
-        return anyWireIsFloating(inputs) ?
-            Signal.none() :
-            Signal.mapAndReduce(
-                inputs.stream().map(Wire::getSignal),
-                weight, accumulator, identity
-            )
-        ;
+        return Signal.mapAndReduce(
+            inputs.stream().map(Wire::getSignal).collect(toList()),
+            weight, accumulator, identity
+        );
     }
 
     public static <T, O> Signal<T> mapAndReduceIndexed(
@@ -97,13 +96,10 @@ public final class Wire<T> {
         BinaryOperator<T> accumulator,
         T identity
     ) {
-        return anyWireIsFloating(inputs) ?
-            Signal.none() :
-            Signal.mapAndReduceIndexed(
-                inputs.stream().map(Wire::getSignal),
-                weight, accumulator, identity
-            )
-        ;
+        return Signal.mapAndReduceIndexed(
+            inputs.stream().map(Wire::getSignal).collect(toList()),
+            weight, accumulator, identity
+        );
     }
 
     /**
@@ -123,30 +119,20 @@ public final class Wire<T> {
         Collection<Wire<O>> inputs,
         Collector<O, ?, T> collector
     ) {
-        return anyWireIsFloating(inputs) ? 
-            Signal.none() :
-            Signal.collect(
-                inputs.stream().map(Wire::getSignal),
-                collector
-            )
-        ;
+        return Signal.collect(
+            inputs.stream().map(Wire::getSignal).collect(toList()),
+            collector
+        );
     }
 
     public static <T, O> Signal<T> collectIndexed(
         List<Wire<O>> inputs,
         Collector<Indexed<O>, ?, T> collector
     ) {
-        return anyWireIsFloating(inputs) ?
-            Signal.none() :
-            Signal.collectIndexed(
-                inputs.stream().map(Wire::getSignal),
-                collector
-            )
-        ;
-    }
-
-    private static <O> boolean anyWireIsFloating(Collection<Wire<O>> inputs) {
-        return inputs.stream().map(Wire::getSignal).anyMatch(Signal.none()::equals);
+        return Signal.collectIndexed(
+            inputs.stream().map(Wire::getSignal).collect(toList()),
+            collector
+        );
     }
 
 }

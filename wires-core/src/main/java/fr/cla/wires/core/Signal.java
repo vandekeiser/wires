@@ -4,12 +4,14 @@ import fr.cla.wires.support.functional.Indexed;
 import fr.cla.wires.support.functional.Streams;
 import fr.cla.wires.support.oo.AbstractValueObject;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Collections.singletonList;
@@ -90,13 +92,15 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
      * @return If if any input is none then Signal.none(), else the result of applying the reducer to the "accumulation value" of all inputs.
      */
     static <O, T> Signal<T> mapAndReduce(
-        Stream<Signal<O>> inputs,
+        Collection<Signal<O>> inputs,
         Function<O, T> weight,
         BinaryOperator<T> accumulator,
         T identity
     ) {
+        if(anySignalIsFloating(inputs)) return Signal.none();
+
         return Signal.of(
-            inputs
+            inputs.stream()
             .map(Signal::value)
             .map(Optional::get)
             .map(weight)
@@ -105,12 +109,14 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
     }
 
     static <O, T> Signal<T> mapAndReduceIndexed(
-        Stream<Signal<O>> inputs,
+        Collection<Signal<O>> inputs,
         Function<Indexed<O>, T> weight,
         BinaryOperator<T> accumulator,
         T identity
     ) {
-        Stream<O> values = inputs.map(Signal::value).map(Optional::get);
+        if(anySignalIsFloating(inputs)) return Signal.none();
+
+        Stream<O> values = inputs.stream().map(Signal::value).map(Optional::get);
         Stream<Indexed<O>> indexedValues = Streams.index(values);
 
         return Signal.of(
@@ -132,11 +138,13 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
      * @return If if any input is none then Signal.none(), else the result of applying the collector to all inputs.
      */
     static <O, T> Signal<T> collect(
-        Stream<Signal<O>> inputs,
+        Collection<Signal<O>> inputs,
         Collector<O, ?, T> collector
     ) {
+        if(anySignalIsFloating(inputs)) return Signal.none();
+
         return Signal.of(
-            inputs
+            inputs.stream()
             .map(Signal::value)
             .map(Optional::get)
             .collect(collector)
@@ -144,15 +152,20 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
     }
 
     static <O, T> Signal<T> collectIndexed(
-        Stream<Signal<O>> inputs,
+        Collection<Signal<O>> inputs,
         Collector<Indexed<O>, ?, T> collector
     ) {
-        Stream<O> values = inputs.map(Signal::value).map(Optional::get);
+        if(anySignalIsFloating(inputs)) return Signal.none();
+
+        //Stream<O> values = inputs.map(Signal::value).map(Optional::get);
+        List<O> values = inputs.stream().map(Signal::value).map(Optional::get).collect(Collectors.toList());
         Stream<Indexed<O>> indexedValues = Streams.index(values);
 
-        return Signal.of(indexedValues
-            .collect(collector)
-        );
+        return Signal.of(indexedValues.collect(collector));
+    }
+
+    private static <O> boolean anySignalIsFloating(Collection<Signal<O>> inputs) {
+        return inputs.stream().anyMatch(Signal.none()::equals);
     }
 
     //----------Functional methods to transform and/or aggregate Signals//----------^^^^^^^^^^
