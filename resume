@@ -1,0 +1,23 @@
+/**1. Maven test-scoped dependencies
+ *
+ *Accumulable_PbtTest::should_give_same_result_when_inputs_are_all_set
+ *in src/test of fr.cla.wires.core
+ *
+ *I reuse test-support class @RandomBooleans from module fr.cla.wires.support*/
+@Property(trials = TRIALS)
+public void should_give_same_result_when_inputs_are_all_set(
+    @RandomBooleans List<Boolean> signals
+) {
+    given: {
+        Iterator<Boolean> _signals = signals.iterator();
+        ins.forEach(w -> w.setSignal(Signal.of(_signals.next())));
+    }
+    when: {
+        clock.tick();
+    }
+    then: {
+        assertThat(collectOut.getSignal()).isEqualTo(reduceOut.getSignal());
+    }
+}
+
+2. Whitebox testing (attempted)

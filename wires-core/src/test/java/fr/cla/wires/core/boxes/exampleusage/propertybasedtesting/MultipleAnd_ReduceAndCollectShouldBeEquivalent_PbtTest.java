@@ -53,6 +53,19 @@ public class MultipleAnd_ReduceAndCollectShouldBeEquivalent_PbtTest {
         CollectMultipleAnd.ins(ins).out(collectOut).time(clock);
     }
 
+    /**
+     * MAVEN NOTES
+     *
+     * 1. Maven test-scoped dependencies
+     *  MultipleAnd_ReduceAndCollectShouldBeEquivalent_PbtTest::should_give_same_result_when_inputs_are_all_set
+     *  in src/test of fr.cla.wires.core
+     *
+     * I reuse test-support class @RandomBooleans
+     *  from src/test of module fr.cla.wires.support
+     *
+     * To do this Maven will patch test classes into the module.
+     *  Then these test classes are indistinguishable from a main class.
+     */
     @Property(trials = TRIALS)
     public void should_give_same_result_when_inputs_are_all_set(
         @RandomBooleans List<Boolean> signals
