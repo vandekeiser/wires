@@ -19,12 +19,6 @@ public class VoGenerator extends Generator<VoSingleton> {
     }
 
     static AbstractValueObject<?> generate(SourceOfRandomness rand) {
-//        switch (rand.nextInt(2)) {
-//            case 0: return VO1.random(rand);
-//            case 1: return VO1A.random(rand);
-//            default: throw new AssertionError();
-//        }
-
         switch (rand.nextInt(6)) {
             case 0: return VO1.random(rand);
             case 1: return VO2.random(rand);
