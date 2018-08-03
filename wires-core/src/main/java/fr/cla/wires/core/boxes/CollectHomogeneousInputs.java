@@ -30,12 +30,23 @@ extends Box {
     private final List<Wire<O>> ins;
     private final Wire<T> out;
 
-    protected CollectHomogeneousInputs(List<Wire<O>> ins, Wire<T> out, Clock clock) {
-        this(ins, out, clock, DEFAULT_DELAY);
+    protected CollectHomogeneousInputs(
+        List<Wire<O>> ins,
+        Wire<T> out,
+        Clock clock,
+        Accumulable.WhenCombining policyForCombiningWithAbsentValues
+    ) {
+        this(ins, out, clock, DEFAULT_DELAY, policyForCombiningWithAbsentValues);
     }
 
-    protected CollectHomogeneousInputs(List<Wire<O>> ins, Wire<T> out, Clock clock, Delay delay) {
-        super(clock, delay);
+    protected CollectHomogeneousInputs(
+        List<Wire<O>> ins,
+        Wire<T> out,
+        Clock clock,
+        Delay delay,
+        Accumulable.WhenCombining policyForCombiningWithAbsentValues
+    ) {
+        super(clock, delay, policyForCombiningWithAbsentValues);
         this.ins = checkNoNulls(ins);
         this.out = requireNonNull(out);
     }

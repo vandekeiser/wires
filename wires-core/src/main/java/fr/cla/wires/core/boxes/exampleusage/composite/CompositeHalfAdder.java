@@ -7,6 +7,7 @@ import fr.cla.wires.core.Wire;
 import fr.cla.wires.core.boxes.exampleusage.basic.And;
 import fr.cla.wires.core.boxes.exampleusage.basic.Not;
 import fr.cla.wires.core.boxes.exampleusage.basic.Or;
+import fr.cla.wires.support.oo.Accumulable;
 
 import static java.util.Objects.requireNonNull;
 
@@ -33,7 +34,7 @@ public final class CompositeHalfAdder extends Box {
     Wire<Boolean> sum, Wire<Boolean> carry,
     Clock clock, Delay delay
     ) {
-        super(clock, delay);
+        super(clock, delay, Accumulable.WhenCombining.ABSENT_WINS);
         this.inA = requireNonNull(inA);
         this.inB = requireNonNull(inB);
         this.sum = requireNonNull(sum);

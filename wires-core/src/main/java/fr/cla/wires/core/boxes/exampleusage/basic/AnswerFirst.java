@@ -4,6 +4,7 @@ import fr.cla.wires.core.Box;
 import fr.cla.wires.core.Clock;
 import fr.cla.wires.core.Delay;
 import fr.cla.wires.core.Wire;
+import fr.cla.wires.support.oo.Accumulable;
 
 import static java.util.Objects.requireNonNull;
 
@@ -21,7 +22,7 @@ public final class AnswerFirst extends Box {
     }
 
     private AnswerFirst(Wire<Boolean> in1, Wire<Boolean> in2, Wire<Boolean> out, Clock clock, Delay delay) {
-        super(clock, delay);
+        super(clock, delay, Accumulable.WhenCombining.PRESENT_WINS);
         this.in1 = requireNonNull(in1);
         this.in2 = requireNonNull(in2);
         this.out = requireNonNull(out);

@@ -4,6 +4,7 @@ import fr.cla.wires.core.Clock;
 import fr.cla.wires.core.Delay;
 import fr.cla.wires.core.Wire;
 import fr.cla.wires.core.boxes.ReduceHomogeneousInputs;
+import fr.cla.wires.support.oo.Accumulable;
 
 import java.util.List;
 import java.util.function.BinaryOperator;
@@ -23,7 +24,7 @@ public class ReduceMultipleAnd extends ReduceHomogeneousInputs<Boolean, Boolean>
     }
 
     private ReduceMultipleAnd(List<Wire<Boolean>> ins, Wire<Boolean> out, Clock clock, Delay delay) {
-        super(ins, out, clock, delay);
+        super(ins, out, clock, delay, Accumulable.WhenCombining.ABSENT_WINS);
     }
 
     @Override protected Function<Boolean, Boolean> weight() {

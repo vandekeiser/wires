@@ -3,6 +3,7 @@ package fr.cla.wires.core.boxes;
 import fr.cla.wires.core.Clock;
 import fr.cla.wires.core.Delay;
 import fr.cla.wires.core.Wire;
+import fr.cla.wires.support.oo.Accumulable;
 
 import java.util.List;
 import java.util.function.Function;
@@ -33,12 +34,23 @@ import java.util.function.UnaryOperator;
 public abstract class CollectHomogeneousInputsToOutputOfSameType<O>
 extends CollectHomogeneousInputs<O, O> {
 
-    protected CollectHomogeneousInputsToOutputOfSameType(List<Wire<O>> ins, Wire<O> out, Clock clock) {
-        this(ins, out, clock, DEFAULT_DELAY);
+    protected CollectHomogeneousInputsToOutputOfSameType(
+        List<Wire<O>> ins,
+        Wire<O> out,
+        Clock clock,
+        Accumulable.WhenCombining policyForCombiningWithAbsentValues
+    ) {
+        this(ins, out, clock, DEFAULT_DELAY, policyForCombiningWithAbsentValues);
     }
 
-    protected CollectHomogeneousInputsToOutputOfSameType(List<Wire<O>> ins, Wire<O> out, Clock clock, Delay delay) {
-        super(ins, out, clock, delay);
+    protected CollectHomogeneousInputsToOutputOfSameType(
+        List<Wire<O>> ins,
+        Wire<O> out,
+        Clock clock,
+        Delay delay,
+        Accumulable.WhenCombining policyForCombiningWithAbsentValues
+    ) {
+        super(ins, out, clock, delay, policyForCombiningWithAbsentValues);
     }
 
 }

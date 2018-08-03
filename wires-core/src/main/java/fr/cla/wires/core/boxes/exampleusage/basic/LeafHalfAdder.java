@@ -5,6 +5,7 @@ import fr.cla.wires.core.Clock;
 import fr.cla.wires.core.Delay;
 import fr.cla.wires.core.Wire;
 import fr.cla.wires.core.boxes.exampleusage.composite.CompositeHalfAdder;
+import fr.cla.wires.support.oo.Accumulable;
 
 import static java.util.Objects.requireNonNull;
 
@@ -27,11 +28,11 @@ public final class LeafHalfAdder extends Box {
     }
 
     private LeafHalfAdder(
-    Wire<Boolean> inA, Wire<Boolean> inB,
-    Wire<Boolean> sum, Wire<Boolean> carry,
-    Clock clock, Delay delay
+        Wire<Boolean> inA, Wire<Boolean> inB,
+        Wire<Boolean> sum, Wire<Boolean> carry,
+        Clock clock, Delay delay
     ) {
-        super(clock, delay);
+        super(clock, delay, Accumulable.WhenCombining.ABSENT_WINS);
         this.inA = requireNonNull(inA);
         this.inB = requireNonNull(inB);
         this.sum = requireNonNull(sum);

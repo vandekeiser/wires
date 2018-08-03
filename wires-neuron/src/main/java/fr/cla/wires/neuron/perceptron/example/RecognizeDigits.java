@@ -5,6 +5,7 @@ import fr.cla.wires.core.Clock;
 import fr.cla.wires.core.Delay;
 import fr.cla.wires.core.Wire;
 import fr.cla.wires.support.functional.Indexed;
+import fr.cla.wires.support.oo.Accumulable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,7 @@ public class RecognizeDigits extends Box {
         double threshold,
         List<Double> segments2HiddensWeigths, List<Double> hiddens2DigitsWeigths
     ) {
-        super(clock, delay);
+        super(clock, delay, Accumulable.WhenCombining.ABSENT_WINS);
         this.threshold = threshold;
         this.segments2HiddensWeigths = new ArrayList<>(segments2HiddensWeigths);
         this.hiddens2DigitsWeigths = new ArrayList<>(hiddens2DigitsWeigths);

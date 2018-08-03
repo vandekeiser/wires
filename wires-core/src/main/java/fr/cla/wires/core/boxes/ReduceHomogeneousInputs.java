@@ -4,6 +4,7 @@ import fr.cla.wires.core.Box;
 import fr.cla.wires.core.Clock;
 import fr.cla.wires.core.Delay;
 import fr.cla.wires.core.Wire;
+import fr.cla.wires.support.oo.Accumulable;
 
 import java.util.List;
 import java.util.function.BinaryOperator;
@@ -24,12 +25,23 @@ extends Box {
     private final List<Wire<O>> ins;
     private final Wire<T> out;
 
-    protected ReduceHomogeneousInputs(List<Wire<O>> ins, Wire<T> out, Clock clock) {
-        this(ins, out, clock, DEFAULT_DELAY);
+    protected ReduceHomogeneousInputs(
+        List<Wire<O>> ins,
+        Wire<T> out,
+        Clock clock,
+        Accumulable.WhenCombining policyForCombiningWithAbsentValues
+    ) {
+        this(ins, out, clock, DEFAULT_DELAY, policyForCombiningWithAbsentValues);
     }
 
-    protected ReduceHomogeneousInputs(List<Wire<O>> ins, Wire<T> out, Clock clock, Delay delay) {
-        super(clock, delay);
+    protected ReduceHomogeneousInputs(
+        List<Wire<O>> ins,
+        Wire<T> out,
+        Clock clock,
+        Delay delay,
+        Accumulable.WhenCombining policyForCombiningWithAbsentValues
+    ) {
+        super(clock, delay, policyForCombiningWithAbsentValues);
         this.ins = checkNoNulls(ins);
         this.out = requireNonNull(out);
     }

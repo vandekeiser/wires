@@ -5,6 +5,7 @@ import fr.cla.wires.core.Delay;
 import fr.cla.wires.core.Wire;
 import fr.cla.wires.core.boxes.CollectIndexedHomogeneousInputs;
 import fr.cla.wires.support.functional.Indexed;
+import fr.cla.wires.support.oo.Accumulable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,13 +29,13 @@ implements GroupOfUnits{
     }
 
     protected Layer(List<Wire<Double>> ins, Wire<Double> out, double threshold, List<Double> weigths, Clock clock, Delay delay) {
-        super(ins, out, clock, delay);
+        super(ins, out, clock, delay, Accumulable.WhenCombining.ABSENT_WINS);
         this.threshold = threshold;
         this.weigths = new ArrayList<>(weigths);
     }
 
     protected Layer(List<Wire<Double>> ins, List<Wire<Double>> outs, double threshold, List<Double> weigths, Clock clock, Delay delay) {
-        super(ins, outs, clock, delay);
+        super(ins, outs, clock, delay, Accumulable.WhenCombining.ABSENT_WINS);
         this.threshold = threshold;
         this.weigths = new ArrayList<>(weigths);
     }

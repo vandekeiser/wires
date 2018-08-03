@@ -1,6 +1,7 @@
 package fr.cla.wires.core.boxes.exampleusage.reentrant;
 
 import fr.cla.wires.core.*;
+import fr.cla.wires.support.oo.Accumulable;
 
 import static java.lang.String.*;
 import static java.util.Objects.requireNonNull;
@@ -25,7 +26,7 @@ public final class Counter extends Box {
     }
     
     private Counter(long initial, long step, Wire<Long> out, Clock clock, Delay delay) {
-        super(clock, delay);
+        super(clock, delay, Accumulable.WhenCombining.ABSENT_WINS);
         this.out = requireNonNull(out);
         this.initial = validateInitial(initial);
         this.step = Wire.make();

@@ -1,6 +1,7 @@
 package fr.cla.wires.core;
 
 import fr.cla.wires.support.functional.Indexed;
+import fr.cla.wires.support.oo.Accumulable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,14 +27,20 @@ public abstract class Box {
     protected final Clock clock;
     protected final Delay delay;
     private final Clock.Agenda agenda;
+    private final Accumulable.WhenCombining policyForCombiningWithAbsentValues;
 
-    protected Box(Clock clock, Delay delay) {
+    protected Box(
+        Clock clock,
+        Delay delay,
+        Accumulable.WhenCombining policyForCombiningWithAbsentValues
+    ) {
         this.clock = requireNonNull(clock);
         this.agenda = clock.agenda();
         if(agenda == null) throw new AssertionError(
             "Clock::agenda broke its promise not to return null!"
         );
         this.delay = requireNonNull(delay);
+        this.policyForCombiningWithAbsentValues = requireNonNull(policyForCombiningWithAbsentValues);
     }
 
     //Don't make package-private as this is the only alternative to the "Staged Builder"
@@ -137,7 +144,7 @@ public abstract class Box {
 
             onSignalChanged(observed,
                 newSignal -> target.setSignal(
-                    Signal.map(newSignal, r.getSignal(), f)
+                    Signal.map(newSignal, r.getSignal(), f, policyForCombiningWithAbsentValues)
                 )
             );
         }
@@ -151,7 +158,7 @@ public abstract class Box {
 
             onSignalChanged(observed,
                 newSignal -> target.setSignal(
-                    Signal.map(l.getSignal(), newSignal, f)
+                    Signal.map(l.getSignal(), newSignal, f, policyForCombiningWithAbsentValues)
                 )
             );
         }
@@ -177,7 +184,7 @@ public abstract class Box {
 
             onSignalChanged(observed,
                 newSignal -> target.setSignal(
-                    Wire.collect(inputs, c)
+                    Wire.collect(inputs, c, policyForCombiningWithAbsentValues)
                 )
             );
         }
@@ -201,7 +208,7 @@ public abstract class Box {
 
             onSignalChanged(observed,
                 newSignal -> target.setSignal(
-                    Wire.collectIndexed(inputs, c)
+                    Wire.collectIndexed(inputs, c, policyForCombiningWithAbsentValues)
                 )
             );
         }
@@ -228,7 +235,7 @@ public abstract class Box {
 
             onSignalChanged(observed,
                 newSignal -> target.setSignal(
-                    Wire.mapAndReduceIndexed(inputs, weight, acc)
+                    Wire.mapAndReduceIndexed(inputs, weight, acc, policyForCombiningWithAbsentValues)
                 )
             );
         }
@@ -255,7 +262,7 @@ public abstract class Box {
 
             onSignalChanged(observed,
                 newSignal -> target.setSignal(
-                    Wire.mapAndReduce(inputs, weight, acc)
+                    Wire.mapAndReduce(inputs, weight, acc, policyForCombiningWithAbsentValues)
                 )
             );
         }

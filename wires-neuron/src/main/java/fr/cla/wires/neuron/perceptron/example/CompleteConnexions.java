@@ -28,7 +28,7 @@ extends Box {
     }
 
     protected CompleteConnexions(List<Wire<I>> ins, List<Wire<O>> outs, Collector<Indexed<I>, ?, O> collector, Clock clock, Delay delay) {
-        super(clock, delay);
+        super(clock, delay, Accumulable.WhenCombining.ABSENT_WINS);
         this.ins = checkNoNulls(ins);
         this.outs = checkNoNulls(outs);
         this.collector = requireNonNull(collector);

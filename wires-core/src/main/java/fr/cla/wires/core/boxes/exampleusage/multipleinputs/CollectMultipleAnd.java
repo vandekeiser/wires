@@ -26,7 +26,7 @@ extends CollectHomogeneousInputsToOutputOfSameType<Boolean> {
     }
 
     private CollectMultipleAnd(List<Wire<Boolean>> ins, Wire<Boolean> out, Clock clock, Delay delay) {
-        super(ins, out, clock, delay);
+        super(ins, out, clock, delay, Accumulable.WhenCombining.ABSENT_WINS);
     }
 
     @Override protected Function<Boolean, Boolean> weight() {

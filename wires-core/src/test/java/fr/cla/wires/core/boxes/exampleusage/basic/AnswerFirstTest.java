@@ -5,6 +5,7 @@ import fr.cla.wires.core.Clock;
 import fr.cla.wires.core.Signal;
 import fr.cla.wires.core.Wire;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -75,6 +76,21 @@ public class AnswerFirstTest {
         given: {
             in1.setSignal(Signal.of(true));
             in2.setSignal(Signal.of(true));
+        }
+        when: {
+            clock.tick();
+        }
+        then: {
+            assertThat(out.getSignal()).isEqualTo(Signal.of(true));
+        }
+    }
+
+    @Ignore//TODO!!!
+    @Test
+    public void out_should_be_true_when_1_is_true_and_2_is_none() {
+        given: {
+            in1.setSignal(Signal.of(true));
+            in2.setSignal(Signal.none());
         }
         when: {
             clock.tick();

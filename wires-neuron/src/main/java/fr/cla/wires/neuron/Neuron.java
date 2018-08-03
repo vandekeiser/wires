@@ -34,13 +34,13 @@ public class Neuron extends CollectIndexedHomogeneousInputs<Double, Double, Long
     }
 
     protected Neuron(List<Wire<Double>> ins, Wire<Double> out, double threshold, List<Double> weigths, Clock clock, Delay delay) {
-        super(ins, out, clock, delay);
+        super(ins, out, clock, delay, Accumulable.WhenCombining.ABSENT_WINS);
         this.threshold = threshold;
         this.weigths = new ArrayList<>(weigths);
     }
 
     protected Neuron(List<Wire<Double>> ins, List<Wire<Double>> outs, double threshold, List<Double> weigths, Clock clock, Delay delay) {
-        super(ins, outs, clock, delay);
+        super(ins, outs, clock, delay, Accumulable.WhenCombining.ABSENT_WINS);
         this.threshold = threshold;
         this.weigths = new ArrayList<>(weigths);
     }
