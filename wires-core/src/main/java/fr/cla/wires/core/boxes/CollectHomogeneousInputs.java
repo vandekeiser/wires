@@ -86,12 +86,13 @@ extends Box {
 
     private Collector<O, ?, T> collector() {
         return Accumulable.collector(
-            weight(), accumulator(), finisher()
+            weight(), accumulator(), policyForCombiningWithAbsentValues(), finisher()
         );
     }
 
     protected abstract Function<O, T> weight();
     protected abstract BinaryOperator<T> accumulator();
+    protected abstract Accumulable.WhenCombining policyForCombiningWithAbsentValues();
     protected abstract UnaryOperator<T> finisher();
 
 }

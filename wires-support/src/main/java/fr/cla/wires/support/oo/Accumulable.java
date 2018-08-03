@@ -1,6 +1,7 @@
 package fr.cla.wires.support.oo;
 
 import java.util.EnumSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.*;
 
@@ -21,61 +22,57 @@ public class Accumulable<W, A> extends MutableValue<A> {
     private final A EMPTY = null;
     private final Function<W, A> weight;
     private final BinaryOperator<A> combiner;
+    private final Accumulable.WhenCombining policyForCombiningWithAbsentValues;
 
     protected Accumulable(
         A initialValue,
-        boolean acceptNull, 
+        boolean acceptNull,
         Function<W, A> weight,
-        BinaryOperator<A> combiner
+        BinaryOperator<A> combiner,
+        WhenCombining policyForCombiningWithAbsentValues
     ) {
         super(initialValue, acceptNull);
         this.weight = requireNonNull(weight);
         this.combiner = requireNonNull(combiner);
+        this.policyForCombiningWithAbsentValues = requireNonNull(policyForCombiningWithAbsentValues);
     }
 
     public static <I, A> Accumulable<I, A> initiallyEmpty(
         Function<I, A> weight,
-        BinaryOperator<A> combiner
+        BinaryOperator<A> combiner,
+        WhenCombining policyForCombiningWithAbsentValues
     ) {
-        return new Accumulable<>(null, true, weight, combiner);
+        return new Accumulable<>(null, true, weight, combiner, policyForCombiningWithAbsentValues);
     }
 
     public static <I, A> Accumulable<I, A> initially(
         A initialValue,
         Function<I, A> weight,
-        BinaryOperator<A> combiner
+        BinaryOperator<A> combiner,
+        WhenCombining policyForCombiningWithAbsentValues
     ) {
-        return new Accumulable<>(initialValue, false, weight, combiner);
+        return new Accumulable<>(initialValue, false, weight, combiner, policyForCombiningWithAbsentValues);
     }
 
     public final void accumulate(W weightable) {
-        A value = this.weight.apply(weightable);
-        mutableEquivalentToInitially(combineWithValue(value));
+        mutableEquivalentToInitially(combineWithValue(
+            weight.apply(weightable)
+        ));
     }
 
     public final Accumulable<W, A> combine(Accumulable<W, A> that) {
-        mutableEquivalentToInitially(combineCurrentValuesWith(that));
+        mutableEquivalentToInitially(combineWithValue(
+            that.get()
+        ));
         return this;
     }
 
     private A combineWithValue(A value) {
-        if(this.isPresent() ) {
-            return combiner.apply(this.get(), value);
-        } else {
-            return value;
-        }
-    }
-
-    private A combineCurrentValuesWith(Accumulable<W, A> that) {
-        if (this.isPresent() && that.isPresent()) {
-            return combiner.apply(this.get(), that.get());
-        } else if (this.isPresent()) {
-            return this.get();
-        } else if (that.isPresent()) {
-            return that.get();
-        } else {
-            return EMPTY;
-        }
+        return this.policyForCombiningWithAbsentValues.combine(
+            Optional.ofNullable(this.get()),
+            Optional.ofNullable(value),
+            this.combiner
+        ).orElse(null);
     }
 
     /**
@@ -108,12 +105,45 @@ public class Accumulable<W, A> extends MutableValue<A> {
     public static <O, T> java.util.stream.Collector<O, ?, T> collector(
         Function<O, T> weight,
         BinaryOperator<T> combiner,
+        WhenCombining policyForCombiningWithAbsentValues,
         UnaryOperator<T> finisher
     ) {
-        return new Collector<>(weight, combiner, finisher);
+        return new Collector<>(weight, combiner, policyForCombiningWithAbsentValues, finisher);
     }
 
+    public enum WhenCombining {
+        PRESENT_WINS {
+            @Override <T> Optional<T> combine(
+                Optional<T> maybe1, Optional<T> maybe2, BinaryOperator<T> combiner
+            ) {
+                if (maybe1.isPresent() && maybe2.isPresent()) {
+                    return Optional.of(combiner.apply(maybe1.get(), maybe2.get()));
+                } else {
+                    return Optional.empty();
+                }
+            }
+        },
+        ABSENT_WINS {
+            @Override <T> Optional<T> combine(
+                Optional<T> maybe1, Optional<T> maybe2, BinaryOperator<T> combiner
+            ) {
+                if (maybe1.isPresent() && maybe2.isPresent()) {
+                    return Optional.of(combiner.apply(maybe1.get(), maybe2.get()));
+                } else if (maybe1.isPresent()) {
+                    return Optional.of(maybe1.get());
+                } else if (maybe2.isPresent()) {
+                    return Optional.of(maybe2.get());
+                } else {
+                    return Optional.empty();
+                }
+            }
+        },
+        ;
 
+        abstract <T> Optional<T> combine(
+            Optional<T> maybe1, Optional<T> maybe2, BinaryOperator<T> combiner
+        );
+    }
 
 
     public static class Collector<O, T>
@@ -121,22 +151,25 @@ public class Accumulable<W, A> extends MutableValue<A> {
         private final Function<Accumulable<O, T>, T> getAccumulated;
         private final Function<O, T> weight;
         private final BinaryOperator<T> combiner;
+        private final WhenCombining policyForCombiningWithAbsentValues;
         private final UnaryOperator<T> finisher;
 
         private Collector(
             Function<O, T> weight,
             BinaryOperator<T> combiner,
+            WhenCombining policyForCombiningWithAbsentValues,
             UnaryOperator<T> finisher
         )  {
             this.getAccumulated = MutableValue::get;
             this.weight = requireNonNull(weight);
             this.combiner = requireNonNull(combiner);
+            this.policyForCombiningWithAbsentValues = requireNonNull(policyForCombiningWithAbsentValues);
             this.finisher = requireNonNull(finisher);
         }
 
         @Override public Supplier<Accumulable<O, T>> supplier() {
             return () -> Accumulable.initiallyEmpty(
-                weight, combiner
+                weight, combiner, policyForCombiningWithAbsentValues
             );
         }
 

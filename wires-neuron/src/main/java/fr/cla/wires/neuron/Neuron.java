@@ -5,6 +5,7 @@ import fr.cla.wires.core.Delay;
 import fr.cla.wires.core.Wire;
 import fr.cla.wires.core.boxes.CollectIndexedHomogeneousInputs;
 import fr.cla.wires.support.functional.Indexed;
+import fr.cla.wires.support.oo.Accumulable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +57,11 @@ public class Neuron extends CollectIndexedHomogeneousInputs<Double, Double, Long
     @Override
     protected BinaryOperator<Double> accumulator() {
         return Double::sum;
+    }
+
+    @Override
+    protected Accumulable.WhenCombining policyForCombiningWithAbsentValues() {
+        return Accumulable.WhenCombining.ABSENT_WINS;
     }
 
     @Override

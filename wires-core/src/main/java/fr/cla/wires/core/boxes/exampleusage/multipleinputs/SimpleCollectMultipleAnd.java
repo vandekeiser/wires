@@ -4,6 +4,7 @@ import fr.cla.wires.core.Clock;
 import fr.cla.wires.core.Delay;
 import fr.cla.wires.core.Wire;
 import fr.cla.wires.core.boxes.CollectHomogeneousInputsToOutputOfSameType;
+import fr.cla.wires.support.oo.Accumulable;
 
 import java.util.List;
 import java.util.function.BinaryOperator;
@@ -44,12 +45,16 @@ extends CollectHomogeneousInputsToOutputOfSameType<Boolean> {
 
 //Do your business-specific magic here:
 //-------------Payload section of the class-------------VVVVVVVVVVVVVVVVVVV
+    @Override protected Function<Boolean, Boolean> weight() {
+        return Function.identity();
+    }
+
     @Override protected BinaryOperator<Boolean> accumulator() {
         return this::and;
     }
 
-    @Override protected Function<Boolean, Boolean> weight() {
-        return Function.identity();
+    @Override protected Accumulable.WhenCombining policyForCombiningWithAbsentValues() {
+        return Accumulable.WhenCombining.ABSENT_WINS;
     }
 
     @Override protected UnaryOperator<Boolean> finisher() {

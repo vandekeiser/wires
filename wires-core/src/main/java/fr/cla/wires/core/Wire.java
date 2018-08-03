@@ -103,7 +103,7 @@ public final class Wire<T> {
      * Collect an aggregate result from the inputs of N Wires, using a java.util.stream.Collector.
      * Can do more than this::mapAndReduce but more complex.
      * @param inputs The in Wires.
-     * @param collector This accumulator is more general (but complex) than mapAndReduce()'s one, since:
+     * @param collector This collector is more general (but complex) than mapAndReduce()'s accumulator, since:
      *  -The value to accumulate doesn't have to be of the same type as the input Signal.
      *  -The accumulation doesn't have to use a BinaryOperator (it is implemented by the Collector itself).
      * On the other hand, the same precondition are demanded from this parameter as in mapAndReduce():
