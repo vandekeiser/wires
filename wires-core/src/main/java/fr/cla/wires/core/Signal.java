@@ -6,7 +6,6 @@ import fr.cla.wires.support.oo.AbstractValueObject;
 import fr.cla.wires.support.oo.Accumulable;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -15,7 +14,6 @@ import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
-import static fr.cla.wires.support.functional.Indexed.*;
 import static fr.cla.wires.support.oo.Accumulable.WhenCombining.ABSENT_WINS;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
@@ -91,12 +89,11 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         BiFunction<V1, V2, W> combiner,
         Accumulable.WhenCombining policyForCombiningWithAbsentValues
     ) {
-        //Collection<Signal<O>> presentSignals = filter(inputs, policyForCombiningWithAbsentValues);
-//
+        //if (policyForCombiningWithAbsentValues == ABSENT_WINS && anySignalIsFloating(inputs)) return Signal.none();
+        //return policyForCombiningWithAbsentValues.combine(v1, v2, combiner);
+
         if(!v1.isPresent() ||!v2.isPresent()) return Signal.none();
         return Signal.of(combiner.apply(v1.get(), v2.get()));
-
-        //return policyForCombiningWithAbsentValues.combine(v1, v2, combiner);
     }
 
     /**
@@ -116,30 +113,17 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         BinaryOperator<T> accumulator,
         Accumulable.WhenCombining policyForCombiningWithAbsentValues
     ) {
+        if (shouldCombineToNone(inputs, policyForCombiningWithAbsentValues)) return Signal.none();
+
         return inputs.stream()
             .map(Signal::value)
-            .map(maybe -> maybe.map(weight))
-            .reduce(maybe(accumulator))
-            .orElseGet(Optional::empty)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .map(weight)
+            .reduce(accumulator)
             .map(Signal::of)
             .orElseGet(Signal::none)
         ;
-    }
-
-    private static <T> BinaryOperator<Optional<T>> maybe(
-        BinaryOperator<T> accumulator
-    ) {
-        return (maybe1, maybe2) -> maybe1.flatMap(v1 -> maybe2.flatMap(v2 ->
-            Optional.of(accumulator.apply(v1, v2))
-        ));
-    }
-
-    private static <O, T> Function<Indexed<Optional<O>>, Optional<T>> maybe(
-        Function<Indexed<O>, T> weight
-    ) {
-        return indexed -> indexed.getValue().map(
-            v -> weight.apply(index(indexed.getIndex(), v))
-        );
     }
 
     static <O, T> Signal<T> mapAndReduceIndexed(
@@ -148,13 +132,22 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         BinaryOperator<T> accumulator,
         Accumulable.WhenCombining policyForCombiningWithAbsentValues
     ) {
-        Stream<Optional<O>> values = inputs.stream().map(Signal::value);
-        Stream<Indexed<Optional<O>>> indexedValues = Streams.index(values);
+        if (shouldCombineToNone(inputs, policyForCombiningWithAbsentValues)) return Signal.none();
 
-        return indexedValues
-            .map(maybe(weight))
-            .reduce(maybe(accumulator))
-            .orElseGet(Optional::empty)
+        Stream<Optional<O>> values = inputs.stream().map(Signal::value);
+        Stream<Indexed<Optional<O>>> indexedMaybes = Streams.index(values);
+
+        Stream<Optional<Indexed<O>>> maybeIndices = indexedMaybes.map(
+            indexed -> indexed.getValue().map(
+                o -> Indexed.index(indexed.getIndex(), o)
+            )
+        );
+
+        return maybeIndices
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .map(weight)
+            .reduce(accumulator)
             .map(Signal::of)
             .orElseGet(Signal::none)
         ;
@@ -180,7 +173,7 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         Collector<O, ?, T> collector,
         Accumulable.WhenCombining policyForCombiningWithAbsentValues
     ) {
-        if (policyForCombiningWithAbsentValues == ABSENT_WINS && anySignalIsFloating(inputs)) return Signal.none();
+        if (shouldCombineToNone(inputs, policyForCombiningWithAbsentValues)) return Signal.none();
 
         return Signal.of(inputs.stream()
             .map(Signal::value)
@@ -195,12 +188,19 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         Collector<Indexed<O>, ?, T> collector,
         Accumulable.WhenCombining policyForCombiningWithAbsentValues
     ) {
-        if (policyForCombiningWithAbsentValues == ABSENT_WINS && anySignalIsFloating(inputs)) return Signal.none();
+        if (shouldCombineToNone(inputs, policyForCombiningWithAbsentValues)) return Signal.none();
 
         List<O> values = inputs.stream().map(Signal::value).map(Optional::get).collect(toList());
         Stream<Indexed<O>> indexedValues = Streams.index(values);
 
         return Signal.of(indexedValues.collect(collector));
+    }
+
+    private static <O> boolean shouldCombineToNone(
+        Collection<Signal<O>> inputs,
+        Accumulable.WhenCombining policyForCombiningWithAbsentValues
+    ) {
+        return policyForCombiningWithAbsentValues == ABSENT_WINS && anySignalIsFloating(inputs);
     }
 
     private static <O> boolean anySignalIsFloating(Collection<Signal<O>> inputs) {
