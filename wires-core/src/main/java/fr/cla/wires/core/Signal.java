@@ -5,6 +5,7 @@ import fr.cla.wires.support.functional.Streams;
 import fr.cla.wires.support.oo.AbstractValueObject;
 import fr.cla.wires.support.oo.Accumulable;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +16,7 @@ import java.util.stream.Collector;
 import java.util.stream.Stream;
 
 import static fr.cla.wires.support.oo.Accumulable.WhenCombining.ABSENT_WINS;
+import static java.lang.String.*;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
@@ -66,7 +68,7 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
 
     @Override
     public String toString() {
-        return String.valueOf(value);
+        return valueOf(value);
     }
 
     //----------Functional methods to transform and/or aggregate Signals//----------VVVVVVVVVV
@@ -77,24 +79,21 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
     static <V1, V2, W> Signal<W> combine(
         Signal<V1> s1,
         Signal<V2> s2,
-        BiFunction<V1, V2, W> mapper,
-        Accumulable.WhenCombining policyForCombiningWithAbsentValues
-    ) {
-        return combine(s1.value(), s2.value(), mapper, policyForCombiningWithAbsentValues);
-    }
-
-    private static <V1, V2, W> Signal<W> combine(
-        Optional<V1> v1,
-        Optional<V2> v2,
         BiFunction<V1, V2, W> combiner,
         Accumulable.WhenCombining policyForCombiningWithAbsentValues
     ) {
-        //if (policyForCombiningWithAbsentValues == ABSENT_WINS && anySignalIsFloating(inputs)) return Signal.none();
-        //return policyForCombiningWithAbsentValues.combine(v1, v2, combiner);
+        if (policyForCombiningWithAbsentValues == ABSENT_WINS && anySignalIsFloating(s1, s2)) return Signal.none();
 
-        if(!v1.isPresent() ||!v2.isPresent()) return Signal.none();
+        Optional<V1> v1 = s1.value();
+        Optional<V2> v2 = s2.value();
+        if(!v1.isPresent() || !v2.isPresent()) throw new UnsupportedOperationException(format(
+            "V1!=V2 so we can't return either when the other is absent." +
+            "And this method doesn't take a neutral element, so we can't return that either."
+        ));
+
         return Signal.of(combiner.apply(v1.get(), v2.get()));
     }
+
 
     /**
      * Collect an aggregate result from the inputs of N Wires, using Stream::reduce.
@@ -203,8 +202,12 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         return policyForCombiningWithAbsentValues == ABSENT_WINS && anySignalIsFloating(inputs);
     }
 
-    private static <O> boolean anySignalIsFloating(Collection<Signal<O>> inputs) {
+    private static <T> boolean anySignalIsFloating(Collection<Signal<T>> inputs) {
         return inputs.stream().anyMatch(Signal.none()::equals);
+    }
+
+    private static <V1, V2> boolean anySignalIsFloating(Signal<V1> v1, Signal<V2> v2) {
+        return v1.equals(Signal.none()) || v2.equals(Signal.none());
     }
 
     //----------Functional methods to transform and/or aggregate Signals//----------^^^^^^^^^^
