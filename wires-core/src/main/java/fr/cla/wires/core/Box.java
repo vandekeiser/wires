@@ -144,7 +144,7 @@ public abstract class Box {
 
             onSignalChanged(observed,
                 newSignal -> target.setSignal(
-                    Signal.map(newSignal, r.getSignal(), f, policyForCombiningWithAbsentValues)
+                    Signal.combine(newSignal, r.getSignal(), f, policyForCombiningWithAbsentValues)
                 )
             );
         }
@@ -158,7 +158,7 @@ public abstract class Box {
 
             onSignalChanged(observed,
                 newSignal -> target.setSignal(
-                    Signal.map(l.getSignal(), newSignal, f, policyForCombiningWithAbsentValues)
+                    Signal.combine(l.getSignal(), newSignal, f, policyForCombiningWithAbsentValues)
                 )
             );
         }

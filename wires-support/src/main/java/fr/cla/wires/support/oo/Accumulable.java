@@ -1,9 +1,11 @@
 package fr.cla.wires.support.oo;
 
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.*;
+import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collector.Characteristics.UNORDERED;
@@ -113,7 +115,7 @@ public class Accumulable<W, A> extends MutableValue<A> {
 
     public enum WhenCombining {
         PRESENT_WINS {
-            @Override <T> Optional<T> combine(
+            @Override public <T> Optional<T> combine(
                 Optional<T> maybe1, Optional<T> maybe2, BinaryOperator<T> combiner
             ) {
                 if (maybe1.isPresent() && maybe2.isPresent()) {
@@ -124,7 +126,7 @@ public class Accumulable<W, A> extends MutableValue<A> {
             }
         },
         ABSENT_WINS {
-            @Override <T> Optional<T> combine(
+            @Override public <T> Optional<T> combine(
                 Optional<T> maybe1, Optional<T> maybe2, BinaryOperator<T> combiner
             ) {
                 if (maybe1.isPresent() && maybe2.isPresent()) {
@@ -140,9 +142,10 @@ public class Accumulable<W, A> extends MutableValue<A> {
         },
         ;
 
-        abstract <T> Optional<T> combine(
+        public abstract <T> Optional<T> combine(
             Optional<T> maybe1, Optional<T> maybe2, BinaryOperator<T> combiner
         );
+
     }
 
 
