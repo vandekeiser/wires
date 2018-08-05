@@ -3,19 +3,16 @@ package fr.cla.wires.core;
 import fr.cla.wires.support.functional.Indexed;
 import fr.cla.wires.support.functional.Streams;
 import fr.cla.wires.support.oo.AbstractValueObject;
-import fr.cla.wires.support.oo.Accumulable;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
-import static java.lang.String.*;
+import static java.lang.String.valueOf;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
@@ -79,13 +76,13 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         Signal<V> s1,
         Signal<V> s2,
         BinaryOperator<V> combiner,
-        Signal.WhenCombining policyForCombiningWithAbsentValues
+        Signal.WhenCombining combiningPolicy
     ) {
-        if (policyForCombiningWithAbsentValues == WhenCombining.ABSENT_WINS && anySignalIsFloating(s1, s2)) return Signal.none();
+        if (combiningPolicy.returnNoneIfAnySignalIsFloating(s1, s2)) return Signal.none();
         Optional<V> v1 = s1.value();
         Optional<V> v2 = s2.value();
 
-        if(policyForCombiningWithAbsentValues == WhenCombining.PRESENT_WINS) {
+        if(combiningPolicy == WhenCombining.PRESENT_WINS) {
             if (v1.isPresent() || v2.isPresent()) {
                 V v = combiner.apply(
                     v1.orElse(null), v2.orElse(null)
@@ -105,8 +102,6 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         } else {
             return Signal.none();
         }
-
-        //return Signal.of(combiner.apply(v1.get(), v2.get()));
     }
 
 
@@ -118,16 +113,16 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
      * @param inputs The in Signals. No Signal is allowed to be Signal.none(), since that was already check by Wire::mapAndReduce.
      * @param weight Maps in signals to values which are then accumulated during the reduction.
      * @param accumulator This accumulation function (technically a java.util.function.BinaryOperator) must be associative, per Stream::reduce.
-     * @param policyForCombiningWithAbsentValues
+     * @param combiningPolicy
      * @return If if any input is none then Signal.none(), else the result of applying the reducer to the "accumulation value" of all inputs.
      */
     static <O, T> Signal<T> mapAndReduce(
         Collection<Signal<O>> inputs,
         Function<O, T> weight,
         BinaryOperator<T> accumulator,
-        Signal.WhenCombining policyForCombiningWithAbsentValues
+        Signal.WhenCombining combiningPolicy
     ) {
-        if (shouldCombineToNone(inputs, policyForCombiningWithAbsentValues)) return Signal.none();
+        if (combiningPolicy.returnNoneIfAnySignalIsFloating(inputs)) return Signal.none();
 
         return inputs.stream()
             .map(Signal::value)
@@ -144,9 +139,9 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         Collection<Signal<O>> inputs,
         Function<Indexed<O>, T> weight,
         BinaryOperator<T> accumulator,
-        Signal.WhenCombining policyForCombiningWithAbsentValues
+        Signal.WhenCombining combiningPolicy
     ) {
-        if (shouldCombineToNone(inputs, policyForCombiningWithAbsentValues)) return Signal.none();
+        if (combiningPolicy.returnNoneIfAnySignalIsFloating(inputs)) return Signal.none();
 
         Stream<Optional<O>> values = inputs.stream().map(Signal::value);
         Stream<Indexed<Optional<O>>> indexedMaybes = Streams.index(values);
@@ -179,15 +174,15 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
      *  -The accumulation doesn't have to use a BinaryOperator (it is implemented by the Collector itself).
      * On the other hand, the same precondition are demanded from this parameter as in mapAndReduce():
      *  -The collector::accumulator and collector::combiner implementations must be associative, per Stream::collect.
-     * @param policyForCombiningWithAbsentValues
+     * @param combiningPolicy
      * @return If if any input is none then Signal.none(), else the result of applying the collector to all inputs.
      */
     static <O, T> Signal<T> collect(
         Collection<Signal<O>> inputs,
         Collector<O, ?, T> collector,
-        Signal.WhenCombining policyForCombiningWithAbsentValues
+        Signal.WhenCombining combiningPolicy
     ) {
-        if (shouldCombineToNone(inputs, policyForCombiningWithAbsentValues)) return Signal.none();
+        if (combiningPolicy.returnNoneIfAnySignalIsFloating(inputs)) return Signal.none();
 
         return Signal.of(inputs.stream()
             .map(Signal::value)
@@ -200,21 +195,14 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
     static <O, T> Signal<T> collectIndexed(
         Collection<Signal<O>> inputs,
         Collector<Indexed<O>, ?, T> collector,
-        Signal.WhenCombining policyForCombiningWithAbsentValues
+        Signal.WhenCombining combiningPolicy
     ) {
-        if (shouldCombineToNone(inputs, policyForCombiningWithAbsentValues)) return Signal.none();
+        if (combiningPolicy.returnNoneIfAnySignalIsFloating(inputs)) return Signal.none();
 
         List<O> values = inputs.stream().map(Signal::value).map(Optional::get).collect(toList());
         Stream<Indexed<O>> indexedValues = Streams.index(values);
 
         return Signal.of(indexedValues.collect(collector));
-    }
-
-    private static <O> boolean shouldCombineToNone(
-        Collection<Signal<O>> inputs,
-        WhenCombining policyForCombiningWithAbsentValues
-    ) {
-        return policyForCombiningWithAbsentValues == WhenCombining.ABSENT_WINS && anySignalIsFloating(inputs);
     }
 
     private static <T> boolean anySignalIsFloating(Collection<Signal<T>> inputs) {
@@ -231,9 +219,32 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
 
 
     public enum WhenCombining {
-        PRESENT_WINS,
-        ABSENT_WINS,
+        PRESENT_WINS {
+            @Override
+            public <V> boolean returnNoneIfAnySignalIsFloating(Signal<V> s1, Signal<V> s2) {
+                return false;
+            }
+
+            @Override
+            public <V> boolean returnNoneIfAnySignalIsFloating(Collection<Signal<V>> inputs) {
+                return false;
+            }
+        },
+        ABSENT_WINS {
+            @Override
+            public <V> boolean returnNoneIfAnySignalIsFloating(Signal<V> s1, Signal<V> s2) {
+                return anySignalIsFloating(s1, s2);
+            }
+
+            @Override
+            public <V> boolean returnNoneIfAnySignalIsFloating(Collection<Signal<V>> inputs) {
+                return anySignalIsFloating(inputs);
+            }
+        },
         ;
+
+        public abstract <V> boolean returnNoneIfAnySignalIsFloating(Signal<V> s1, Signal<V> s2);
+        public abstract <V> boolean returnNoneIfAnySignalIsFloating(Collection<Signal<V>> inputs);
     }
 
 }

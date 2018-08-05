@@ -39,9 +39,9 @@ extends CollectHomogeneousInputs<O, O> {
         List<Wire<O>> ins,
         Wire<O> out,
         Clock clock,
-        Signal.WhenCombining policyForCombiningWithAbsentValues
+        Signal.WhenCombining combiningPolicy
     ) {
-        this(ins, out, clock, DEFAULT_DELAY, policyForCombiningWithAbsentValues);
+        this(ins, out, clock, DEFAULT_DELAY, combiningPolicy);
     }
 
     protected CollectHomogeneousInputsToOutputOfSameType(
@@ -49,9 +49,9 @@ extends CollectHomogeneousInputs<O, O> {
         Wire<O> out,
         Clock clock,
         Delay delay,
-        Signal.WhenCombining policyForCombiningWithAbsentValues
+        Signal.WhenCombining combiningPolicy
     ) {
-        super(ins, out, clock, delay, policyForCombiningWithAbsentValues);
+        super(ins, out, clock, delay, combiningPolicy);
     }
 
 }

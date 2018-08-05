@@ -76,18 +76,18 @@ public final class Wire<T> {
      * @param inputs The in Wires.
      * @param weight Maps in signals to values which are then accumulated during the reduction.
      * @param accumulator This accumulation function must be associative, per Stream::reduce.
-     * @param policyForCombiningWithAbsentValues
+     * @param combiningPolicy
      * @return If if any input is none then Signal.none(), else the result of applying the reducer to the "accumulation value" of all inputs.
      */
     static <O, T> Signal<T> mapAndReduce(
         Collection<Wire<O>> inputs,
         Function<O, T> weight,
         BinaryOperator<T> accumulator,
-        Signal.WhenCombining policyForCombiningWithAbsentValues
+        Signal.WhenCombining combiningPolicy
     ) {
         return Signal.mapAndReduce(
             inputs.stream().map(Wire::getSignal).collect(toList()),
-            weight, accumulator, policyForCombiningWithAbsentValues
+            weight, accumulator, combiningPolicy
         );
     }
 
@@ -95,11 +95,11 @@ public final class Wire<T> {
         List<Wire<O>> inputs,
         Function<Indexed<O>, T> weight,
         BinaryOperator<T> accumulator,
-        Signal.WhenCombining policyForCombiningWithAbsentValues
+        Signal.WhenCombining combiningPolicy
     ) {
         return Signal.mapAndReduceIndexed(
             inputs.stream().map(Wire::getSignal).collect(toList()),
-            weight, accumulator, policyForCombiningWithAbsentValues
+            weight, accumulator, combiningPolicy
         );
     }
 
@@ -114,30 +114,30 @@ public final class Wire<T> {
      *  -The accumulation doesn't have to use a BinaryOperator (it is implemented by the Collector itself).
      * On the other hand, the same precondition are demanded from this parameter as in mapAndReduce():
      *  -The collector::accumulator and collector::combiner implementations must be associative, per Stream::collect.
-     * @param policyForCombiningWithAbsentValues
+     * @param combiningPolicy
      * @return If if any input is none then Signal.none(), else the result of applying the collector to all inputs.
      */
     static <O, T> Signal<T> collect(
         Collection<Wire<O>> inputs,
         Collector<O, ?, T> collector,
-        Signal.WhenCombining policyForCombiningWithAbsentValues
+        Signal.WhenCombining combiningPolicy
     ) {
         return Signal.collect(
             inputs.stream().map(Wire::getSignal).collect(toList()),
             collector,
-            policyForCombiningWithAbsentValues
+            combiningPolicy
         );
     }
 
     public static <T, O> Signal<T> collectIndexed(
         List<Wire<O>> inputs,
         Collector<Indexed<O>, ?, T> collector,
-        Signal.WhenCombining policyForCombiningWithAbsentValues
+        Signal.WhenCombining combiningPolicy
     ) {
         return Signal.collectIndexed(
             inputs.stream().map(Wire::getSignal).collect(toList()),
             collector,
-            policyForCombiningWithAbsentValues
+            combiningPolicy
         );
     }
 

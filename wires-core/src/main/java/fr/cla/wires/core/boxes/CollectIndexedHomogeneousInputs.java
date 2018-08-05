@@ -27,9 +27,9 @@ extends Box {
         List<Wire<O>> ins,
         Wire<T> out,
         Clock clock,
-        Signal.WhenCombining policyForCombiningWithAbsentValues
+        Signal.WhenCombining combiningPolicy
     ) {
-        this(ins, out, clock, DEFAULT_DELAY, policyForCombiningWithAbsentValues);
+        this(ins, out, clock, DEFAULT_DELAY, combiningPolicy);
     }
 
     protected CollectIndexedHomogeneousInputs(
@@ -37,10 +37,10 @@ extends Box {
         Wire<T> out,
         Clock clock,
         Delay delay,
-        Signal.WhenCombining policyForCombiningWithAbsentValues
+        Signal.WhenCombining combiningPolicy
     ) {
         //Can use Java9 List.of here since out can't legally be null.
-        this(ins, List.of(out), clock, delay, policyForCombiningWithAbsentValues);
+        this(ins, List.of(out), clock, delay, combiningPolicy);
     }
 
     protected CollectIndexedHomogeneousInputs(
@@ -48,9 +48,9 @@ extends Box {
         List<Wire<T>> outs,
         Clock clock,
         Delay delay,
-        Signal.WhenCombining policyForCombiningWithAbsentValues
+        Signal.WhenCombining combiningPolicy
     ) {
-        super(clock, delay, policyForCombiningWithAbsentValues);
+        super(clock, delay, combiningPolicy);
         this.ins = checkNoNulls(ins);
         this.outs = checkNoNulls(outs);
     }
