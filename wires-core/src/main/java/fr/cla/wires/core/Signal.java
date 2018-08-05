@@ -15,7 +15,6 @@ import java.util.stream.Stream;
 import static java.lang.String.valueOf;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toList;
 
 //@formatter:off
 /**
@@ -119,17 +118,7 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         //Not supporting the other option at least yet
         if (WhenCombining.ABSENT_WINS.returnNoneIfAnySignalIsFloating(inputs)) return Signal.none();
 
-        Stream<Optional<O>> values = inputs.stream().map(Signal::value);
-        Stream<Indexed<Optional<O>>> indexedMaybes = Streams.index(values);
-
-        Stream<Optional<Indexed<O>>> maybeIndices = indexedMaybes.map(
-            indexed -> indexed.getValue().map(
-                o -> Indexed.index(indexed.getIndex(), o)
-            )
-        );
-
-        return maybeIndices
-            .flatMap(Optional::stream)
+        return indexPresentSignals(inputs)
             .map(weight)
             .reduce(accumulator)
             .map(Signal::of)
@@ -158,7 +147,8 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         //Not supporting the other option at least yet
         if (WhenCombining.ABSENT_WINS.returnNoneIfAnySignalIsFloating(inputs)) return Signal.none();
 
-        return Signal.of(inputs.stream()
+        return Signal.of(
+            inputs.stream()
             .map(Signal::value)
             .flatMap(Optional::stream)
             .collect(collector)
@@ -172,10 +162,21 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         //Not supporting the other option at least yet
         if (WhenCombining.ABSENT_WINS.returnNoneIfAnySignalIsFloating(inputs)) return Signal.none();
 
-        List<O> values = inputs.stream().map(Signal::value).map(Optional::get).collect(toList());
-        Stream<Indexed<O>> indexedValues = Streams.index(values);
+        return Signal.of(
+            indexPresentSignals(inputs).collect(collector)
+        );
+    }
 
-        return Signal.of(indexedValues.collect(collector));
+    private static <O> Stream<Indexed<O>> indexPresentSignals(Collection<Signal<O>> inputs) {
+        Stream<Optional<O>> values = inputs.stream().map(Signal::value);
+        //Index before filtering, as the weight of an Indexed can take the index into account (eg. neuron weight)
+        Stream<Indexed<Optional<O>>> indexedMaybes = Streams.index(values);
+        Stream<Optional<Indexed<O>>> maybeIndices =  indexedMaybes.map(
+            indexed -> indexed.getValue().map(
+                o -> Indexed.index(indexed.getIndex(), o)
+            )
+        );
+        return maybeIndices.flatMap(Optional::stream);
     }
 
     private static <T> boolean anySignalIsFloating(Collection<Signal<T>> inputs) {
