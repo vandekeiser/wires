@@ -6,6 +6,8 @@ import fr.cla.wires.core.Delay;
 import fr.cla.wires.core.Wire;
 import fr.cla.wires.support.oo.Accumulable;
 
+import java.util.function.BiFunction;
+
 import static java.util.Objects.requireNonNull;
 
 //@formatter:off
@@ -52,12 +54,13 @@ public final class And extends Box {
      */
     @Override
     protected And startup() {
-        this.<Boolean, Boolean>onSignalChanged(in1)
+        this.onSignalChanged2(in1)
             .set(out)
             .toResultOfApplying()
             .signalValuesCombinator(Boolean::logicalAnd, in2)
         ;
-        this.<Boolean, Boolean>onSignalChanged(in2)
+
+        this.onSignalChanged2(in2)
             .set(out)
             .toResultOfApplying()
             .signalValuesCombinator(in1, Boolean::logicalAnd)

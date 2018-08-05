@@ -76,22 +76,27 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         return value().map(mapper).map(Signal::of).orElse(Signal.none());
     }
 
-    static <V1, V2, W> Signal<W> combine(
-        Signal<V1> s1,
-        Signal<V2> s2,
-        BiFunction<V1, V2, W> combiner,
+    static <V> Signal<V> combine(
+        Signal<V> s1,
+        Signal<V> s2,
+        BinaryOperator<V> combiner,
         Accumulable.WhenCombining policyForCombiningWithAbsentValues
     ) {
         if (policyForCombiningWithAbsentValues == ABSENT_WINS && anySignalIsFloating(s1, s2)) return Signal.none();
 
-        Optional<V1> v1 = s1.value();
-        Optional<V2> v2 = s2.value();
-        if(!v1.isPresent() || !v2.isPresent()) throw new UnsupportedOperationException(format(
-            "V1!=V2 so we can't return either when the other is absent." +
-            "And this method doesn't take a neutral element, so we can't return that either."
-        ));
+        Optional<V> v1 = s1.value();
+        Optional<V> v2 = s2.value();
+        if (v1.isPresent() && v2.isPresent()) {
+            return Signal.of(combiner.apply(v1.get(), v2.get()));
+        } else if (v1.isPresent()) {
+            return Signal.of(v1.get());
+        } else if (v2.isPresent()) {
+            return Signal.of(v2.get());
+        } else {
+            return Signal.none();
+        }
 
-        return Signal.of(combiner.apply(v1.get(), v2.get()));
+        //return Signal.of(combiner.apply(v1.get(), v2.get()));
     }
 
 

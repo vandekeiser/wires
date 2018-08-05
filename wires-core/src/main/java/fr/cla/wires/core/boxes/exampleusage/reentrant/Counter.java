@@ -56,7 +56,7 @@ public final class Counter extends Box {
      * }
      */
     @Override protected Counter startup() {
-        this.<Long, Long>onSignalChanged(out)
+        this.onSignalChanged2(out)
             .set(out)
             .toResultOfApplying()
             .signalValuesCombinator(this::add, step)//a decomposer en 2 steps!

@@ -51,12 +51,12 @@ public final class Or extends Box {
      * }
      */
     @Override protected Or startup() {
-        this.<Boolean, Boolean>onSignalChanged(in1)
+        this.onSignalChanged2(in1)
             .set(out)
             .toResultOfApplying()
             .signalValuesCombinator(Boolean::logicalOr, in2)
         ;
-        this.<Boolean, Boolean>onSignalChanged(in2)
+        this.onSignalChanged2(in2)
             .set(out)
             .toResultOfApplying()
             .signalValuesCombinator(in1, Boolean::logicalOr)

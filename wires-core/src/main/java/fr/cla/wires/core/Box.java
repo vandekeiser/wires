@@ -80,6 +80,10 @@ public abstract class Box {
         return new ObservedWireCaptured<>(observed);
     }
 
+    protected final <O> ObservedWireCapturedAndMatchedToOutputOfSameType<O> onSignalChanged2(Wire<O> observed) {
+        return new ObservedWireCapturedAndMatchedToOutputOfSameType<>(observed);
+    }
+
 
 
 
@@ -90,8 +94,18 @@ public abstract class Box {
             this.observed = requireNonNull(observed);
         }
 
-        public final ObservedAndTargetWiresCaptured<O, T> set(Wire<T> target) {
+        public ObservedAndTargetWiresCaptured<O, T> set(Wire<T> target) {
             return new ObservedAndTargetWiresCaptured<>(observed, requireNonNull(target));
+        }
+    }
+
+    protected class ObservedWireCapturedAndMatchedToOutputOfSameType<O> extends ObservedWireCaptured<O, O> {
+        private ObservedWireCapturedAndMatchedToOutputOfSameType(Wire<O> observed) {
+            super(observed);
+        }
+
+        public final ObservedAndTargetWiresOfSameTypeCaptured<O> set(Wire<O> target) {
+            return new ObservedAndTargetWiresOfSameTypeCaptured<>(observed, requireNonNull(target));
         }
     }
 
@@ -106,7 +120,7 @@ public abstract class Box {
             this.target = requireNonNull(target);
         }
 
-        public final Applying<O, T> toResultOfApplying() {
+        public Applying<O, T> toResultOfApplying() {
             return new Applying<>(observed, target);
         }
 
@@ -115,6 +129,16 @@ public abstract class Box {
                 observed, target, requireNonNull(inputs)
             );
         }
+    }
+    protected class ObservedAndTargetWiresOfSameTypeCaptured<O> extends ObservedAndTargetWiresCaptured<O, O> {
+        private ObservedAndTargetWiresOfSameTypeCaptured(Wire<O> observed, Wire<O> target) {
+            super(observed, target);
+        }
+
+        public final ApplyingToTargetOfSameType<O> toResultOfApplying() {
+            return new ApplyingToTargetOfSameType<>(observed, target);
+        }
+
     }
 
 
@@ -125,7 +149,13 @@ public abstract class Box {
             super(observed, target);
         }
 
-        public final void signalValueTransformation(Function<O, T> signalValueTransformation) {
+    }
+    protected class ApplyingToTargetOfSameType<O> extends Applying<O, O> {
+        private ApplyingToTargetOfSameType(Wire<O> observed, Wire<O> target) {
+            super(observed, target);
+        }
+
+        public final void signalValueTransformation(Function<O, O> signalValueTransformation) {
             var f = requireNonNull(signalValueTransformation);
 
             onSignalChanged(observed,
@@ -135,9 +165,9 @@ public abstract class Box {
             );
         }
 
-        public final <R> void signalValuesCombinator(
-            BiFunction<O, R, T> signalValuesCombinator,
-            Wire<R> rightWire
+        public final void signalValuesCombinator(
+            BinaryOperator<O> signalValuesCombinator,
+            Wire<O> rightWire
         ) {
             var f = requireNonNull(signalValuesCombinator);
             var r = requireNonNull(rightWire);
@@ -149,9 +179,9 @@ public abstract class Box {
             );
         }
 
-        public final <L> void signalValuesCombinator(
-            Wire<L> leftWire,
-            BiFunction<L, O, T> signalValuesCombinator
+        public final void signalValuesCombinator(
+            Wire<O> leftWire,
+            BinaryOperator<O> signalValuesCombinator
         ) {
             var l = requireNonNull(leftWire);
             var f = requireNonNull(signalValuesCombinator);

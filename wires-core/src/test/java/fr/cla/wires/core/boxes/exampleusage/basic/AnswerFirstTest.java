@@ -85,7 +85,6 @@ public class AnswerFirstTest {
         }
     }
 
-    @Ignore//TODO!!!
     @Test
     public void out_should_be_true_when_1_is_true_and_2_is_none() {
         given: {

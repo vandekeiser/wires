@@ -52,12 +52,12 @@ public final class AnswerSecond extends Box {
      */
     @Override
     protected AnswerSecond startup() {
-        this.<Boolean, Boolean>onSignalChanged(in1)
+        this.onSignalChanged2(in1)
             .set(out)
             .toResultOfApplying()
             .signalValuesCombinator(this::answerSecond, in2)
         ;
-        this.<Boolean, Boolean>onSignalChanged(in2)
+        this.onSignalChanged2(in2)
             .set(out)
             .toResultOfApplying()
             .signalValuesCombinator(in1, this::answerSecond)
