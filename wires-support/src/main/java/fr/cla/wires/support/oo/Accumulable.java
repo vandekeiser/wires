@@ -118,8 +118,17 @@ public class Accumulable<W, A> extends MutableValue<A> {
             @Override public <T> Optional<T> combine(
                 Optional<T> maybe1, Optional<T> maybe2, BinaryOperator<T> combiner
             ) {
+//                if (maybe1.isPresent() && maybe2.isPresent()) {
+//                    return Optional.of(combiner.apply(maybe1.get(), maybe2.get()));
+//                } else {
+//                    return Optional.empty();
+//                }
                 if (maybe1.isPresent() && maybe2.isPresent()) {
                     return Optional.of(combiner.apply(maybe1.get(), maybe2.get()));
+                } else if (maybe1.isPresent()) {
+                    return Optional.of(maybe1.get());
+                } else if (maybe2.isPresent()) {
+                    return Optional.of(maybe2.get());
                 } else {
                     return Optional.empty();
                 }
