@@ -76,13 +76,12 @@ extends Box {
             .set(out)
             .from(ins)
             .map(weight())
-            .reduce(accumulator(), identity())
+            .reduce(accumulator())
         ;
     }
 
     protected abstract Function<O,T> weight();
     protected abstract BinaryOperator<T> accumulator();
-    protected abstract T identity();
 
 }
 //@formatter:on

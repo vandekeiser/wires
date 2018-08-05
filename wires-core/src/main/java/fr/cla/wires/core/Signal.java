@@ -4,14 +4,15 @@ import fr.cla.wires.support.functional.Indexed;
 import fr.cla.wires.support.functional.Streams;
 import fr.cla.wires.support.oo.AbstractValueObject;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
+import static java.lang.String.valueOf;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
 
@@ -62,7 +63,7 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
 
     @Override
     public String toString() {
-        return String.valueOf(value);
+        return valueOf(value);
     }
 
     //----------Functional methods to transform and/or aggregate Signals//----------VVVVVVVVVV
@@ -70,92 +71,194 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         return value().map(mapper).map(Signal::of).orElse(Signal.none());
     }
 
-    static <V1, V2, W> Signal<W> map(Signal<V1> s1, Signal<V2> s2, BiFunction<V1, V2, W> mapper) {
-        return map(s1.value(), s2.value(), mapper);
+    static <V> Signal<V> combine(
+        Signal<V> s1,
+        Signal<V> s2,
+        BinaryOperator<V> combiner,
+        Signal.WhenCombining combiningPolicy
+    ) {
+        if (combiningPolicy.returnNoneIfAnySignalIsFloating(s1, s2)) return Signal.none();
+        return combiningPolicy.combine(s1, s2, combiner);
     }
-    private static <V1, V2, W> Signal<W> map(Optional<V1> v1, Optional<V2> v2, BiFunction<V1, V2, W> mapper) {
-        if(!v1.isPresent() ||!v2.isPresent()) return Signal.none();
-        return Signal.of(mapper.apply(v1.get(), v2.get()));
-    }
+
 
     /**
      * Collect an aggregate result from the inputs of N Wires, using Stream::reduce.
      * Can do less than this::collect but less complex.
+     * @param <T> The type of Signal that transits on the target Wire
+     * @param <O> The type of Signal that transits on the observed Wire
      * @param inputs The in Signals. No Signal is allowed to be Signal.none(), since that was already check by Wire::mapAndReduce.
      * @param weight Maps in signals to values which are then accumulated during the reduction.
      * @param accumulator This accumulation function (technically a java.util.function.BinaryOperator) must be associative, per Stream::reduce.
-     * @param identity This must be the neutral element of the group associated with the reducer (ex: 0 for +, 1 for *).
-     * @param <T> The type of Signal that transits on the target Wire
-     * @param <O> The type of Signal that transits on the observed Wire
      * @return If if any input is none then Signal.none(), else the result of applying the reducer to the "accumulation value" of all inputs.
      */
     static <O, T> Signal<T> mapAndReduce(
-        Stream<Signal<O>> inputs,
+        Collection<Signal<O>> inputs,
         Function<O, T> weight,
-        BinaryOperator<T> accumulator,
-        T identity
+        BinaryOperator<T> accumulator
     ) {
-        return Signal.of(
-            inputs
+        //Not supporting the other option at least yet
+        if (WhenCombining.ABSENT_WINS.returnNoneIfAnySignalIsFloating(inputs)) return Signal.none();
+
+        return inputs.stream()
             .map(Signal::value)
-            .map(Optional::get)
+            .flatMap(Optional::stream)
             .map(weight)
-            .reduce(identity, accumulator)
-        );
+            .reduce(accumulator)
+            .map(Signal::of)
+            .orElseGet(Signal::none)
+        ;
     }
 
     static <O, T> Signal<T> mapAndReduceIndexed(
-        Stream<Signal<O>> inputs,
+        Collection<Signal<O>> inputs,
         Function<Indexed<O>, T> weight,
-        BinaryOperator<T> accumulator,
-        T identity
+        BinaryOperator<T> accumulator
     ) {
-        Stream<O> values = inputs.map(Signal::value).map(Optional::get);
-        Stream<Indexed<O>> indexedValues = Streams.index(values);
+        //Not supporting the other option at least yet
+        if (WhenCombining.ABSENT_WINS.returnNoneIfAnySignalIsFloating(inputs)) return Signal.none();
 
-        return Signal.of(
-            indexedValues.map(weight).reduce(identity, accumulator)
-        );
+        return indexPresentSignals(inputs)
+            .map(weight)
+            .reduce(accumulator)
+            .map(Signal::of)
+            .orElseGet(Signal::none)
+        ;
+
     }
 
     /**
      * Collect an aggregate result from the inputs of N Wires, using a java.util.stream.Collector.
      * Can do more than this::mapAndReduce but more complex.
+     * @param <T> The type of Signal that transits on the target Wire
+     * @param <O> The type of Signal that transits on the observed Wire
      * @param inputs The in Signals. No Signal is allowed to be Signal.none(), since that was already check by Wire::collect.
-     * @param collector This accumulator is more general (but complex) than mapAndReduce()'s one, since:
+     * @param collector This collector is more general (but complex) than mapAndReduce()'s accumulator, since:
      *  -The value to accumulate doesn't have to be of the same type as the input Signal.
      *  -The accumulation doesn't have to use a BinaryOperator (it is implemented by the Collector itself).
      * On the other hand, the same precondition are demanded from this parameter as in mapAndReduce():
      *  -The collector::accumulator and collector::combiner implementations must be associative, per Stream::collect.
-     * @param <T> The type of Signal that transits on the target Wire
-     * @param <O> The type of Signal that transits on the observed Wire
      * @return If if any input is none then Signal.none(), else the result of applying the collector to all inputs.
      */
     static <O, T> Signal<T> collect(
-        Stream<Signal<O>> inputs,
+        Collection<Signal<O>> inputs,
         Collector<O, ?, T> collector
     ) {
+        //Not supporting the other option at least yet
+        if (WhenCombining.ABSENT_WINS.returnNoneIfAnySignalIsFloating(inputs)) return Signal.none();
+
         return Signal.of(
-            inputs
+            inputs.stream()
             .map(Signal::value)
-            .map(Optional::get)
+            .flatMap(Optional::stream)
             .collect(collector)
         );
     }
 
     static <O, T> Signal<T> collectIndexed(
-        Stream<Signal<O>> inputs,
+        Collection<Signal<O>> inputs,
         Collector<Indexed<O>, ?, T> collector
     ) {
-        Stream<O> values = inputs.map(Signal::value).map(Optional::get);
-        Stream<Indexed<O>> indexedValues = Streams.index(values);
+        //Not supporting the other option at least yet
+        if (WhenCombining.ABSENT_WINS.returnNoneIfAnySignalIsFloating(inputs)) return Signal.none();
 
-        return Signal.of(indexedValues
-            .collect(collector)
+        return Signal.of(
+            indexPresentSignals(inputs).collect(collector)
         );
     }
 
+    private static <O> Stream<Indexed<O>> indexPresentSignals(Collection<Signal<O>> inputs) {
+        Stream<Optional<O>> values = inputs.stream().map(Signal::value);
+        //Index before filtering, as the weight of an Indexed can take the index into account (eg. neuron weight)
+        Stream<Indexed<Optional<O>>> indexedMaybes = Streams.index(values);
+        Stream<Optional<Indexed<O>>> maybeIndices =  indexedMaybes.map(
+            indexed -> indexed.getValue().map(
+                o -> Indexed.index(indexed.getIndex(), o)
+            )
+        );
+        return maybeIndices.flatMap(Optional::stream);
+    }
+
+    private static <T> boolean anySignalIsFloating(Collection<Signal<T>> inputs) {
+        return inputs.stream().anyMatch(Signal.none()::equals);
+    }
+
+    private static <V1, V2> boolean anySignalIsFloating(Signal<V1> v1, Signal<V2> v2) {
+        return v1.equals(Signal.none()) || v2.equals(Signal.none());
+    }
+
     //----------Functional methods to transform and/or aggregate Signals//----------^^^^^^^^^^
+
+
+
+
+    public enum WhenCombining {
+        /**
+         * Forces the evaluation of combiner if one of the signal is missing.
+         * Obviously this only works if combiner supports that, eg. AnswerFirst/Second
+         */
+        PRESENT_WINS {
+            @Override
+            public <V> boolean returnNoneIfAnySignalIsFloating(Signal<V> s1, Signal<V> s2) {
+                return false;
+            }
+
+            @Override
+            public <V> boolean returnNoneIfAnySignalIsFloating(Collection<Signal<V>> inputs) {
+                return false;
+            }
+
+            @Override
+            public <V> Signal<V> combine(Signal<V> s1, Signal<V> s2, BinaryOperator<V> combiner) {
+                Optional<V> v1 = s1.value();
+                Optional<V> v2 = s2.value();
+
+                if (v1.isPresent() || v2.isPresent()) {
+                    V v = combiner.apply(
+                        v1.orElse(null), v2.orElse(null)
+                    );
+                    return v==null ? Signal.none() : Signal.of(v);
+                } else {
+                    return Signal.none();
+                }
+            }
+        },
+        /**
+         * Output is none if any input is none
+         */
+        ABSENT_WINS {
+            @Override
+            public <V> boolean returnNoneIfAnySignalIsFloating(Signal<V> s1, Signal<V> s2) {
+                return anySignalIsFloating(s1, s2);
+            }
+
+            @Override
+            public <V> boolean returnNoneIfAnySignalIsFloating(Collection<Signal<V>> inputs) {
+                return anySignalIsFloating(inputs);
+            }
+
+            @Override
+            public <V> Signal<V> combine(Signal<V> s1, Signal<V> s2, BinaryOperator<V> combiner) {
+                Optional<V> v1 = s1.value();
+                Optional<V> v2 = s2.value();
+
+                if (v1.isPresent() && v2.isPresent()) {
+                    return Signal.of(combiner.apply(v1.get(), v2.get()));
+                } else if (v1.isPresent()) {
+                    return Signal.of(v1.get());
+                } else if (v2.isPresent()) {
+                    return Signal.of(v2.get());
+                } else {
+                    return Signal.none();
+                }
+            }
+        },
+        ;
+
+        public abstract <V> boolean returnNoneIfAnySignalIsFloating(Signal<V> s1, Signal<V> s2);
+        public abstract <V> boolean returnNoneIfAnySignalIsFloating(Collection<Signal<V>> inputs);
+        public abstract <V> Signal<V> combine(Signal<V> s1, Signal<V> s2, BinaryOperator<V> combiner);
+    }
 
 }
 //@formatter:on

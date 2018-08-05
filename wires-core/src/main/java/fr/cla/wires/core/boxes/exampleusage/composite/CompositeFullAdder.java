@@ -1,10 +1,8 @@
 package fr.cla.wires.core.boxes.exampleusage.composite;
 
-import fr.cla.wires.core.Box;
-import fr.cla.wires.core.Clock;
-import fr.cla.wires.core.Delay;
-import fr.cla.wires.core.Wire;
+import fr.cla.wires.core.*;
 import fr.cla.wires.core.boxes.exampleusage.basic.Or;
+import fr.cla.wires.support.oo.Accumulable;
 
 import static java.util.Objects.requireNonNull;
 

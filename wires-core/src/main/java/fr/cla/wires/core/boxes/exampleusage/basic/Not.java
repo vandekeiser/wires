@@ -50,7 +50,7 @@ public final class Not extends Box {
      */
     @Override
     protected Not startup() {
-        this.<Boolean, Boolean>onSignalChanged(in)
+        this.onSignalChanged2(in)
             .set(out)
             .toResultOfApplying()
             .signalValueTransformation(this::not)

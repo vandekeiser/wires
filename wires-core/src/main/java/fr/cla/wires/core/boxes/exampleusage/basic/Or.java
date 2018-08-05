@@ -1,9 +1,7 @@
 package fr.cla.wires.core.boxes.exampleusage.basic;
 
-import fr.cla.wires.core.Box;
-import fr.cla.wires.core.Clock;
-import fr.cla.wires.core.Delay;
-import fr.cla.wires.core.Wire;
+import fr.cla.wires.core.*;
+import fr.cla.wires.support.oo.Accumulable;
 
 import static java.util.Objects.requireNonNull;
 
@@ -50,15 +48,15 @@ public final class Or extends Box {
      * }
      */
     @Override protected Or startup() {
-        this.<Boolean, Boolean>onSignalChanged(in1)
+        this.onSignalChanged2(in1)
             .set(out)
             .toResultOfApplying()
-            .signalValuesCombinator(Boolean::logicalOr, in2)
+            .signalValuesCombinator(Boolean::logicalOr, in2, Signal.WhenCombining.ABSENT_WINS)
         ;
-        this.<Boolean, Boolean>onSignalChanged(in2)
+        this.onSignalChanged2(in2)
             .set(out)
             .toResultOfApplying()
-            .signalValuesCombinator(in1, Boolean::logicalOr)
+            .signalValuesCombinator(in1, Boolean::logicalOr, Signal.WhenCombining.ABSENT_WINS)
         ;
         return this;
     }

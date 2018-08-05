@@ -4,13 +4,13 @@ import fr.cla.wires.core.Clock;
 import fr.cla.wires.core.Delay;
 import fr.cla.wires.core.Signal;
 import fr.cla.wires.core.Wire;
-import fr.cla.wires.core.boxes.CollectHomogeneousInputsToOutputOfSameType;
+import fr.cla.wires.core.boxes.ReduceHomogeneousInputs;
+import fr.cla.wires.support.functional.Indexed;
 import fr.cla.wires.support.oo.Accumulable;
 
 import java.util.List;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
-import java.util.function.UnaryOperator;
 
 import static java.util.Objects.requireNonNull;
 
@@ -19,27 +19,27 @@ import static java.util.Objects.requireNonNull;
  * An example usage of how to connect wires to boxes.
  * @see fr.cla.wires.core.boxes.exampleusage
  */
-public final class CollectMultipleAnd
-extends CollectHomogeneousInputsToOutputOfSameType<Boolean> {
+public class ReduceMultipleIndexedAnd extends ReduceHomogeneousInputs<Indexed<Boolean>, Boolean> {
 
-    private CollectMultipleAnd(List<Wire<Boolean>> ins, Wire<Boolean> out, Clock clock) {
+    private ReduceMultipleIndexedAnd(List<Wire<Indexed<Boolean>>> ins, Wire<Boolean> out, Clock clock) {
         this(ins, out, clock, DEFAULT_DELAY);
     }
 
-    private CollectMultipleAnd(List<Wire<Boolean>> ins, Wire<Boolean> out, Clock clock, Delay delay) {
+    private ReduceMultipleIndexedAnd(List<Wire<Indexed<Boolean>>> ins, Wire<Boolean> out, Clock clock, Delay delay) {
         super(ins, out, clock, delay);
     }
 
-    @Override protected Function<Boolean, Boolean> weight() {
-        return Function.identity();
+    @Override protected Function<Indexed<Boolean>, Boolean> weight() {
+        return identityWithoutCaringAboutTheIndex();
+    }
+
+    //I just want to test simplifying Signal::mapAndReduceIndexed
+    private Function<Indexed<Boolean>, Boolean> identityWithoutCaringAboutTheIndex() {
+        return Indexed::getValue;
     }
 
     @Override protected BinaryOperator<Boolean> accumulator() {
         return this::and;
-    }
-
-    @Override protected UnaryOperator<Boolean> finisher() {
-        return UnaryOperator.identity();
     }
 
     private boolean and(boolean b1, boolean b2) {
@@ -59,22 +59,23 @@ extends CollectHomogeneousInputsToOutputOfSameType<Boolean> {
      * @return this Box, started.
      */
     @Override
-    protected CollectMultipleAnd startup() {
+    protected ReduceMultipleIndexedAnd startup() {
         super.startup();
         return this;
     }
 
-    public static Builder ins(List<Wire<Boolean>> ins) {
+    public static Builder ins(List<Wire<Indexed<Boolean>>> ins) {
         return new Builder(checkNoNulls(ins));
     }
 
 
 
+
     public static class Builder {
-        private List<Wire<Boolean>> ins;
+        private List<Wire<Indexed<Boolean>>> ins;
         private Wire<Boolean> out;
 
-        private Builder(List<Wire<Boolean>> ins) {
+        private Builder(List<Wire<Indexed<Boolean>>> ins) {
             this.ins = checkNoNulls(ins);
         }
 
@@ -83,9 +84,9 @@ extends CollectHomogeneousInputsToOutputOfSameType<Boolean> {
             return this;
         }
 
-        public CollectMultipleAnd time(Clock clock) {
+        public ReduceMultipleIndexedAnd time(Clock clock) {
             Clock _clock = requireNonNull(clock);
-            return new CollectMultipleAnd(ins, out, _clock).startup();
+            return new ReduceMultipleIndexedAnd(ins, out, _clock).startup();
         }
     }
 

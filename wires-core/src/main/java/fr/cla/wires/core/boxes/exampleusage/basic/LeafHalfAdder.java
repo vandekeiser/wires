@@ -1,10 +1,8 @@
 package fr.cla.wires.core.boxes.exampleusage.basic;
 
-import fr.cla.wires.core.Box;
-import fr.cla.wires.core.Clock;
-import fr.cla.wires.core.Delay;
-import fr.cla.wires.core.Wire;
+import fr.cla.wires.core.*;
 import fr.cla.wires.core.boxes.exampleusage.composite.CompositeHalfAdder;
+import fr.cla.wires.support.oo.Accumulable;
 
 import static java.util.Objects.requireNonNull;
 
@@ -27,9 +25,9 @@ public final class LeafHalfAdder extends Box {
     }
 
     private LeafHalfAdder(
-    Wire<Boolean> inA, Wire<Boolean> inB,
-    Wire<Boolean> sum, Wire<Boolean> carry,
-    Clock clock, Delay delay
+        Wire<Boolean> inA, Wire<Boolean> inB,
+        Wire<Boolean> sum, Wire<Boolean> carry,
+        Clock clock, Delay delay
     ) {
         super(clock, delay);
         this.inA = requireNonNull(inA);
@@ -40,25 +38,25 @@ public final class LeafHalfAdder extends Box {
 
     @Override
     protected LeafHalfAdder startup() {
-        this.<Boolean, Boolean>onSignalChanged(inA)
+        this.onSignalChanged2(inA)
             .set(sum)
             .toResultOfApplying()
-            .signalValuesCombinator(this::sum, inB)
+            .signalValuesCombinator(this::sum, inB, Signal.WhenCombining.ABSENT_WINS)
         ;
-        this.<Boolean, Boolean>onSignalChanged(inB)
+        this.onSignalChanged2(inB)
             .set(sum)
             .toResultOfApplying()
-            .signalValuesCombinator(inA, this::sum)
+            .signalValuesCombinator(inA, this::sum, Signal.WhenCombining.ABSENT_WINS)
         ;
-        this.<Boolean, Boolean>onSignalChanged(inA)
+        this.onSignalChanged2(inA)
             .set(carry)
             .toResultOfApplying()
-            .signalValuesCombinator(this::carry, inB)
+            .signalValuesCombinator(this::carry, inB, Signal.WhenCombining.ABSENT_WINS)
         ;
-        this.<Boolean, Boolean>onSignalChanged(inB)
+        this.onSignalChanged2(inB)
             .set(carry)
             .toResultOfApplying()
-            .signalValuesCombinator(inA, this::carry)
+            .signalValuesCombinator(inA, this::carry, Signal.WhenCombining.ABSENT_WINS)
         ;
         return this;
     }

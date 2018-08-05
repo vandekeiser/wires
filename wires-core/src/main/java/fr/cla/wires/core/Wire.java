@@ -1,6 +1,7 @@
 package fr.cla.wires.core;
 
 import fr.cla.wires.support.functional.Indexed;
+import fr.cla.wires.support.oo.Accumulable;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -9,8 +10,10 @@ import java.util.Set;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.*;
 
 //@formatter:off
 /**
@@ -68,85 +71,66 @@ public final class Wire<T> {
     /**
      * Collect an aggregate result from the inputs of N Wires, using Stream::reduce.
      * Can do less than this::collect but less complex.
+     * @param <T> The type of Signal that transits on the target Wire
+     * @param <O> The type of Signal that transits on the observed Wire
      * @param inputs The in Wires.
      * @param weight Maps in signals to values which are then accumulated during the reduction.
      * @param accumulator This accumulation function must be associative, per Stream::reduce.
-     * @param identity This must be the neutral element of the group associated with the reducer (ex: 0 for +, 1 for *).
-     * @param <T> The type of Signal that transits on the target Wire
-     * @param <O> The type of Signal that transits on the observed Wire
      * @return If if any input is none then Signal.none(), else the result of applying the reducer to the "accumulation value" of all inputs.
      */
     static <O, T> Signal<T> mapAndReduce(
         Collection<Wire<O>> inputs,
         Function<O, T> weight,
-        BinaryOperator<T> accumulator,
-        T identity
+        BinaryOperator<T> accumulator
     ) {
-        return anyWireIsFloating(inputs) ?
-            Signal.none() :
-            Signal.mapAndReduce(
-                inputs.stream().map(Wire::getSignal),
-                weight, accumulator, identity
-            )
-        ;
+        return Signal.mapAndReduce(
+            inputs.stream().map(Wire::getSignal).collect(toList()),
+            weight, accumulator
+        );
     }
 
     public static <T, O> Signal<T> mapAndReduceIndexed(
         List<Wire<O>> inputs,
         Function<Indexed<O>, T> weight,
-        BinaryOperator<T> accumulator,
-        T identity
+        BinaryOperator<T> accumulator
     ) {
-        return anyWireIsFloating(inputs) ?
-            Signal.none() :
-            Signal.mapAndReduceIndexed(
-                inputs.stream().map(Wire::getSignal),
-                weight, accumulator, identity
-            )
-        ;
+        return Signal.mapAndReduceIndexed(
+            inputs.stream().map(Wire::getSignal).collect(toList()),
+            weight, accumulator
+        );
     }
 
     /**
      * Collect an aggregate result from the inputs of N Wires, using a java.util.stream.Collector.
      * Can do more than this::mapAndReduce but more complex.
+     * @param <T> The type of Signal that transits on the target Wire
+     * @param <O> The type of Signal that transits on the observed Wire
      * @param inputs The in Wires.
-     * @param collector This accumulator is more general (but complex) than mapAndReduce()'s one, since:
+     * @param collector This collector is more general (but complex) than mapAndReduce()'s accumulator, since:
      *  -The value to accumulate doesn't have to be of the same type as the input Signal.
      *  -The accumulation doesn't have to use a BinaryOperator (it is implemented by the Collector itself).
      * On the other hand, the same precondition are demanded from this parameter as in mapAndReduce():
      *  -The collector::accumulator and collector::combiner implementations must be associative, per Stream::collect.
-     * @param <T> The type of Signal that transits on the target Wire
-     * @param <O> The type of Signal that transits on the observed Wire
      * @return If if any input is none then Signal.none(), else the result of applying the collector to all inputs.
      */
     static <O, T> Signal<T> collect(
         Collection<Wire<O>> inputs,
         Collector<O, ?, T> collector
     ) {
-        return anyWireIsFloating(inputs) ? 
-            Signal.none() :
-            Signal.collect(
-                inputs.stream().map(Wire::getSignal),
-                collector
-            )
-        ;
+        return Signal.collect(
+            inputs.stream().map(Wire::getSignal).collect(toList()),
+            collector
+        );
     }
 
     public static <T, O> Signal<T> collectIndexed(
         List<Wire<O>> inputs,
         Collector<Indexed<O>, ?, T> collector
     ) {
-        return anyWireIsFloating(inputs) ?
-            Signal.none() :
-            Signal.collectIndexed(
-                inputs.stream().map(Wire::getSignal),
-                collector
-            )
-        ;
-    }
-
-    private static <O> boolean anyWireIsFloating(Collection<Wire<O>> inputs) {
-        return inputs.stream().map(Wire::getSignal).anyMatch(Signal.none()::equals);
+        return Signal.collectIndexed(
+            inputs.stream().map(Wire::getSignal).collect(toList()),
+            collector
+        );
     }
 
 }

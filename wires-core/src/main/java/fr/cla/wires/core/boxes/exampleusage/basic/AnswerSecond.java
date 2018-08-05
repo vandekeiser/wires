@@ -1,9 +1,7 @@
 package fr.cla.wires.core.boxes.exampleusage.basic;
 
-import fr.cla.wires.core.Box;
-import fr.cla.wires.core.Clock;
-import fr.cla.wires.core.Delay;
-import fr.cla.wires.core.Wire;
+import fr.cla.wires.core.*;
+import fr.cla.wires.support.oo.Accumulable;
 
 import static java.util.Objects.requireNonNull;
 
@@ -51,20 +49,26 @@ public final class AnswerSecond extends Box {
      */
     @Override
     protected AnswerSecond startup() {
-        this.<Boolean, Boolean>onSignalChanged(in1)
+        this.onSignalChanged2(in1)
             .set(out)
             .toResultOfApplying()
-            .signalValuesCombinator(this::answerSecond, in2)
+            .signalValuesCombinator(this::answerSecond, in2, Signal.WhenCombining.PRESENT_WINS)
         ;
-        this.<Boolean, Boolean>onSignalChanged(in2)
+        this.onSignalChanged2(in2)
             .set(out)
             .toResultOfApplying()
-            .signalValuesCombinator(in1, this::answerSecond)
+            .signalValuesCombinator(in1, this::answerSecond, Signal.WhenCombining.PRESENT_WINS)
         ;
         return this;
     }
 
-    private boolean answerSecond(boolean b1, boolean b2) {
+    /**
+     * Both b1 and b2 are nullable
+     * @param b1 Unused
+     * @param b2 The only used parameter
+     * @return b2
+     */
+    private Boolean answerSecond(Boolean b1, Boolean b2) {
         return b2;
     }
 

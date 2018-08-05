@@ -5,6 +5,7 @@ import fr.cla.wires.core.Clock;
 import fr.cla.wires.core.Signal;
 import fr.cla.wires.core.Wire;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -81,6 +82,77 @@ public class AnswerFirstTest {
         }
         then: {
             assertThat(out.getSignal()).isEqualTo(Signal.of(true));
+        }
+    }
+
+    //----------Signal.none------------VVVVVVVVVVVV---------------------------
+    @Test
+    public void out_should_be_true_when_1_is_true_and_2_is_none() {
+        given: {
+            in1.setSignal(Signal.of(true));
+            in2.setSignal(Signal.none());
+        }
+        when: {
+            clock.tick();
+        }
+        then: {
+            assertThat(out.getSignal()).isEqualTo(Signal.of(true));
+        }
+    }
+
+    @Test
+    public void out_should_be_false_when_1_is_false_and_2_is_none() {
+        given: {
+            in1.setSignal(Signal.of(false));
+            in2.setSignal(Signal.none());
+        }
+        when: {
+            clock.tick();
+        }
+        then: {
+            assertThat(out.getSignal()).isEqualTo(Signal.of(false));
+        }
+    }
+
+    @Test
+    public void out_should_be_none_when_1_is_none_and_2_is_none() {
+        given: {
+            in1.setSignal(Signal.none());
+            in2.setSignal(Signal.none());
+        }
+        when: {
+            clock.tick();
+        }
+        then: {
+            assertThat(out.getSignal()).isEqualTo(Signal.none());
+        }
+    }
+
+    @Test
+    public void out_should_be_none_when_1_is_none_and_2_is_true() {
+        given: {
+            in1.setSignal(Signal.none());
+            in2.setSignal(Signal.of(true));
+        }
+        when: {
+            clock.tick();
+        }
+        then: {
+            assertThat(out.getSignal()).isEqualTo(Signal.none());
+        }
+    }
+
+    @Test
+    public void out_should_be_none_when_1_is_none_and_2_is_false() {
+        given: {
+            in1.setSignal(Signal.none());
+            in2.setSignal(Signal.of(false));
+        }
+        when: {
+            clock.tick();
+        }
+        then: {
+            assertThat(out.getSignal()).isEqualTo(Signal.none());
         }
     }
 

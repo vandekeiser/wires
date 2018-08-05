@@ -45,13 +45,21 @@ public class Accumulable_PbtTest {
         assertThat(
             acc
         ).isEqualTo(
-            Accumulable.initially(initialAndNewValues.y, weight, accumulator)
+            Accumulable.initially(
+                initialAndNewValues.y,
+                weight,
+                accumulator
+            )
         );
 
         assertThat(
             acc.hashCode()
         ).isEqualTo(
-            Accumulable.initially(initialAndNewValues.y, weight, accumulator).hashCode()
+            Accumulable.initially(
+                initialAndNewValues.y,
+                weight,
+                accumulator
+            ).hashCode()
         );
     }
 

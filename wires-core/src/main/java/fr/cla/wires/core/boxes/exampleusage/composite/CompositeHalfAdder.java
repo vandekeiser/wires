@@ -1,12 +1,10 @@
 package fr.cla.wires.core.boxes.exampleusage.composite;
 
-import fr.cla.wires.core.Box;
-import fr.cla.wires.core.Clock;
-import fr.cla.wires.core.Delay;
-import fr.cla.wires.core.Wire;
+import fr.cla.wires.core.*;
 import fr.cla.wires.core.boxes.exampleusage.basic.And;
 import fr.cla.wires.core.boxes.exampleusage.basic.Not;
 import fr.cla.wires.core.boxes.exampleusage.basic.Or;
+import fr.cla.wires.support.oo.Accumulable;
 
 import static java.util.Objects.requireNonNull;
 
@@ -29,9 +27,9 @@ public final class CompositeHalfAdder extends Box {
     }
 
     private CompositeHalfAdder(
-    Wire<Boolean> inA, Wire<Boolean> inB,
-    Wire<Boolean> sum, Wire<Boolean> carry,
-    Clock clock, Delay delay
+        Wire<Boolean> inA, Wire<Boolean> inB,
+        Wire<Boolean> sum, Wire<Boolean> carry,
+        Clock clock, Delay delay
     ) {
         super(clock, delay);
         this.inA = requireNonNull(inA);
