@@ -54,13 +54,13 @@ public final class And extends Box {
         this.onSignalChanged2(in1)
             .set(out)
             .toResultOfApplying()
-            .signalValuesCombinator(Boolean::logicalAnd, in2)
+            .signalValuesCombinator(Boolean::logicalAnd, in2, Signal.WhenCombining.ABSENT_WINS)
         ;
 
         this.onSignalChanged2(in2)
             .set(out)
             .toResultOfApplying()
-            .signalValuesCombinator(in1, Boolean::logicalAnd)
+            .signalValuesCombinator(in1, Boolean::logicalAnd, Signal.WhenCombining.ABSENT_WINS)
         ;
         return this;
     }

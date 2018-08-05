@@ -91,16 +91,15 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
      * @param inputs The in Signals. No Signal is allowed to be Signal.none(), since that was already check by Wire::mapAndReduce.
      * @param weight Maps in signals to values which are then accumulated during the reduction.
      * @param accumulator This accumulation function (technically a java.util.function.BinaryOperator) must be associative, per Stream::reduce.
-     * @param combiningPolicy
      * @return If if any input is none then Signal.none(), else the result of applying the reducer to the "accumulation value" of all inputs.
      */
     static <O, T> Signal<T> mapAndReduce(
         Collection<Signal<O>> inputs,
         Function<O, T> weight,
-        BinaryOperator<T> accumulator,
-        Signal.WhenCombining combiningPolicy
+        BinaryOperator<T> accumulator
     ) {
-        if (combiningPolicy.returnNoneIfAnySignalIsFloating(inputs)) return Signal.none();
+        //Not supporting the other option at least yet
+        if (WhenCombining.ABSENT_WINS.returnNoneIfAnySignalIsFloating(inputs)) return Signal.none();
 
         return inputs.stream()
             .map(Signal::value)
@@ -116,10 +115,10 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
     static <O, T> Signal<T> mapAndReduceIndexed(
         Collection<Signal<O>> inputs,
         Function<Indexed<O>, T> weight,
-        BinaryOperator<T> accumulator,
-        Signal.WhenCombining combiningPolicy
+        BinaryOperator<T> accumulator
     ) {
-        if (combiningPolicy.returnNoneIfAnySignalIsFloating(inputs)) return Signal.none();
+        //Not supporting the other option at least yet
+        if (WhenCombining.ABSENT_WINS.returnNoneIfAnySignalIsFloating(inputs)) return Signal.none();
 
         Stream<Optional<O>> values = inputs.stream().map(Signal::value);
         Stream<Indexed<Optional<O>>> indexedMaybes = Streams.index(values);
@@ -157,10 +156,10 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
      */
     static <O, T> Signal<T> collect(
         Collection<Signal<O>> inputs,
-        Collector<O, ?, T> collector,
-        Signal.WhenCombining combiningPolicy
+        Collector<O, ?, T> collector
     ) {
-        if (combiningPolicy.returnNoneIfAnySignalIsFloating(inputs)) return Signal.none();
+        //Not supporting the other option at least yet
+        if (WhenCombining.ABSENT_WINS.returnNoneIfAnySignalIsFloating(inputs)) return Signal.none();
 
         return Signal.of(inputs.stream()
             .map(Signal::value)
@@ -172,10 +171,10 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
 
     static <O, T> Signal<T> collectIndexed(
         Collection<Signal<O>> inputs,
-        Collector<Indexed<O>, ?, T> collector,
-        Signal.WhenCombining combiningPolicy
+        Collector<Indexed<O>, ?, T> collector
     ) {
-        if (combiningPolicy.returnNoneIfAnySignalIsFloating(inputs)) return Signal.none();
+        //Not supporting the other option at least yet
+        if (WhenCombining.ABSENT_WINS.returnNoneIfAnySignalIsFloating(inputs)) return Signal.none();
 
         List<O> values = inputs.stream().map(Signal::value).map(Optional::get).collect(toList());
         Stream<Indexed<O>> indexedValues = Streams.index(values);

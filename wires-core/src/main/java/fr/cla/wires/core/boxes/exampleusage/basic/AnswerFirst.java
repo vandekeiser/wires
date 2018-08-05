@@ -52,12 +52,12 @@ public final class AnswerFirst extends Box {
         this.onSignalChanged2(in1)
             .set(out)
             .toResultOfApplying()
-            .signalValuesCombinator(this::answerFirst, in2)
+            .signalValuesCombinator(this::answerFirst, in2, Signal.WhenCombining.PRESENT_WINS)
         ;
         this.onSignalChanged2(in2)
             .set(out)
             .toResultOfApplying()
-            .signalValuesCombinator(in1, this::answerFirst)
+            .signalValuesCombinator(in1, this::answerFirst, Signal.WhenCombining.PRESENT_WINS)
         ;
         return this;
     }

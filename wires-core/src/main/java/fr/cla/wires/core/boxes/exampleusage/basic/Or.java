@@ -51,12 +51,12 @@ public final class Or extends Box {
         this.onSignalChanged2(in1)
             .set(out)
             .toResultOfApplying()
-            .signalValuesCombinator(Boolean::logicalOr, in2)
+            .signalValuesCombinator(Boolean::logicalOr, in2, Signal.WhenCombining.ABSENT_WINS)
         ;
         this.onSignalChanged2(in2)
             .set(out)
             .toResultOfApplying()
-            .signalValuesCombinator(in1, Boolean::logicalOr)
+            .signalValuesCombinator(in1, Boolean::logicalOr, Signal.WhenCombining.ABSENT_WINS)
         ;
         return this;
     }

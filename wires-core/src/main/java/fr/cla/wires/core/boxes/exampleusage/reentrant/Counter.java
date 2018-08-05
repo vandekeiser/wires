@@ -59,7 +59,7 @@ public final class Counter extends Box {
         this.onSignalChanged2(out)
             .set(out)
             .toResultOfApplying()
-            .signalValuesCombinator(this::add, step)//a decomposer en 2 steps!
+            .signalValuesCombinator(this::add, step, Signal.WhenCombining.ABSENT_WINS)//a decomposer en 2 steps!
         ;
         out.setSignal(Signal.of(initial)); //Do this after registering the transformation, so that this change is visible.
         return this;
