@@ -79,29 +79,7 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         Signal.WhenCombining combiningPolicy
     ) {
         if (combiningPolicy.returnNoneIfAnySignalIsFloating(s1, s2)) return Signal.none();
-        Optional<V> v1 = s1.value();
-        Optional<V> v2 = s2.value();
-
-        if(combiningPolicy == WhenCombining.PRESENT_WINS) {
-            if (v1.isPresent() || v2.isPresent()) {
-                V v = combiner.apply(
-                    v1.orElse(null), v2.orElse(null)
-                );
-                return v==null ? Signal.none() : Signal.of(v);
-            } else {
-                return Signal.none();
-            }
-        }
-
-        if (v1.isPresent() && v2.isPresent()) {
-            return Signal.of(combiner.apply(v1.get(), v2.get()));
-        } else if (v1.isPresent()) {
-            return Signal.of(v1.get());
-        } else if (v2.isPresent()) {
-            return Signal.of(v2.get());
-        } else {
-            return Signal.none();
-        }
+        return combiningPolicy.combine(s1, s2, combiner);
     }
 
 
@@ -219,6 +197,10 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
 
 
     public enum WhenCombining {
+        /**
+         * Forces the evaluation of combiner if one of the signal is missing.
+         * Obviously this only works if combiner supports that, eg. AnswerFirst/Second
+         */
         PRESENT_WINS {
             @Override
             public <V> boolean returnNoneIfAnySignalIsFloating(Signal<V> s1, Signal<V> s2) {
@@ -229,7 +211,25 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
             public <V> boolean returnNoneIfAnySignalIsFloating(Collection<Signal<V>> inputs) {
                 return false;
             }
+
+            @Override
+            public <V> Signal<V> combine(Signal<V> s1, Signal<V> s2, BinaryOperator<V> combiner) {
+                Optional<V> v1 = s1.value();
+                Optional<V> v2 = s2.value();
+
+                if (v1.isPresent() || v2.isPresent()) {
+                    V v = combiner.apply(
+                        v1.orElse(null), v2.orElse(null)
+                    );
+                    return v==null ? Signal.none() : Signal.of(v);
+                } else {
+                    return Signal.none();
+                }
+            }
         },
+        /**
+         * Output is none if any input is none
+         */
         ABSENT_WINS {
             @Override
             public <V> boolean returnNoneIfAnySignalIsFloating(Signal<V> s1, Signal<V> s2) {
@@ -240,11 +240,28 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
             public <V> boolean returnNoneIfAnySignalIsFloating(Collection<Signal<V>> inputs) {
                 return anySignalIsFloating(inputs);
             }
+
+            @Override
+            public <V> Signal<V> combine(Signal<V> s1, Signal<V> s2, BinaryOperator<V> combiner) {
+                Optional<V> v1 = s1.value();
+                Optional<V> v2 = s2.value();
+
+                if (v1.isPresent() && v2.isPresent()) {
+                    return Signal.of(combiner.apply(v1.get(), v2.get()));
+                } else if (v1.isPresent()) {
+                    return Signal.of(v1.get());
+                } else if (v2.isPresent()) {
+                    return Signal.of(v2.get());
+                } else {
+                    return Signal.none();
+                }
+            }
         },
         ;
 
         public abstract <V> boolean returnNoneIfAnySignalIsFloating(Signal<V> s1, Signal<V> s2);
         public abstract <V> boolean returnNoneIfAnySignalIsFloating(Collection<Signal<V>> inputs);
+        public abstract <V> Signal<V> combine(Signal<V> s1, Signal<V> s2, BinaryOperator<V> combiner);
     }
 
 }
