@@ -83,7 +83,7 @@ public final class Wire<T> {
         Collection<Wire<O>> inputs,
         Function<O, T> weight,
         BinaryOperator<T> accumulator,
-        Accumulable.WhenCombining policyForCombiningWithAbsentValues
+        Signal.WhenCombining policyForCombiningWithAbsentValues
     ) {
         return Signal.mapAndReduce(
             inputs.stream().map(Wire::getSignal).collect(toList()),
@@ -95,7 +95,7 @@ public final class Wire<T> {
         List<Wire<O>> inputs,
         Function<Indexed<O>, T> weight,
         BinaryOperator<T> accumulator,
-        Accumulable.WhenCombining policyForCombiningWithAbsentValues
+        Signal.WhenCombining policyForCombiningWithAbsentValues
     ) {
         return Signal.mapAndReduceIndexed(
             inputs.stream().map(Wire::getSignal).collect(toList()),
@@ -120,7 +120,7 @@ public final class Wire<T> {
     static <O, T> Signal<T> collect(
         Collection<Wire<O>> inputs,
         Collector<O, ?, T> collector,
-        Accumulable.WhenCombining policyForCombiningWithAbsentValues
+        Signal.WhenCombining policyForCombiningWithAbsentValues
     ) {
         return Signal.collect(
             inputs.stream().map(Wire::getSignal).collect(toList()),
@@ -132,7 +132,7 @@ public final class Wire<T> {
     public static <T, O> Signal<T> collectIndexed(
         List<Wire<O>> inputs,
         Collector<Indexed<O>, ?, T> collector,
-        Accumulable.WhenCombining policyForCombiningWithAbsentValues
+        Signal.WhenCombining policyForCombiningWithAbsentValues
     ) {
         return Signal.collectIndexed(
             inputs.stream().map(Wire::getSignal).collect(toList()),

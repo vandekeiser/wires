@@ -1,9 +1,6 @@
 package fr.cla.wires.core.boxes;
 
-import fr.cla.wires.core.Box;
-import fr.cla.wires.core.Clock;
-import fr.cla.wires.core.Delay;
-import fr.cla.wires.core.Wire;
+import fr.cla.wires.core.*;
 import fr.cla.wires.support.functional.Indexed;
 import fr.cla.wires.support.oo.Accumulable;
 
@@ -30,7 +27,7 @@ extends Box {
         List<Wire<O>> ins,
         Wire<T> out,
         Clock clock,
-        Accumulable.WhenCombining policyForCombiningWithAbsentValues
+        Signal.WhenCombining policyForCombiningWithAbsentValues
     ) {
         this(ins, out, clock, DEFAULT_DELAY, policyForCombiningWithAbsentValues);
     }
@@ -40,7 +37,7 @@ extends Box {
         Wire<T> out,
         Clock clock,
         Delay delay,
-        Accumulable.WhenCombining policyForCombiningWithAbsentValues
+        Signal.WhenCombining policyForCombiningWithAbsentValues
     ) {
         super(clock, delay, policyForCombiningWithAbsentValues);
         this.ins = checkNoNulls(ins);

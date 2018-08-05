@@ -27,12 +27,12 @@ public abstract class Box {
     protected final Clock clock;
     protected final Delay delay;
     private final Clock.Agenda agenda;
-    private final Accumulable.WhenCombining policyForCombiningWithAbsentValues;
+    private final Signal.WhenCombining policyForCombiningWithAbsentValues;
 
     protected Box(
         Clock clock,
         Delay delay,
-        Accumulable.WhenCombining policyForCombiningWithAbsentValues
+        Signal.WhenCombining policyForCombiningWithAbsentValues
     ) {
         this.clock = requireNonNull(clock);
         this.agenda = clock.agenda();

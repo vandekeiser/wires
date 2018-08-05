@@ -1,9 +1,6 @@
 package fr.cla.wires.core.boxes.exampleusage.composite;
 
-import fr.cla.wires.core.Box;
-import fr.cla.wires.core.Clock;
-import fr.cla.wires.core.Delay;
-import fr.cla.wires.core.Wire;
+import fr.cla.wires.core.*;
 import fr.cla.wires.core.boxes.exampleusage.basic.Or;
 import fr.cla.wires.support.oo.Accumulable;
 
@@ -32,7 +29,7 @@ public final class CompositeFullAdder extends Box {
         Wire<Boolean> sum, Wire<Boolean> carry,
         Clock clock, Delay delay
     ) {
-        super(clock, delay, Accumulable.WhenCombining.ABSENT_WINS);
+        super(clock, delay, Signal.WhenCombining.ABSENT_WINS);
         this.inA = requireNonNull(inA);
         this.inB = requireNonNull(inB);
         this.inCarry = requireNonNull(inCarry);

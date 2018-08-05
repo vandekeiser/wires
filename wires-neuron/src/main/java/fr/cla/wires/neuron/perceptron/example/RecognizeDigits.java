@@ -1,9 +1,6 @@
 package fr.cla.wires.neuron.perceptron.example;
 
-import fr.cla.wires.core.Box;
-import fr.cla.wires.core.Clock;
-import fr.cla.wires.core.Delay;
-import fr.cla.wires.core.Wire;
+import fr.cla.wires.core.*;
 import fr.cla.wires.support.functional.Indexed;
 import fr.cla.wires.support.oo.Accumulable;
 
@@ -30,7 +27,7 @@ public class RecognizeDigits extends Box {
         double threshold,
         List<Double> segments2HiddensWeigths, List<Double> hiddens2DigitsWeigths
     ) {
-        super(clock, delay, Accumulable.WhenCombining.ABSENT_WINS);
+        super(clock, delay, Signal.WhenCombining.ABSENT_WINS);
         this.threshold = threshold;
         this.segments2HiddensWeigths = new ArrayList<>(segments2HiddensWeigths);
         this.hiddens2DigitsWeigths = new ArrayList<>(hiddens2DigitsWeigths);

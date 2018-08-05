@@ -1,9 +1,6 @@
 package fr.cla.wires.neuron.perceptron.example;
 
-import fr.cla.wires.core.Box;
-import fr.cla.wires.core.Clock;
-import fr.cla.wires.core.Delay;
-import fr.cla.wires.core.Wire;
+import fr.cla.wires.core.*;
 import fr.cla.wires.support.functional.Indexed;
 import fr.cla.wires.support.oo.Accumulable;
 
@@ -28,7 +25,7 @@ extends Box {
     }
 
     protected CompleteConnexions(List<Wire<I>> ins, List<Wire<O>> outs, Collector<Indexed<I>, ?, O> collector, Clock clock, Delay delay) {
-        super(clock, delay, Accumulable.WhenCombining.ABSENT_WINS);
+        super(clock, delay, Signal.WhenCombining.ABSENT_WINS);
         this.ins = checkNoNulls(ins);
         this.outs = checkNoNulls(outs);
         this.collector = requireNonNull(collector);

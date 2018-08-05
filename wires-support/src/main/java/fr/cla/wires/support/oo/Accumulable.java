@@ -112,11 +112,7 @@ public class Accumulable<W, A> extends MutableValue<A> {
         return new Collector<>(weight, combiner, finisher);
     }
 
-    public enum WhenCombining {
-        PRESENT_WINS,
-        ABSENT_WINS
-        ;
-    }
+
 
 
     public static class Collector<O, T>

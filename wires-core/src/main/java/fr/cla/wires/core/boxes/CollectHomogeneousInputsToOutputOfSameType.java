@@ -2,6 +2,7 @@ package fr.cla.wires.core.boxes;
 
 import fr.cla.wires.core.Clock;
 import fr.cla.wires.core.Delay;
+import fr.cla.wires.core.Signal;
 import fr.cla.wires.core.Wire;
 import fr.cla.wires.support.oo.Accumulable;
 
@@ -38,7 +39,7 @@ extends CollectHomogeneousInputs<O, O> {
         List<Wire<O>> ins,
         Wire<O> out,
         Clock clock,
-        Accumulable.WhenCombining policyForCombiningWithAbsentValues
+        Signal.WhenCombining policyForCombiningWithAbsentValues
     ) {
         this(ins, out, clock, DEFAULT_DELAY, policyForCombiningWithAbsentValues);
     }
@@ -48,7 +49,7 @@ extends CollectHomogeneousInputs<O, O> {
         Wire<O> out,
         Clock clock,
         Delay delay,
-        Accumulable.WhenCombining policyForCombiningWithAbsentValues
+        Signal.WhenCombining policyForCombiningWithAbsentValues
     ) {
         super(ins, out, clock, delay, policyForCombiningWithAbsentValues);
     }

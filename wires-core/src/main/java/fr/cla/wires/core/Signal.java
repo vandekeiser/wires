@@ -15,8 +15,6 @@ import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
-import static fr.cla.wires.support.oo.Accumulable.WhenCombining.ABSENT_WINS;
-import static fr.cla.wires.support.oo.Accumulable.WhenCombining.PRESENT_WINS;
 import static java.lang.String.*;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
@@ -81,13 +79,13 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         Signal<V> s1,
         Signal<V> s2,
         BinaryOperator<V> combiner,
-        Accumulable.WhenCombining policyForCombiningWithAbsentValues
+        Signal.WhenCombining policyForCombiningWithAbsentValues
     ) {
-        if (policyForCombiningWithAbsentValues == ABSENT_WINS && anySignalIsFloating(s1, s2)) return Signal.none();
+        if (policyForCombiningWithAbsentValues == WhenCombining.ABSENT_WINS && anySignalIsFloating(s1, s2)) return Signal.none();
         Optional<V> v1 = s1.value();
         Optional<V> v2 = s2.value();
 
-        if(policyForCombiningWithAbsentValues==PRESENT_WINS) {
+        if(policyForCombiningWithAbsentValues == WhenCombining.PRESENT_WINS) {
             if (v1.isPresent() || v2.isPresent()) {
                 V v = combiner.apply(
                     v1.orElse(null), v2.orElse(null)
@@ -127,7 +125,7 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         Collection<Signal<O>> inputs,
         Function<O, T> weight,
         BinaryOperator<T> accumulator,
-        Accumulable.WhenCombining policyForCombiningWithAbsentValues
+        Signal.WhenCombining policyForCombiningWithAbsentValues
     ) {
         if (shouldCombineToNone(inputs, policyForCombiningWithAbsentValues)) return Signal.none();
 
@@ -146,7 +144,7 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         Collection<Signal<O>> inputs,
         Function<Indexed<O>, T> weight,
         BinaryOperator<T> accumulator,
-        Accumulable.WhenCombining policyForCombiningWithAbsentValues
+        Signal.WhenCombining policyForCombiningWithAbsentValues
     ) {
         if (shouldCombineToNone(inputs, policyForCombiningWithAbsentValues)) return Signal.none();
 
@@ -187,7 +185,7 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
     static <O, T> Signal<T> collect(
         Collection<Signal<O>> inputs,
         Collector<O, ?, T> collector,
-        Accumulable.WhenCombining policyForCombiningWithAbsentValues
+        Signal.WhenCombining policyForCombiningWithAbsentValues
     ) {
         if (shouldCombineToNone(inputs, policyForCombiningWithAbsentValues)) return Signal.none();
 
@@ -202,7 +200,7 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
     static <O, T> Signal<T> collectIndexed(
         Collection<Signal<O>> inputs,
         Collector<Indexed<O>, ?, T> collector,
-        Accumulable.WhenCombining policyForCombiningWithAbsentValues
+        Signal.WhenCombining policyForCombiningWithAbsentValues
     ) {
         if (shouldCombineToNone(inputs, policyForCombiningWithAbsentValues)) return Signal.none();
 
@@ -214,9 +212,9 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
 
     private static <O> boolean shouldCombineToNone(
         Collection<Signal<O>> inputs,
-        Accumulable.WhenCombining policyForCombiningWithAbsentValues
+        WhenCombining policyForCombiningWithAbsentValues
     ) {
-        return policyForCombiningWithAbsentValues == ABSENT_WINS && anySignalIsFloating(inputs);
+        return policyForCombiningWithAbsentValues == WhenCombining.ABSENT_WINS && anySignalIsFloating(inputs);
     }
 
     private static <T> boolean anySignalIsFloating(Collection<Signal<T>> inputs) {
@@ -228,6 +226,15 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
     }
 
     //----------Functional methods to transform and/or aggregate Signals//----------^^^^^^^^^^
+
+
+
+
+    public enum WhenCombining {
+        PRESENT_WINS,
+        ABSENT_WINS,
+        ;
+    }
 
 }
 //@formatter:on
