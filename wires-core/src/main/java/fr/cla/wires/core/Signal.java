@@ -168,15 +168,11 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
     }
 
     private static <O> Stream<Indexed<O>> indexPresentSignals(Collection<Signal<O>> inputs) {
-        Stream<Optional<O>> values = inputs.stream().map(Signal::value);
-        //Index before filtering, as the weight of an Indexed can take the index into account (eg. neuron weight)
-        Stream<Indexed<Optional<O>>> indexedMaybes = Streams.index(values);
-        Stream<Optional<Indexed<O>>> maybeIndices =  indexedMaybes.map(
-            indexed -> indexed.getValue().map(
-                o -> Indexed.index(indexed.getIndex(), o)
-            )
+        return Streams.index(
+            inputs.stream()
+            .map(Signal::value)
+            .flatMap(Optional::stream)
         );
-        return maybeIndices.flatMap(Optional::stream);
     }
 
     private static <T> boolean anySignalIsFloating(Collection<Signal<T>> inputs) {
