@@ -38,20 +38,18 @@ extends CollectHomogeneousInputs<O, O> {
     protected CollectHomogeneousInputsToOutputOfSameType(
         List<Wire<O>> ins,
         Wire<O> out,
-        Clock clock,
-        Signal.WhenCombining combiningPolicy
+        Clock clock
     ) {
-        this(ins, out, clock, DEFAULT_DELAY, combiningPolicy);
+        this(ins, out, clock, DEFAULT_DELAY);
     }
 
     protected CollectHomogeneousInputsToOutputOfSameType(
         List<Wire<O>> ins,
         Wire<O> out,
         Clock clock,
-        Delay delay,
-        Signal.WhenCombining combiningPolicy
+        Delay delay
     ) {
-        super(ins, out, clock, delay, combiningPolicy);
+        super(ins, out, clock, delay);
     }
 
 }

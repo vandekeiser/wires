@@ -27,11 +27,11 @@ public final class CompositeHalfAdder extends Box {
     }
 
     private CompositeHalfAdder(
-    Wire<Boolean> inA, Wire<Boolean> inB,
-    Wire<Boolean> sum, Wire<Boolean> carry,
-    Clock clock, Delay delay
+        Wire<Boolean> inA, Wire<Boolean> inB,
+        Wire<Boolean> sum, Wire<Boolean> carry,
+        Clock clock, Delay delay
     ) {
-        super(clock, delay, Signal.WhenCombining.ABSENT_WINS);
+        super(clock, delay);
         this.inA = requireNonNull(inA);
         this.inB = requireNonNull(inB);
         this.sum = requireNonNull(sum);

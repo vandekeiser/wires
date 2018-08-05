@@ -29,7 +29,7 @@ public final class CompositeFullAdder extends Box {
         Wire<Boolean> sum, Wire<Boolean> carry,
         Clock clock, Delay delay
     ) {
-        super(clock, delay, Signal.WhenCombining.ABSENT_WINS);
+        super(clock, delay);
         this.inA = requireNonNull(inA);
         this.inB = requireNonNull(inB);
         this.inCarry = requireNonNull(inCarry);

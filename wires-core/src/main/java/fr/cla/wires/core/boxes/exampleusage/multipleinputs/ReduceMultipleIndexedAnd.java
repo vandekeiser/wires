@@ -26,7 +26,7 @@ public class ReduceMultipleIndexedAnd extends ReduceHomogeneousInputs<Indexed<Bo
     }
 
     private ReduceMultipleIndexedAnd(List<Wire<Indexed<Boolean>>> ins, Wire<Boolean> out, Clock clock, Delay delay) {
-        super(ins, out, clock, delay, Signal.WhenCombining.ABSENT_WINS);
+        super(ins, out, clock, delay);
     }
 
     @Override protected Function<Indexed<Boolean>, Boolean> weight() {

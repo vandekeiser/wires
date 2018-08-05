@@ -30,13 +30,13 @@ implements GroupOfUnits{
     }
 
     protected Layer(List<Wire<Double>> ins, Wire<Double> out, double threshold, List<Double> weigths, Clock clock, Delay delay) {
-        super(ins, out, clock, delay, Signal.WhenCombining.ABSENT_WINS);
+        super(ins, out, clock, delay);
         this.threshold = threshold;
         this.weigths = new ArrayList<>(weigths);
     }
 
     protected Layer(List<Wire<Double>> ins, List<Wire<Double>> outs, double threshold, List<Double> weigths, Clock clock, Delay delay) {
-        super(ins, outs, clock, delay, Signal.WhenCombining.ABSENT_WINS);
+        super(ins, outs, clock, delay);
         this.threshold = threshold;
         this.weigths = new ArrayList<>(weigths);
     }

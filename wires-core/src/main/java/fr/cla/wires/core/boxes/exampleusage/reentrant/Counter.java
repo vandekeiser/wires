@@ -26,7 +26,7 @@ public final class Counter extends Box {
     }
     
     private Counter(long initial, long step, Wire<Long> out, Clock clock, Delay delay) {
-        super(clock, delay, Signal.WhenCombining.ABSENT_WINS);
+        super(clock, delay);
         this.out = requireNonNull(out);
         this.initial = validateInitial(initial);
         this.step = Wire.make();

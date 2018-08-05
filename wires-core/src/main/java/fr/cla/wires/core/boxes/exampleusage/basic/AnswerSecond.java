@@ -19,7 +19,7 @@ public final class AnswerSecond extends Box {
     }
 
     private AnswerSecond(Wire<Boolean> in1, Wire<Boolean> in2, Wire<Boolean> out, Clock clock, Delay delay) {
-        super(clock, delay, Signal.WhenCombining.PRESENT_WINS);
+        super(clock, delay);
         this.in1 = requireNonNull(in1);
         this.in2 = requireNonNull(in2);
         this.out = requireNonNull(out);

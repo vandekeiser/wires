@@ -1,7 +1,9 @@
 package fr.cla.wires.core.boxes.exampleusage.basic;
 
-import fr.cla.wires.core.*;
-import fr.cla.wires.support.oo.Accumulable;
+import fr.cla.wires.core.Box;
+import fr.cla.wires.core.Clock;
+import fr.cla.wires.core.Delay;
+import fr.cla.wires.core.Wire;
 
 import static java.util.Objects.requireNonNull;
 
@@ -19,7 +21,7 @@ public final class Not extends Box {
     }
 
     private Not(Wire<Boolean> in, Wire<Boolean> out, Clock clock, Delay delay) {
-        super(clock, delay, Signal.WhenCombining.ABSENT_WINS);
+        super(clock, delay);
         this.in = requireNonNull(in);
         this.out = requireNonNull(out);
     }

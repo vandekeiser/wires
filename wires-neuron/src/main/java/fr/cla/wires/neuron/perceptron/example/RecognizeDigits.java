@@ -27,7 +27,7 @@ public class RecognizeDigits extends Box {
         double threshold,
         List<Double> segments2HiddensWeigths, List<Double> hiddens2DigitsWeigths
     ) {
-        super(clock, delay, Signal.WhenCombining.ABSENT_WINS);
+        super(clock, delay);
         this.threshold = threshold;
         this.segments2HiddensWeigths = new ArrayList<>(segments2HiddensWeigths);
         this.hiddens2DigitsWeigths = new ArrayList<>(hiddens2DigitsWeigths);

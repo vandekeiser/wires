@@ -30,8 +30,7 @@ public abstract class Box {
 
     protected Box(
         Clock clock,
-        Delay delay,
-        Signal.WhenCombining combiningPolicy
+        Delay delay
     ) {
         this.clock = requireNonNull(clock);
         this.agenda = clock.agenda();

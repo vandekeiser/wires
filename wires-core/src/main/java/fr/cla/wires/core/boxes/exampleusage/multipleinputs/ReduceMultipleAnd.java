@@ -25,7 +25,7 @@ public class ReduceMultipleAnd extends ReduceHomogeneousInputs<Boolean, Boolean>
     }
 
     private ReduceMultipleAnd(List<Wire<Boolean>> ins, Wire<Boolean> out, Clock clock, Delay delay) {
-        super(ins, out, clock, delay, Signal.WhenCombining.ABSENT_WINS);
+        super(ins, out, clock, delay);
     }
 
     @Override protected Function<Boolean, Boolean> weight() {

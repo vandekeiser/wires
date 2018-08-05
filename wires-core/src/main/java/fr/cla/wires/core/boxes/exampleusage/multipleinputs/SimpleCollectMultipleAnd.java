@@ -84,7 +84,7 @@ extends CollectHomogeneousInputsToOutputOfSameType<Boolean> {
     }
 
     private SimpleCollectMultipleAnd(List<Wire<Boolean>> ins, Wire<Boolean> out, Clock clock, Delay delay) {
-        super(ins, out, clock, delay, Signal.WhenCombining.ABSENT_WINS);
+        super(ins, out, clock, delay);
     }
 //-------------Builder section of the class-------------^^^^^^^^^^^^^^^^^^^
 
