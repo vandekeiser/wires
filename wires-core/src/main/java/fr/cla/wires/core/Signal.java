@@ -16,6 +16,7 @@ import java.util.stream.Collector;
 import java.util.stream.Stream;
 
 import static fr.cla.wires.support.oo.Accumulable.WhenCombining.ABSENT_WINS;
+import static fr.cla.wires.support.oo.Accumulable.WhenCombining.PRESENT_WINS;
 import static java.lang.String.*;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
@@ -83,9 +84,20 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         Accumulable.WhenCombining policyForCombiningWithAbsentValues
     ) {
         if (policyForCombiningWithAbsentValues == ABSENT_WINS && anySignalIsFloating(s1, s2)) return Signal.none();
-
         Optional<V> v1 = s1.value();
         Optional<V> v2 = s2.value();
+
+        if(policyForCombiningWithAbsentValues==PRESENT_WINS) {
+            if (v1.isPresent() || v2.isPresent()) {
+                V v = combiner.apply(
+                    v1.orElse(null), v2.orElse(null)
+                );
+                return v==null ? Signal.none() : Signal.of(v);
+            } else {
+                return Signal.none();
+            }
+        }
+
         if (v1.isPresent() && v2.isPresent()) {
             return Signal.of(combiner.apply(v1.get(), v2.get()));
         } else if (v1.isPresent()) {

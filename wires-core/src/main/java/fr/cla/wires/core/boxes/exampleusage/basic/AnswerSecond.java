@@ -65,7 +65,7 @@ public final class AnswerSecond extends Box {
         return this;
     }
 
-    private boolean answerSecond(boolean b1, boolean b2) {
+    private Boolean answerSecond(Boolean b1, Boolean b2) {
         return b2;
     }
 

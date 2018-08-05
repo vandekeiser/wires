@@ -65,7 +65,12 @@ public final class AnswerFirst extends Box {
         return this;
     }
 
-    private boolean answerFirst(boolean b1, boolean b2) {
+    /**
+     * @param b1 The only used param
+     * @param b2 Nullable
+     * @return Null iff b2==null
+     */
+    private Boolean answerFirst(Boolean b1, Boolean b2) {
         return b1;
     }
 
