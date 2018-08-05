@@ -103,8 +103,7 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
 
         return inputs.stream()
             .map(Signal::value)
-            .filter(Optional::isPresent)
-            .map(Optional::get)
+            .flatMap(Optional::stream)
             .map(weight)
             .reduce(accumulator)
             .map(Signal::of)
@@ -130,8 +129,7 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
         );
 
         return maybeIndices
-            .filter(Optional::isPresent)
-            .map(Optional::get)
+            .flatMap(Optional::stream)
             .map(weight)
             .reduce(accumulator)
             .map(Signal::of)
@@ -162,8 +160,7 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
 
         return Signal.of(inputs.stream()
             .map(Signal::value)
-            .filter(Optional::isPresent)
-            .map(Optional::get)
+            .flatMap(Optional::stream)
             .collect(collector)
         );
     }
