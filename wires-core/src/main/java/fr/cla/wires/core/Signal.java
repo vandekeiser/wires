@@ -151,7 +151,6 @@ public final class Signal<V> extends AbstractValueObject<Signal<V>> {
      *  -The accumulation doesn't have to use a BinaryOperator (it is implemented by the Collector itself).
      * On the other hand, the same precondition are demanded from this parameter as in mapAndReduce():
      *  -The collector::accumulator and collector::combiner implementations must be associative, per Stream::collect.
-     * @param combiningPolicy
      * @return If if any input is none then Signal.none(), else the result of applying the collector to all inputs.
      */
     static <O, T> Signal<T> collect(
