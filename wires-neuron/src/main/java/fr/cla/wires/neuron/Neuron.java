@@ -60,11 +60,6 @@ public class Neuron extends CollectIndexedHomogeneousInputs<Double, Double, Long
     }
 
     @Override
-    protected Accumulable.WhenCombining policyForCombiningWithAbsentValues() {
-        return Accumulable.WhenCombining.ABSENT_WINS;
-    }
-
-    @Override
     protected UnaryOperator<Double> finisher() {
         return potential -> potential > threshold ? 1.0 : 0.0;
     }

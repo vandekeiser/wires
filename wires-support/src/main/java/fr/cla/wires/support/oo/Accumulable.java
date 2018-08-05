@@ -24,36 +24,31 @@ public class Accumulable<W, A> extends MutableValue<A> {
     private final A EMPTY = null;
     private final Function<W, A> weight;
     private final BinaryOperator<A> combiner;
-    private final Accumulable.WhenCombining policyForCombiningWithAbsentValues;
 
     protected Accumulable(
         A initialValue,
         boolean acceptNull,
         Function<W, A> weight,
-        BinaryOperator<A> combiner,
-        WhenCombining policyForCombiningWithAbsentValues
+        BinaryOperator<A> combiner
     ) {
         super(initialValue, acceptNull);
         this.weight = requireNonNull(weight);
         this.combiner = requireNonNull(combiner);
-        this.policyForCombiningWithAbsentValues = requireNonNull(policyForCombiningWithAbsentValues);
     }
 
     public static <I, A> Accumulable<I, A> initiallyEmpty(
         Function<I, A> weight,
-        BinaryOperator<A> combiner,
-        WhenCombining policyForCombiningWithAbsentValues
+        BinaryOperator<A> combiner
     ) {
-        return new Accumulable<>(null, true, weight, combiner, policyForCombiningWithAbsentValues);
+        return new Accumulable<>(null, true, weight, combiner);
     }
 
     public static <I, A> Accumulable<I, A> initially(
         A initialValue,
         Function<I, A> weight,
-        BinaryOperator<A> combiner,
-        WhenCombining policyForCombiningWithAbsentValues
+        BinaryOperator<A> combiner
     ) {
-        return new Accumulable<>(initialValue, false, weight, combiner, policyForCombiningWithAbsentValues);
+        return new Accumulable<>(initialValue, false, weight, combiner);
     }
 
     public final void accumulate(W weightable) {
@@ -70,11 +65,16 @@ public class Accumulable<W, A> extends MutableValue<A> {
     }
 
     private A combineWithValue(A value) {
-        return this.policyForCombiningWithAbsentValues.combine(
-            Optional.ofNullable(this.get()),
-            Optional.ofNullable(value),
-            this.combiner
-        ).orElse(null);
+        A maybe1 = this.get();
+        A maybe2 = value;
+
+        if (maybe1 != null && maybe2 != null) {
+            return combiner.apply(maybe1, maybe2);
+        } else if (maybe1 != null) {
+            return maybe1;
+        } else {
+            return maybe2;
+        }
     }
 
     /**
@@ -107,54 +107,15 @@ public class Accumulable<W, A> extends MutableValue<A> {
     public static <O, T> java.util.stream.Collector<O, ?, T> collector(
         Function<O, T> weight,
         BinaryOperator<T> combiner,
-        WhenCombining policyForCombiningWithAbsentValues,
         UnaryOperator<T> finisher
     ) {
-        return new Collector<>(weight, combiner, policyForCombiningWithAbsentValues, finisher);
+        return new Collector<>(weight, combiner, finisher);
     }
 
     public enum WhenCombining {
-        PRESENT_WINS {
-            @Override public <T> Optional<T> combine(
-                Optional<T> maybe1, Optional<T> maybe2, BinaryOperator<T> combiner
-            ) {
-//                if (maybe1.isPresent() && maybe2.isPresent()) {
-//                    return Optional.of(combiner.apply(maybe1.get(), maybe2.get()));
-//                } else {
-//                    return Optional.empty();
-//                }
-                if (maybe1.isPresent() && maybe2.isPresent()) {
-                    return Optional.of(combiner.apply(maybe1.get(), maybe2.get()));
-                } else if (maybe1.isPresent()) {
-                    return Optional.of(maybe1.get());
-                } else if (maybe2.isPresent()) {
-                    return Optional.of(maybe2.get());
-                } else {
-                    return Optional.empty();
-                }
-            }
-        },
-        ABSENT_WINS {
-            @Override public <T> Optional<T> combine(
-                Optional<T> maybe1, Optional<T> maybe2, BinaryOperator<T> combiner
-            ) {
-                if (maybe1.isPresent() && maybe2.isPresent()) {
-                    return Optional.of(combiner.apply(maybe1.get(), maybe2.get()));
-                } else if (maybe1.isPresent()) {
-                    return Optional.of(maybe1.get());
-                } else if (maybe2.isPresent()) {
-                    return Optional.of(maybe2.get());
-                } else {
-                    return Optional.empty();
-                }
-            }
-        },
+        PRESENT_WINS,
+        ABSENT_WINS
         ;
-
-        public abstract <T> Optional<T> combine(
-            Optional<T> maybe1, Optional<T> maybe2, BinaryOperator<T> combiner
-        );
-
     }
 
 
@@ -163,25 +124,22 @@ public class Accumulable<W, A> extends MutableValue<A> {
         private final Function<Accumulable<O, T>, T> getAccumulated;
         private final Function<O, T> weight;
         private final BinaryOperator<T> combiner;
-        private final WhenCombining policyForCombiningWithAbsentValues;
         private final UnaryOperator<T> finisher;
 
         private Collector(
             Function<O, T> weight,
             BinaryOperator<T> combiner,
-            WhenCombining policyForCombiningWithAbsentValues,
             UnaryOperator<T> finisher
         )  {
             this.getAccumulated = MutableValue::get;
             this.weight = requireNonNull(weight);
             this.combiner = requireNonNull(combiner);
-            this.policyForCombiningWithAbsentValues = requireNonNull(policyForCombiningWithAbsentValues);
             this.finisher = requireNonNull(finisher);
         }
 
         @Override public Supplier<Accumulable<O, T>> supplier() {
             return () -> Accumulable.initiallyEmpty(
-                weight, combiner, policyForCombiningWithAbsentValues
+                weight, combiner
             );
         }
 

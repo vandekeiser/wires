@@ -13,7 +13,4 @@ public class FeedForwardLayer extends Layer {
         super(ins, out, threshold, weigths, clock);
     }
 
-    @Override protected Accumulable.WhenCombining policyForCombiningWithAbsentValues() {
-        return Accumulable.WhenCombining.ABSENT_WINS;
-    }
 }

@@ -19,8 +19,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class Accumulable_PbtTest {
 
     private static final int TRIALS = 100_000;
-    //TODO randomize
-    private static final Accumulable.WhenCombining TESTED_POLICY_FOR_COMBINING_WITH_ABSENT_VALUES = Accumulable.WhenCombining.ABSENT_WINS;
 
     //Note:
     // Not using var here even though these types are a mouthful since they're not obvious either.
@@ -37,8 +35,7 @@ public class Accumulable_PbtTest {
         Accumulable<AbstractValueObject<?>, AbstractValueObject<?>> acc =  Accumulable.initially(
             initialAndNewValues.x,
             weight,
-            accumulator,
-            TESTED_POLICY_FOR_COMBINING_WITH_ABSENT_VALUES
+            accumulator
         );
 
         //When
@@ -51,8 +48,7 @@ public class Accumulable_PbtTest {
             Accumulable.initially(
                 initialAndNewValues.y,
                 weight,
-                accumulator,
-                TESTED_POLICY_FOR_COMBINING_WITH_ABSENT_VALUES
+                accumulator
             )
         );
 
@@ -62,8 +58,7 @@ public class Accumulable_PbtTest {
             Accumulable.initially(
                 initialAndNewValues.y,
                 weight,
-                accumulator,
-                TESTED_POLICY_FOR_COMBINING_WITH_ABSENT_VALUES
+                accumulator
             ).hashCode()
         );
     }

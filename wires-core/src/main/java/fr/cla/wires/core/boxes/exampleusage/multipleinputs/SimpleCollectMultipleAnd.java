@@ -53,10 +53,6 @@ extends CollectHomogeneousInputsToOutputOfSameType<Boolean> {
         return this::and;
     }
 
-    @Override protected Accumulable.WhenCombining policyForCombiningWithAbsentValues() {
-        return Accumulable.WhenCombining.ABSENT_WINS;
-    }
-
     @Override protected UnaryOperator<Boolean> finisher() {
         return UnaryOperator.identity();
     }
