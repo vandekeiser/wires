@@ -65,6 +65,12 @@ public final class AnswerSecond extends Box {
         return this;
     }
 
+    /**
+     * Both b1 and b2 are nullable
+     * @param b1 Unused
+     * @param b2 The only used parameter
+     * @return b2
+     */
     private Boolean answerSecond(Boolean b1, Boolean b2) {
         return b2;
     }
