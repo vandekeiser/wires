@@ -17,17 +17,17 @@
     <dependencies>
         <dependency>
             <groupId>fr.cla</groupId>
-            <artifactId>wires.support</artifactId>
+            <artifactId>wires-support</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>fr.cla</groupId>
-            <artifactId>wires.core</artifactId>
+            <artifactId>wires-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>fr.cla</groupId>
-            <artifactId>wires.neuron</artifactId>
+            <artifactId>wires-neuron</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
